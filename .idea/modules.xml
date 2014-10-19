@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Factograph.iml" filepath="$PROJECT_DIR$/Factograph.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java_2.iml" filepath="$PROJECT_DIR$/java_2.iml" />
       <module fileurl="file://$PROJECT_DIR$/m_fact/m_fact.iml" filepath="$PROJECT_DIR$/m_fact/m_fact.iml" />
     </modules>
   </component>

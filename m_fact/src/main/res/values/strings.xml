@@ -19,7 +19,13 @@
     <string name="title_activity_overview">Overview</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_details">Details</string>
-
     <string name="Button_start">Start</string>
+    <string name="Button_exit">Exit</string>
+    <string name="Button_auth">Auth</string>
+    <string name="title_activity_auth">Auth</string>
+    <string name="Auth">Please, enter your login and password</string>
+    <string name="password"></string>
+    <string name="login">Login</string>
+    <string name="button_auth">Sign in</string>
 
 </resources>

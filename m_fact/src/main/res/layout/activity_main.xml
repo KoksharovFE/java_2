@@ -18,4 +18,22 @@
         android:layout_marginTop="105dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Button_exit"
+        android:id="@+id/button2"
+        android:onClick="buttonClicked"
+        android:layout_marginTop="145dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Button_auth"
+        android:id="@+id/button3"
+        android:onClick="buttonClicked"
+        android:layout_marginTop="185dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

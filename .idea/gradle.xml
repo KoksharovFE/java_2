@@ -7,8 +7,8 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="H:\andWs\astrak1\Factograph" />
-            <option value="H:\andWs\astrak1\Factograph\m_fact" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/m_fact" />
           </set>
         </option>
       </GradleProjectSettings>

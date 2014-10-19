@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Factograph</string>
+    <string name="hello">Hello World, Todo!</string>
+    <string name="no_todos">Currently there are no fact items maintained</string>
+    <string name="menu_insert">Add Item</string>
+    <string name="menu_delete">Delete Todo</string>
+    <string name="todo_summary">Summary</string>
+    <string name="todo_description">Delete Todo</string>
+    <string name="todo_edit_summary">Summary</string>
+    <string name="todo_edit_description">Description</string>
+    <string name="todo_edit_confirm">Confirm</string>
+
+    <color name="listcolor">#FFE87C</color>
+    <color name="black">#000000</color>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_overview">Overview</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_details">Details</string>
+
+    <string name="Button_start">Start</string>
+
+</resources>

@@ -24,8 +24,13 @@
     <string name="Button_auth">Auth</string>
     <string name="title_activity_auth">Auth</string>
     <string name="Auth">Please, enter your login and password</string>
-    <string name="password"></string>
+    <string name="password">Password</string>
+    <string name="back">Back</string>
     <string name="login">Login</string>
     <string name="button_auth">Sign in</string>
+    <string name="button_registration">Sign up</string>
     <string name="voids"></string>
+    <string name="title_activity_restrate">Restrate</string>
+    <string name="registration_text">Input login, password and rights level</string>
+    <string name="right_of_write">Right Of Write</string>
 </resources>

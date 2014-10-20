@@ -46,7 +46,7 @@
         android:layout_below="@+id/login_field"
         android:layout_alignLeft="@+id/login_field"
         android:layout_alignStart="@+id/login_field"
-        android:text="@string/password" />
+        android:text="@string/voids" />
 
     <TextView
         android:text="@string/voids"

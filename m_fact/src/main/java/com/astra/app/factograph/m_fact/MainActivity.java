@@ -39,6 +39,10 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(MainActivity.this, Auth.class);
                 startActivity(intent);
             }
+            case R.id.button4: {
+                Intent intent = new Intent(MainActivity.this, Auth.class);
+                startActivity(intent);
+            }
 
         }
 

@@ -27,7 +27,7 @@
         android:layout_marginTop="145dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-    <Button
+        <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Button_auth"
@@ -36,4 +36,14 @@
         android:layout_marginTop="185dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_registration"
+        android:id="@+id/button4"
+        android:onClick="buttonClicked"
+        android:layout_marginTop="225dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

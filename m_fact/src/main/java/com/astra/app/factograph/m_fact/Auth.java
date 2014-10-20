@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 
 public class Auth extends Activity {
@@ -16,6 +17,7 @@ public class Auth extends Activity {
     private static final int ACTIVITY_EDIT = 1;
     private static final int DELETE_ID = Menu.FIRST + 1;
     private Cursor cursor;
+    private EditText login_field,password_field;
 
     /**
      * Called when the activity is first created.
@@ -26,6 +28,8 @@ public class Auth extends Activity {
         setContentView(R.layout.activity_auth);
         dbHelper = new UserDbAdapter(this);
         dbHelper.open();
+        login_field=(EditText) findViewById(R.id.login_field);
+        password_field=(EditText) findViewById(R.id.password_field);
     }
 
     public void buttonClicked(View view) {
@@ -34,7 +38,7 @@ public class Auth extends Activity {
                 cursor = dbHelper.fetchAllTodos();
                 String[] from = new String[]{UserDbAdapter.KEY_LOGIN};
                 for(int i=0;i<from.length;i++) {
-                    if (from[i]=="true") {
+                    if ( from[i].equals(login_field.getText().toString()) ) {
                         Intent intent = new Intent(Auth.this, MainActivity.class);
                         startActivity(intent);
                     }

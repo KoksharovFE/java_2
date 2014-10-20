@@ -27,5 +27,5 @@
     <string name="password"></string>
     <string name="login">Login</string>
     <string name="button_auth">Sign in</string>
-
+    <string name="voids"></string>
 </resources>

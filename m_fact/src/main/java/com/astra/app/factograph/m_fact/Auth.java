@@ -1,5 +1,8 @@
 package com.astra.app.factograph.m_fact;
 
+/**
+ * Created by teodor on 20.10.2014.
+ */
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -55,7 +58,10 @@ public class Auth extends Activity {
 
         }
     }
-
+    protected void onStop() {
+        super.onStop();
+        setResult(RESULT_OK);
+    }
 
 
     @Override

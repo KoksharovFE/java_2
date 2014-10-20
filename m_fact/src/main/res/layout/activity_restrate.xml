@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="@string/voids"
         android:id="@+id/text_reg_below"
         android:layout_below="@+id/button"
         android:textColor="#ffff0000"

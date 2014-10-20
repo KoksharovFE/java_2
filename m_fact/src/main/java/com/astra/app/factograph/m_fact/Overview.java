@@ -1,4 +1,7 @@
 package com.astra.app.factograph.m_fact;
+/**
+ * Created by konnor2007 on 07.09.14.
+ */
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -125,5 +128,13 @@ public class Overview extends ListActivity {
         if (dbHelper != null) {
             dbHelper.close();
         }
+    }
+
+    protected void onStop() {
+        if (dbHelper != null) {
+            dbHelper.close();
+        }
+        super.onStop();
+        setResult(RESULT_OK);
     }
 }

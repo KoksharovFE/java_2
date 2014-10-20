@@ -9,10 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class UserDbUsing extends SQLiteOpenHelper{
-    private static final String DATABASE_NAME = "userdata";
-    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_NAME = "applicationdata";
+    private static final int DATABASE_VERSION = 2;
     // запрос на создание базы данных
-    private static final String DATABASE_CREATE = "create table users (_id integer primary key autoincrement, "
+    private static final String DATABASE_CREATE = "create table usersData (_id integer primary key autoincrement, "
             + "login text not null, password text not null, rights text not null);";
 
     public UserDbUsing(Context context) {

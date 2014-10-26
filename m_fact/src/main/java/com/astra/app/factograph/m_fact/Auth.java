@@ -3,13 +3,11 @@ package com.astra.app.factograph.m_fact;
 /**
  * Created by teodor on 20.10.2014.
  */
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,25 +39,23 @@ public class Auth extends Activity {
         auth_below=(TextView) findViewById(R.id.text_auth_below);
     }
 
-    @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.button: {
                 cursor = dbHelper.fetchAllTodos();
                 String[] login = new String[]{UserDbAdapter.KEY_LOGIN};
                 String[] pass = new String[]{UserDbAdapter.KEY_PASSWORD};
-                Log.i("login.size", String.valueOf(login.length));
                 for(int i=0;i<login.length;i++) {
                     if ( login[i].equals(login_field.getText().toString()) ) {
                         if( pass[i].equals(password_field.getText().toString()) ){
-                            auth_below.setTextColor(R.color.cyan);
-                            auth_below.setText("correct credentials");
-                            Intent intent = new Intent(Auth.this, Overview.class);
-                            startActivity(intent);
+                        auth_below.setTextColor(Color.parseColor("#00FF00"));
+                        auth_below.setText("correct credentials");
+                        Intent intent = new Intent(Auth.this, MainActivity.class);
+                        startActivity(intent);
                         }
                     }
                 }
-                auth_below.setTextColor(R.color.red);
+                auth_below.setTextColor(Color.parseColor("#FF0000"));
                 auth_below.setText("Incorrect credentials");
             }
 

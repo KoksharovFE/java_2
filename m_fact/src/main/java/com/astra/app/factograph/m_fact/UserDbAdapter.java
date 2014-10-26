@@ -35,7 +35,7 @@ public class UserDbAdapter {
     }
 
     /**
-    * создать новый элемент списка дел. если создан успешно - возвращается номер строки rowId
+    * создать новый элемент списка юхеров. если создан успешно - возвращается номер строки rowId
     * иначе -1
             */
     public long createTodo(String login, String password, String rights) {

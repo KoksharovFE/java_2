@@ -6,6 +6,7 @@ package com.astra.app.factograph.m_fact;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,22 +48,29 @@ public class Auth extends Activity {
                 for(int i=0;i<login.length;i++) {
                     if ( login[i].equals(login_field.getText().toString()) ) {
                         if( pass[i].equals(password_field.getText().toString()) ){
+                        auth_below.setTextColor(Color.parseColor("#00FF00"));
                         auth_below.setText("correct credentials");
                         Intent intent = new Intent(Auth.this, MainActivity.class);
                         startActivity(intent);
                         }
                     }
                 }
+                auth_below.setTextColor(Color.parseColor("#FF0000"));
                 auth_below.setText("Incorrect credentials");
             }
 
         }
     }
     protected void onStop() {
+        cursor.close();
         super.onStop();
         setResult(RESULT_OK);
     }
-
+    protected void onPause() {
+        cursor.close();
+        super.onStop();
+        setResult(RESULT_OK);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -3,6 +3,7 @@ package com.astra.app.factograph.m_fact;
 /**
  * Created by teodor on 20.10.2014.
  */
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -46,25 +47,45 @@ public class Restrate extends Activity {
         belowOutput = (TextView) this.findViewById(R.id.text_reg_below);
 
     }
-
+    @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.button: {
                 cursor = dbHelper.fetchAllTodos();
                 try {
-                String[] login = new String[]{UserDbAdapter.KEY_LOGIN};
-                String[] pass = new String[]{UserDbAdapter.KEY_PASSWORD};
-                    for (int i = 0; i < login.length; i++) {
-                        if (login[i].equals(loginInput.getText().toString())) {
-                            belowOutput.setTextColor(Color.parseColor("#FF0000"));
+//                    cursor.getString(0);
+//                    cursor.getString(1);
+//                    cursor.getString(2);
+//                    cursor.getString(3);
+//                    Log.i("cursor.getString(1);", cursor.getString(1));
+//                    Log.i("cursor.getString(2);", cursor.getString(2));
+//                    Log.i("cursor.getString(3);", cursor.getString(3));
+                cursor.moveToFirst();
+                //Log.i("UserDbAdapter.KEY_LOGIN;", cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_LOGIN)));
+                    boolean exists=false;
+                    do {
+                        cursor.moveToNext();
+                        String[] login = new String[]{cursor.getString(cursor.getColumnIndex(
+                                UserDbAdapter.KEY_LOGIN))};
+                        String[] pass = new String[]{cursor.getString(cursor.getColumnIndex(
+                                UserDbAdapter.KEY_PASSWORD))};
+                        if (login.equals(loginInput.getText().toString())) {
+//                            belowOutput.setTextColor(Color.parseColor("#FF0000"))
+                            exists=true;
+                            belowOutput.setTextColor(R.color.red);
                             belowOutput.setText("user already exist");
-
+                            Log.i("Name of ", String.valueOf(login));
+                            Log.i("Pass of ", String.valueOf(pass));
+                            break;
                         } else {
-                            saveState();
-                            belowOutput.setTextColor(Color.parseColor("#00FF00"));
-                            belowOutput.setText("user successfully created");
-
+                            Log.i("Name of ", String.valueOf(login));
+                            Log.i("Pass of ", String.valueOf(pass));
                         }
+                    } while(!cursor.isLast());
+                    if(!exists){
+                        saveState();
+                        belowOutput.setTextColor(R.color.cyan);
+                        belowOutput.setText("user successfully created");
                     }
                 }catch(NullPointerException e){
                     saveState();

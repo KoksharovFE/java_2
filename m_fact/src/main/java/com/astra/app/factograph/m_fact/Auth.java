@@ -43,24 +43,39 @@ public class Auth extends Activity {
 
     @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
+        //TODO auth
         switch (view.getId()) {
             case R.id.button: {
                 cursor = dbHelper.fetchAllTodos();
-                String[] login = new String[]{UserDbAdapter.KEY_LOGIN};
-                String[] pass = new String[]{UserDbAdapter.KEY_PASSWORD};
-                Log.i("login.size", String.valueOf(login.length));
-                for(int i=0;i<login.length;i++) {
-                    if ( login[i].equals(login_field.getText().toString()) ) {
-                        if( pass[i].equals(password_field.getText().toString()) ){
-                            auth_below.setTextColor(R.color.cyan);
-                            auth_below.setText("correct credentials");
-                            Intent intent = new Intent(Auth.this, Overview.class);
-                            startActivity(intent);
+                String login_input = Auth.this.login_field.getText().toString();
+                String password_input = Auth.this.password_field.getText().toString();
+                boolean correct_credentials = false;
+                if (cursor.moveToFirst()) {
+                    do {
+                        Integer _id = cursor.getInt(cursor.getColumnIndex(UserDbAdapter.KEY_ROWID));
+                        String login = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_LOGIN));
+                        String pass = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_PASSWORD));
+                        String rights = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_RIGHTS));
+                        if (login_input.equals(login) && password_input.equals(password_input)) {
+                            correct_credentials = true;
                         }
-                    }
+//                        Log.i("login_input of ", login_input+"");
+//                        Log.i("password_input of ", password_input+"");
+//                        Log.i("_id of ", _id+"");
+//                        Log.i("login of ", login+"");
+//                        Log.i("pass of ", pass+"");
+//                        Log.i("rights of ", rights+"");
+                    } while (cursor.moveToNext());
                 }
-                auth_below.setTextColor(R.color.red);
-                auth_below.setText("Incorrect credentials");
+                if (correct_credentials) {
+                    auth_below.setTextColor(R.color.cyan);
+                    auth_below.setText("correct credentials");
+                    Intent intent = new Intent(Auth.this, Overview.class);
+                    startActivity(intent);
+                } else {
+                    auth_below.setTextColor(R.color.red);
+                    auth_below.setText("Incorrect credentials");
+                }
             }
 
         }

@@ -5,4 +5,11 @@
    <color name="cyan">#18FFE2</color>
    <color name="orange">#E89B15</color>
    <color name="light_green">#BFFF60</color>
+   <string name="light_green">#BFFF60</string>
+   <string name="purple">#7A66E8</string>
+   <string name="orange">#E89B15</string>
+   <string name="cyan">#18FFE2</string>
+   <string name="red">#FF2446</string>
+   <color name="listcolor">#FFE87C</color>
+   <color name="black">#000000</color>
 </resources>

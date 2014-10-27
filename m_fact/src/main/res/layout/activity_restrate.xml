@@ -65,6 +65,7 @@
         android:layout_height="wrap_content"
         android:text="@string/back"
         android:id="@+id/button2"
+        android:onClick="buttonClicked"
         android:layout_toStartOf="@+id/button"
         android:layout_above="@+id/text_reg_below"
         android:layout_toLeftOf="@+id/button" />

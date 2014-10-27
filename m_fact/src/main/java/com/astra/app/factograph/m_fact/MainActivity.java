@@ -47,7 +47,10 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(MainActivity.this, Restrate.class);
                 startActivityForResult(intent, 1);
             }
-
+            case R.id.button5: {
+                Intent intent = new Intent(MainActivity.this, MonteMoiEF.class);
+                startActivityForResult(intent, 1);
+            }
         }
 
     }

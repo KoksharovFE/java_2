@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import static com.astra.app.factograph.m_fact.R.id.login_field;
 import static com.astra.app.factograph.m_fact.R.id.password_field;
+import static com.astra.app.factograph.m_fact.R.string;
 
 
 public class Restrate extends Activity {
@@ -53,49 +54,50 @@ public class Restrate extends Activity {
             case R.id.button: {
                 cursor = dbHelper.fetchAllTodos();
                 try {
-//                    cursor.getString(0);
-//                    cursor.getString(1);
-//                    cursor.getString(2);
-//                    cursor.getString(3);
-//                    Log.i("cursor.getString(1);", cursor.getString(1));
-//                    Log.i("cursor.getString(2);", cursor.getString(2));
-//                    Log.i("cursor.getString(3);", cursor.getString(3));
+//              Log.i("cursor.getString(1);", cursor.getString(1));
                 cursor.moveToFirst();
                 //Log.i("UserDbAdapter.KEY_LOGIN;", cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_LOGIN)));
                     boolean exists=false;
-                    do {
-                        cursor.moveToNext();
-                        String[] login = new String[]{cursor.getString(cursor.getColumnIndex(
-                                UserDbAdapter.KEY_LOGIN))};
-                        String[] pass = new String[]{cursor.getString(cursor.getColumnIndex(
-                                UserDbAdapter.KEY_PASSWORD))};
-                        if (login.equals(loginInput.getText().toString())) {
-//                            belowOutput.setTextColor(Color.parseColor("#FF0000"))
-                            exists=true;
-                            belowOutput.setTextColor(R.color.red);
-                            belowOutput.setText("user already exist");
-                            Log.i("Name of ", String.valueOf(login));
-                            Log.i("Pass of ", String.valueOf(pass));
-                            break;
-                        } else {
-                            Log.i("Name of ", String.valueOf(login));
-                            Log.i("Pass of ", String.valueOf(pass));
-                        }
-                    } while(!cursor.isLast());
+                    String login_input=Restrate.this.loginInput.getText().toString();
+                    if (cursor.moveToFirst()){
+                        do{
+                            Integer _id = cursor.getInt(cursor.getColumnIndex(UserDbAdapter.KEY_ROWID));
+                            String login = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_LOGIN));
+                            String pass = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_PASSWORD));
+                            String rights = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_RIGHTS));
+                            if(login.equals(login_input)){
+                                exists=true;
+                            }
+//                            Log.i("_id of ", _id+"");
+//                            Log.i("login of ", login+""); debug
+//                            Log.i("pass of ", pass+"");
+//                            Log.i("rights of ", rights+"");
+                        }while(cursor.moveToNext());
+                    }
+                    if(exists){
+                        //belowOutput.setTextColor(R.color.red);
+                        belowOutput.setTextColor(string.red);
+                        belowOutput.setText("user already exist");
+                    }
                     if(!exists){
                         saveState();
-                        belowOutput.setTextColor(R.color.cyan);
+                       //belowOutput.setTextColor(R.color.cyan);
+                        belowOutput.setTextColor(string.cyan);
                         belowOutput.setText("user successfully created");
                     }
                 }catch(NullPointerException e){
                     saveState();
                     belowOutput.setText("no one users");
                 }
+                break;
 
             }
             case R.id.button2: {
+                cursor.close();
+                super.onStop();
+                setResult(RESULT_OK);
                 this.finish();
-
+                break;
             }
         }
 
@@ -125,16 +127,18 @@ public class Restrate extends Activity {
         cursor.close();
         super.onStop();
         setResult(RESULT_OK);
+        finish();
     }
     protected void onPause() {
         cursor.close();
         super.onStop();
         setResult(RESULT_OK);
+        finish();
     }
     private void saveState() {
-        String rights = "1";
-        String password = "2";
-        String login= "3";
+        String rights = "";
+        String password = "";
+        String login= "";
 //        login_field_reg.setText("Login/2");
 //        password_field_reg.setText("Login/2");
         try {

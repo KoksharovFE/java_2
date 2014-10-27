@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="C:\andWs\Factograph\java_2\m_fact\build\intermediates\pre-dexed\debug\internal_impl-21.0.0-30ad36c18d27f7ccbc6d1ee98bef35fd2d4d97c3.jar"
+        jar="C:\andWs\Factograph\java_2\m_fact\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0\libs\internal_impl-21.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="1609e6d42d0480b0f4188e2c29f75388fa12a8f0"/>
+    <item
+        dex="C:\andWs\Factograph\java_2\m_fact\build\intermediates\pre-dexed\debug\classes-3d88a65a7bda97fe6dde7360982f18af122c9115.jar"
+        jar="C:\andWs\Factograph\java_2\m_fact\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="686344a780033e4ba22b926cd225f8d4941247e6"/>
+    <item
+        dex="C:\andWs\Factograph\java_2\m_fact\build\intermediates\pre-dexed\debug\classes-d94ee84ad37616193d3bc9844eb5a6ad1e153c25.jar"
+        jar="C:\andWs\Factograph\java_2\m_fact\build\intermediates\exploded-aar\com.android.support\support-v13\21.0.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="0c0c19759e5868604a3b4c2c0074ee9404d73c76"/>
+    <item
+        dex="C:\andWs\Factograph\java_2\m_fact\build\intermediates\pre-dexed\debug\support-annotations-21.0.0-12c1a64ad23e0be888f0dfa6119e65a210bf4620.jar"
+        jar="C:\Program Files (x86)\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.0\support-annotations-21.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="1a578b9607b36266c63d43a4fa0ab5664dbe911e"/>
+    <item
+        dex="C:\andWs\Factograph\java_2\m_fact\build\intermediates\pre-dexed\debug\internal_impl-21.0.0-503392d94ca2558ee00bd177d197e3dc663cf7c2.jar"
+        jar="C:\andWs\Factograph\java_2\m_fact\build\intermediates\exploded-aar\com.android.support\support-v13\21.0.0\libs\internal_impl-21.0.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="5a8e01742aee890c56fe638ea7c921b91a3fdc62"/>
+
+</pre-dex-items>

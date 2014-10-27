@@ -1,0 +1,7 @@
+if (cursor.moveToFirst()){
+   do{
+      String data = cursor.getString(cursor.getColumnIndex("data"));
+      // do what ever you want here
+   }while(cursor.moveToNext());
+}
+cursor.close();

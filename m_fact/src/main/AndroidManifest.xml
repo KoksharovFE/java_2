@@ -35,6 +35,10 @@
             android:name=".Restrate"
             android:label="@string/title_activity_restrate" >
         </activity>
+        <activity
+            android:name=".MonteMoiEF"
+            android:label="@string/title_activity_monte_moi_ef" >
+        </activity>
     </application>
 
 </manifest>

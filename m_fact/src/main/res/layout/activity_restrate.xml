@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.astra.app.factograph.m_fact.Restrate">
+
+    <TextView
+        android:text="@string/registration_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="216dp"
+        android:id="@+id/regText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/login_field_reg"
+        android:layout_below="@+id/regText"
+        android:layout_alignRight="@+id/regText"
+        android:layout_alignEnd="@+id/regText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="@string/password"
+        android:ems="10"
+        android:id="@+id/password_field_reg"
+        android:layout_below="@+id/login_field_reg"
+        android:layout_alignRight="@+id/regText"
+        android:layout_alignEnd="@+id/regText" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_registration"
+        android:id="@+id/button"
+        android:onClick="buttonClicked"
+        android:layout_below="@+id/category"
+        android:layout_alignRight="@+id/regText"
+        android:layout_alignEnd="@+id/regText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/voids"
+        android:id="@+id/text_reg_below"
+        android:layout_below="@+id/button"
+        android:textColor="#ffff0000"
+        android:layout_alignLeft="@+id/password_field_reg"
+        android:layout_alignStart="@+id/password_field_reg" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:id="@+id/button2"
+        android:onClick="buttonClicked"
+        android:layout_toStartOf="@+id/button"
+        android:layout_above="@+id/text_reg_below"
+        android:layout_toLeftOf="@+id/button" />
+
+    <Spinner
+        android:id="@+id/category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/Rights"
+        android:layout_toStartOf="@+id/password_field_reg"
+        android:layout_toEndOf="@+id/text_reg_below"
+        android:layout_below="@+id/password_field_reg"
+        android:layout_alignLeft="@+id/password_field_reg"
+        android:layout_alignStart="@+id/password_field_reg"
+        android:layout_alignRight="@+id/regText"
+        android:layout_alignEnd="@+id/regText"></Spinner>
+
+</RelativeLayout>

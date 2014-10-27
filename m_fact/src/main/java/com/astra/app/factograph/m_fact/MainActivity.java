@@ -1,4 +1,7 @@
 package com.astra.app.factograph.m_fact;
+/**
+ * Created by konnor2007 on 07.09.14.
+ */
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,11 +32,30 @@ public class MainActivity extends Activity {
         switch (view.getId()) {
             case R.id.button: {
                 Intent intent = new Intent(MainActivity.this, Overview.class);
-                startActivity(intent);
+                startActivityForResult(intent, 1);
+                //startActivity(intent);
+            }
+            case R.id.button2: {
+                this.finish();
+                System.exit(0);
+            }
+            case R.id.button3: {
+                Intent intent = new Intent(MainActivity.this, Auth.class);
+                startActivityForResult(intent, 1);
+            }
+            case R.id.button4: {
+                Intent intent = new Intent(MainActivity.this, Restrate.class);
+                startActivityForResult(intent, 1);
+            }
+            case R.id.button5: {
+                Intent intent = new Intent(MainActivity.this, MonteMoiEF.class);
+                startActivityForResult(intent, 1);
             }
         }
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

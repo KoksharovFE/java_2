@@ -1,4 +1,7 @@
 package com.astra.app.factograph.m_fact;
+/**
+ * Created by konnor2007 on 07.09.14.
+ */
 
 import android.app.Activity;
 import android.database.Cursor;

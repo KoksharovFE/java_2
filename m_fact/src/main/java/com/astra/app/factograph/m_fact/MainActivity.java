@@ -34,22 +34,28 @@ public class MainActivity extends Activity {
                 Intent intent = new Intent(MainActivity.this, Overview.class);
                 startActivityForResult(intent, 1);
                 //startActivity(intent);
+                break;
             }
+
             case R.id.button2: {
                 this.finish();
                 System.exit(0);
+                break;
             }
             case R.id.button3: {
                 Intent intent = new Intent(MainActivity.this, Auth.class);
                 startActivityForResult(intent, 1);
+                break;
             }
             case R.id.button4: {
                 Intent intent = new Intent(MainActivity.this, Restrate.class);
                 startActivityForResult(intent, 1);
+                break;
             }
             case R.id.button5: {
                 Intent intent = new Intent(MainActivity.this, MonteMoiEF.class);
                 startActivityForResult(intent, 1);
+                break;
             }
         }
 

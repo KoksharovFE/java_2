@@ -76,13 +76,13 @@ public class Restrate extends Activity {
                     }
                     if(exists){
                         //belowOutput.setTextColor(R.color.red);
-                        belowOutput.setTextColor(string.red);
+                        belowOutput.setTextColor(getResources().getColor(R.color.red));
                         belowOutput.setText("user already exist");
                     }
                     if(!exists){
                         saveState();
-                       //belowOutput.setTextColor(R.color.cyan);
-                        belowOutput.setTextColor(string.cyan);
+                        //belowOutput.setTextColor(R.color.cyan);
+                        belowOutput.setTextColor(getResources().getColor(R.color.cyan));
                         belowOutput.setText("user successfully created");
                     }
                 }catch(NullPointerException e){

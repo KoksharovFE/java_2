@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="priorities">
-        <item>Urgent</item>
-        <item>Reminder</item>
+        <item>Fact</item>
+        <item>Event</item>
     </string-array>
     <string-array name="Rights">
         <item>Read-Only</item>
         <item>Read-Write</item>
+    </string-array>
+    <string-array name="Type">
+        <item>Event</item>
+        <item>Fact</item>
+        <item>Place</item>
+    </string-array>
+    <string-array name="TypeForSearch">
+        <item>Event</item>
+        <item>Fact</item>
+        <item>Place</item>
+        <item>User</item>
+        <item>Link</item>
+    </string-array>
+    <string-array name="Category">
+        <item>Art</item>
+        <item>Enterprise</item>
+        <item>Entertainment</item>
+        <item>Nature</item>
+        <item>Health</item>
+        <item>Other</item>
     </string-array>
 </resources>

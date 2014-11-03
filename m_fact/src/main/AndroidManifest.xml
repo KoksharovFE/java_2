@@ -3,6 +3,7 @@
     package="com.astra.app.factograph.m_fact" >
 
     <application
+        android:name=".MyGlobalSigns"
         android:allowBackup="true"
         android:icon="@drawable/c4_luancher"
         android:label="@string/app_name"
@@ -38,6 +39,10 @@
         <activity
             android:name=".MonteMoiEF"
             android:label="@string/title_activity_monte_moi_ef" >
+        </activity>
+        <activity
+            android:name=".EditEF"
+            android:label="@string/title_activity_edit_ef" >
         </activity>
     </application>
 

@@ -11,9 +11,10 @@ import android.util.Log;
 public class EFDbUsing extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "applicationdata";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
+    private static final String DATABASE_TABLE = "eventFact";
     // запрос на создание базы данных
-    private static final String DATABASE_CREATE = "create table eventfact (_id integer primary key autoincrement, "
+    private static final String DATABASE_CREATE = "create table "+ DATABASE_TABLE+ " (_id integer primary key autoincrement, "
             + "name text not null, type text not null, description text, category text not null);";
 
     public EFDbUsing(Context context) {
@@ -34,7 +35,7 @@ public class EFDbUsing extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data"
         );
-        database.execSQL("DROP TABLE IF EXISTS eventfact");
+        database.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE);
         onCreate(database);
     }
 }

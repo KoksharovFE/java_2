@@ -32,13 +32,13 @@ public class EditEF extends Activity {
         mType = (Spinner) findViewById(R.id.type);
         mName = (EditText) findViewById(R.id.ef_edit_Name);
         mDescription = (EditText) findViewById(R.id.ef_edit_description);
-        Button confirmButton = (Button) findViewById(R.id.todo_edit_button);
+        //Button confirmButton = (Button) findViewById(R.id.todo_edit_button);
         mRowId = null;
         Bundle extras = getIntent().getExtras();
         mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
-                .getSerializable(DBadapter.KEY_ROWID);
+                .getSerializable(EFDbAdapted.KEY_ROWID);
         if (extras != null) {
-            mRowId = extras.getLong(DBadapter.KEY_ROWID);
+            mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
         }
         populateFields();
 //        try {

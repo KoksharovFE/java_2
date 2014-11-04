@@ -10,17 +10,20 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -33,9 +36,9 @@ import android.widget.TextView;
 public class MonteMoiEF extends Activity {
     private EFDbAdapted efHelper;
     private UserDbAdapter userHelper;
-    private static final int ACTIVITY_CREATE = 0;
-    private static final int ACTIVITY_EDIT = 1;
-    private static final int DELETE_ID = Menu.FIRST + 1;
+    //    private static final int ACTIVITY_CREATE = 0;
+//    private static final int ACTIVITY_EDIT = 1;
+//    private static final int DELETE_ID = Menu.FIRST + 1;
     private Cursor cursor;
     private Spinner mType;
     private EditText mSearch;
@@ -106,9 +109,10 @@ public class MonteMoiEF extends Activity {
             case R.id.button3: {
                 //TODO search
                 String type = (String) mType.getSelectedItem();
-                String[] names = new String[0];
-                ArrayList<String> namesDinamic= new ArrayList<String>();
-                if(type.equals("User")){//Вывод Пользователей
+//                String[] names = new String[0];
+                ArrayList<String> namesDinamic = new ArrayList<String>();
+                ArrayList<String> descrptionDinamic = new ArrayList<String>();
+                if (type.equals("User")) {//Вывод Пользователей
                     cursor = userHelper.fetchAllTodos();
                     if (cursor.moveToFirst()) {
                         do {
@@ -117,14 +121,15 @@ public class MonteMoiEF extends Activity {
                             String upass = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_PASSWORD));
                             String urights = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_RIGHTS));
                             namesDinamic.add(ulogin);
-                        }while (cursor.moveToNext());
-                        names = new String[namesDinamic.size()];
-                        namesDinamic.toArray(names);
+                            descrptionDinamic.add(_id.toString());
+                        } while (cursor.moveToNext());
+//                        names = new String[namesDinamic.size()];
+//                        namesDinamic.toArray(names);
                     }
 
                 }
-                if(type.equals("Fact") || type.equals("Event") || type.equals("Place")){
-                //Вывод Фактов || Вывод Событий || Вывод Мест
+                if (type.equals("Fact") || type.equals("Event") || type.equals("Place")) {
+                    //Вывод Фактов || Вывод Событий || Вывод Мест
                     cursor = efHelper.fetchAllTodos();
                     if (cursor.moveToFirst()) {
                         do {
@@ -133,26 +138,67 @@ public class MonteMoiEF extends Activity {
                             String eftype = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_TYPE));
                             String efdescription = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_DESCRIPTION));
                             String efcategory = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_CATEGORY));
-                            if(type.equals(eftype)){
+                            if (type.equals(eftype)) {
                                 namesDinamic.add(efname);
+                                descrptionDinamic.add(_id.toString());
                             }
-                        }while (cursor.moveToNext());
-                        names = new String[namesDinamic.size()];
-                        namesDinamic.toArray(names);
+                        } while (cursor.moveToNext());
+//                        names = new String[namesDinamic.size()];
+//                        namesDinamic.toArray(names);
                     }
                 }
-                if(type.equals("Link")){//Вывод Связей
+                if (type.equals("Link")) {//Вывод Связей
                     //TODO for links output
-                    names = new String[1];
-                    names[0]="Links not work";
+//                    names = new String[1];
+//                    names[0] = "Links not work";
+                    namesDinamic.add("Links not work");
+                    descrptionDinamic.add("no one link");
                 }
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                        android.R.layout.simple_list_item_1, names);
+                ArrayList<Item> items = new ArrayList<Item>();
+//                items.addAll(namesDinamic,descrptionDinamic);
+                int i=0;
+                while(i<namesDinamic.size()){
+                    items.add(new Item(namesDinamic.get(i),descrptionDinamic.get(i)));
+                    i++;
+                }
+                MyEDListViewAdapter adapter = new MyEDListViewAdapter(this,items);
+//                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+//                        android.R.layout.simple_list_item_1, names);
                 mListView.setAdapter(adapter);
+                mListView.setTextFilterEnabled(true);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+//                        String value; // Это то что вам надо
+//                        value = (String) a.getItemAtPosition(position);
+                        ItemClickListener(a, v, position, id);
+                    }
+                });
                 break;
             }
         }
     }
+
+    public void ItemClickListener(AdapterView<?> a, View v, int position, long id) {
+        //TODO not work, try to catch error
+        Item chosenItem = (Item) a.getSelectedItem();
+        String name = chosenItem.getTitle();
+        String _id = chosenItem.getDescription();
+        String type = (String) mType.getSelectedItem();
+        if(type.equals("Fact") || type.equals("Event") || type.equals("Place")){
+            Intent intent = new Intent(MonteMoiEF.this, EditEF.class);
+            intent.putExtra(EFDbAdapted.KEY_ROWID,Long.parseLong(_id));
+            startActivityForResult(intent, 1);
+        }
+        if (type.equals("User")) {
+            //TODO users edit
+            Log.i("Users Editor","Not Created");
+        }
+        if (type.equals("Link")) {
+            //TODO links edit
+            Log.i("Links Editor","Not Created");
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -185,6 +231,7 @@ public class MonteMoiEF extends Activity {
         userHelper.open();
         efHelper.open();
     }
+
     protected void onStop() {
         super.onStop();
         userHelper.close();
@@ -264,4 +311,59 @@ public class MonteMoiEF extends Activity {
 //        }
 //    }
 
+    public class Item {
+
+        private String title;
+        private String description;
+
+        public Item(String title, String description) {
+            super();
+            this.title = title;
+            this.description = description;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+        // getters and setters...
+    }
+
+    private class MyEDListViewAdapter extends ArrayAdapter<Item> {
+
+        private final Context context;
+        private final ArrayList<Item> itemsArrayList;
+
+        public MyEDListViewAdapter(Context context, ArrayList<Item> itemsArrayList) {
+            super(context, R.layout.row, itemsArrayList);
+            this.context = context;
+            this.itemsArrayList = itemsArrayList;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            // 1. Create inflater
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            // 2. Get rowView from inflater
+            View rowView = inflater.inflate(R.layout.row, parent, false);
+
+            // 3. Get the two text view from the rowView
+            TextView labelView = (TextView) rowView.findViewById(R.id.monte_moi_item_name);
+            TextView descriptionView = (TextView) rowView.findViewById(R.id.monte_moi_item_description);
+
+            // 4. Set the text for textView
+            labelView.setText(itemsArrayList.get(position).getTitle());
+            descriptionView.setText(itemsArrayList.get(position).getDescription());
+
+            // 5. retrn rowView
+            return rowView;
+        }
+
+    };
 }

@@ -37,6 +37,7 @@
     <string name="title_section1">Fact</string>
     <string name="title_section2">Event</string>
     <string name="title_section3">Place</string>
+    <string name="pattern">.*</string>
     <string name="EFview">Event/Fact/Place view</string>
     <string name="title_activity_edit_ef">EditEF</string>
 

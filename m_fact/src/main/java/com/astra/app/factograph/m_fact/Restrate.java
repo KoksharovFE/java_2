@@ -80,10 +80,27 @@ public class Restrate extends Activity {
                         belowOutput.setText("user already exist");
                     }
                     if(!exists){
-                        saveState();
+                        String rights = "";
+                        String password = "";
+                        String login= "";
+                        rights = (String) spinnerInput.getSelectedItem();
+                        login =(String) Restrate.this.loginInput.getText().toString();
+                        password =(String) Restrate.this.passwordInput.getText().toString();
+                        if(login.length() >= 8) {
+                            if (password.length() >= 8) {
+                                saveState();
+                                belowOutput.setTextColor(getResources().getColor(R.color.cyan));
+                                belowOutput.setText("user successfully created");
+
+                            } else {
+                                belowOutput.setTextColor(getResources().getColor(R.color.red));
+                                belowOutput.setText("password not contains 8 characters");
+                            }
+                        } else {
+                            belowOutput.setTextColor(getResources().getColor(R.color.red));
+                            belowOutput.setText("login not contains 8 characters");
+                        }
                         //belowOutput.setTextColor(R.color.cyan);
-                        belowOutput.setTextColor(getResources().getColor(R.color.cyan));
-                        belowOutput.setText("user successfully created");
                     }
                 }catch(NullPointerException e){
                     saveState();
@@ -145,12 +162,12 @@ public class Restrate extends Activity {
             rights = (String) spinnerInput.getSelectedItem();
             login =(String) Restrate.this.loginInput.getText().toString();
             password =(String) Restrate.this.passwordInput.getText().toString();
-                if (rowId == null) {
-                    long id = dbHelper.createTodo(login, password, rights);
-                    if (id > 0) {
-                        rowId = id;
-                    }
+            if (rowId == null) {
+                long id = dbHelper.createTodo(login, password, rights);
+                if (id > 0) {
+                    rowId = id;
                 }
+            }
             //Log.i("fields",rights+" "+password+" "+login);
         } catch (Exception e) {
             Log.e(e.toString(),"null fields try to write in database");

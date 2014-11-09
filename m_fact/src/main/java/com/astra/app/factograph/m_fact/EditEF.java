@@ -74,7 +74,7 @@ public class EditEF extends Activity {
                     .getColumnIndexOrThrow(EFDbAdapted.KEY_CATEGORY));
             for (int i = 0; i < mCategory.getCount(); i++) {
                 String s = (String) mCategory.getItemAtPosition(i);
-                Log.e(null, s + " " + category);
+                //Log.e(null, s + " " + category);
                 if (s.equalsIgnoreCase(category)) {
                     mCategory.setSelection(i);
                 }
@@ -83,7 +83,7 @@ public class EditEF extends Activity {
                     .getColumnIndexOrThrow(EFDbAdapted.KEY_TYPE));
             for (int i = 0; i < mType.getCount(); i++) {
                 String s = (String) mType.getItemAtPosition(i);
-                Log.e(null, s + " " + type);
+                //Log.e(null, s + " " + type);
                 if (s.equalsIgnoreCase(type)) {
                     mType.setSelection(i);
                 }
@@ -142,14 +142,15 @@ public class EditEF extends Activity {
         String type = (String) mType.getSelectedItem();
         String name = mName.getText().toString();
         String description = mDescription.getText().toString();
-
-        if (mRowId == null) {
-            long id = mDbHelper.createTodo(name, type, description, category);
-            if (id > 0) {
-                mRowId = id;
+        if(name.length() > 0){
+            if (mRowId == null) {
+                long id = mDbHelper.createTodo(name, type, description, category);
+                if (id > 0) {
+                    mRowId = id;
+                }
+            } else {
+                mDbHelper.updateTodo(mRowId, name, type, description, category);
             }
-        } else {
-            mDbHelper.updateTodo(mRowId, name, type, description, category);
         }
     }
 

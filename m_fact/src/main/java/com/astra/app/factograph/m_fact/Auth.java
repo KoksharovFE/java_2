@@ -73,7 +73,7 @@ public class Auth extends Activity {
                 if (correct_credentials) {
                     auth_below.setTextColor(getResources().getColor(R.color.cyan));
                     auth_below.setText("correct credentials");
-                    Intent intent = new Intent(Auth.this, Overview.class);
+                    Intent intent = new Intent(Auth.this, MainActivity.class);
                     startActivity(intent);
                 } else {
                     auth_below.setTextColor(getResources().getColor(R.color.red));
@@ -87,12 +87,14 @@ public class Auth extends Activity {
         cursor.close();
         super.onStop();
         setResult(RESULT_OK);
+        this.finish();
     }
-    protected void onPause() {
-        cursor.close();
-        super.onStop();
-        setResult(RESULT_OK);
-    }
+//    protected void onPause() {
+//        cursor.close();
+//        super.onStop();
+//        setResult(RESULT_OK);
+//        this.finish();
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

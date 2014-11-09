@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ import android.widget.TextView;
  * Created by teodor on 27.10.2014.
  */
 
-public class MonteMoiEF extends Activity {
+public class MonteMoiEF extends ListActivity {
     private EFDbAdapted efHelper;
     private UserDbAdapter userHelper;
     //    private static final int ACTIVITY_CREATE = 0;
@@ -44,6 +45,7 @@ public class MonteMoiEF extends Activity {
     private EditText mSearch;
     private ListView mListView;
     ViewPager mViewPager;
+    private Menu menu;
 //    SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
@@ -74,12 +76,13 @@ public class MonteMoiEF extends Activity {
 //        mViewPager.setAdapter(mSectionsPagerAdapter);
         mType = (Spinner) findViewById(R.id.monte_moi_spinner);
         mSearch = (EditText) findViewById(R.id.monte_moi_search);
-        mListView = (ListView) findViewById(R.id.monte_moi_list_view);
+        //mListView = (ListView) findViewById(R.id.monte_moi_list_view);
         //TODO databasetalbe_links
         efHelper = new EFDbAdapted(this);
-        efHelper.open();
         userHelper = new UserDbAdapter(this);
-        userHelper.open();
+        mListView = (ListView) this.getListView();
+//        userHelper.open();
+//        efHelper.open();
     }
 
     @SuppressLint("ResourceAsColor")
@@ -108,6 +111,8 @@ public class MonteMoiEF extends Activity {
 //            intent.putExtra("lname", etLName.getText().toString());
             case R.id.button3: {
                 //TODO search
+                userHelper.open();
+                efHelper.open();
                 String type = (String) mType.getSelectedItem();
 //                String[] names = new String[0];
                 ArrayList<String> namesDinamic = new ArrayList<String>();
@@ -166,13 +171,15 @@ public class MonteMoiEF extends Activity {
 //                        android.R.layout.simple_list_item_1, names);
                 mListView.setAdapter(adapter);
                 mListView.setTextFilterEnabled(true);
-                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-//                        String value; // Это то что вам надо
-//                        value = (String) a.getItemAtPosition(position);
-                        ItemClickListener(a, v, position, id);
-                    }
-                });
+                userHelper.close();
+                efHelper.close();
+//                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+////                        String value; // Это то что вам надо
+////                        value = (String) a.getItemAtPosition(position);
+//                        ItemClickListener(a, v, position, id);
+//                    }
+//                });
                 break;
             }
         }
@@ -198,11 +205,13 @@ public class MonteMoiEF extends Activity {
             Log.i("Links Editor","Not Created");
         }
     }
-
+    // Создаем меню, основанное на XML-файле
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.monte_moi_e, menu);
+        this.menu = menu;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.listmenu, menu);
         return true;
     }
 
@@ -225,12 +234,12 @@ public class MonteMoiEF extends Activity {
         efHelper.close();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        userHelper.open();
-        efHelper.open();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        userHelper.open();
+//        efHelper.open();
+//    }
 
     protected void onStop() {
         super.onStop();
@@ -240,6 +249,46 @@ public class MonteMoiEF extends Activity {
         finish();
     }
 
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+//        Intent i = new Intent(this, Details.class);
+//        i.putExtra(EFDbAdapted.KEY_ROWID, id);
+//        // активити вернет результат если будет вызвано с помощью этого метода
+//        startActivityForResult(i,1);
+        try {
+            super.onListItemClick(l, v, position, id);
+            //TODO not work, try to catch error
+//            userHelper.open();
+//            efHelper.open();
+            MyEDListViewAdapter adapter =(MyEDListViewAdapter) l.getAdapter();
+            Item chosenItem = adapter.getItem(position);
+            String name = chosenItem.getTitle();
+            String _id = chosenItem.getDescription();
+            String type = (String) mType.getSelectedItem();
+            if (type.equals("Fact") || type.equals("Event") || type.equals("Place")) {
+                Intent intent = new Intent(MonteMoiEF.this, EditEF.class);
+                intent.putExtra(EFDbAdapted.KEY_ROWID, Long.parseLong(_id));
+                startActivityForResult(intent, 1);
+                Log.i("try : ", "7");
+            }
+            if (type.equals("User")) {
+                //TODO users edit && rights
+                Log.i("Users Editor", "Not Created");
+            }
+            if (type.equals("Link")) {
+                //TODO links edit
+                Log.i("Links Editor", "Not Created");
+            }
+            userHelper.close();
+            efHelper.close();
+        }catch (NullPointerException e){
+            Log.e("null err", "in monte moi ef");
+        }
+//        finally { not work
+//            userHelper.close();
+//            efHelper.close();
+//        }
+    }
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.

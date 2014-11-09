@@ -5,7 +5,7 @@
 
     <ImageView
         android:id="@+id/icon"
-        android:src="@drawable/c6"
+        android:src="@drawable/c4_luancher"
         android:layout_marginLeft="4px"
         android:layout_marginRight="8px"
         android:layout_height="40px"

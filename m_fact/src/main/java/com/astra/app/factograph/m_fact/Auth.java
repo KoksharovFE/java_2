@@ -6,6 +6,7 @@ package com.astra.app.factograph.m_fact;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -43,7 +44,6 @@ public class Auth extends Activity {
 
     @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
-        //TODO auth
         switch (view.getId()) {
             case R.id.button: {
                 cursor = dbHelper.fetchAllTodos();
@@ -58,6 +58,9 @@ public class Auth extends Activity {
                         String rights = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_RIGHTS));
                         if (login_input.equals(login) && password_input.equals(password_input)) {
                             correct_credentials = true;
+//                            MyGlobalSigns appState = ((MyGlobalSigns)this.getApplicationContext());
+//                            String s=rights; TODO global
+//                            String state = appState.setRights("t");
                         }
 //                        Log.i("login_input of ", login_input+"");
 //                        Log.i("password_input of ", password_input+"");
@@ -68,12 +71,12 @@ public class Auth extends Activity {
                     } while (cursor.moveToNext());
                 }
                 if (correct_credentials) {
-                    auth_below.setTextColor(R.color.cyan);
+                    auth_below.setTextColor(getResources().getColor(R.color.cyan));
                     auth_below.setText("correct credentials");
-                    Intent intent = new Intent(Auth.this, Overview.class);
+                    Intent intent = new Intent(Auth.this, MainActivity.class);
                     startActivity(intent);
                 } else {
-                    auth_below.setTextColor(R.color.red);
+                    auth_below.setTextColor(getResources().getColor(R.color.red));
                     auth_below.setText("Incorrect credentials");
                 }
             }
@@ -84,12 +87,14 @@ public class Auth extends Activity {
         cursor.close();
         super.onStop();
         setResult(RESULT_OK);
+        this.finish();
     }
-    protected void onPause() {
-        cursor.close();
-        super.onStop();
-        setResult(RESULT_OK);
-    }
+//    protected void onPause() {
+//        cursor.close();
+//        super.onStop();
+//        setResult(RESULT_OK);
+//        this.finish();
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

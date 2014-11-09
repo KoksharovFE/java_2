@@ -16,15 +16,15 @@ public class EFDbAdapted {
     public static final String KEY_TYPE = "type";
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_CATEGORY = "category";
-    private static final String DATABASE_TABLE = "usersData";
+    private static final String DATABASE_TABLE = "eventFact";
     private Context context;
     private SQLiteDatabase database;
-    private UserDbUsing dbHelper;
+    private EFDbUsing dbHelper;
     public EFDbAdapted(Context context) {
         this.context = context;
     }
     public EFDbAdapted open() throws SQLException {
-        dbHelper = new UserDbUsing(context);
+        dbHelper = new EFDbUsing(context);
         database = dbHelper.getWritableDatabase();
         return this;
     }
@@ -86,7 +86,7 @@ public class EFDbAdapted {
         values.put(KEY_NAME, name);
         values.put(KEY_TYPE, type);
         values.put(KEY_DESCRIPTION, description);
-        values.put(KEY_DESCRIPTION, category);
+        values.put(KEY_CATEGORY, category);
         return values;
     }
 }

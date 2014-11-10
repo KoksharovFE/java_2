@@ -182,13 +182,14 @@ public class MonteMoiEF extends ListActivity {
                     }
                 }
 
-                if (type.equals("Link")) {//Вывод Связей
-                    //TODO for links output && matcher
-//                    names = new String[1];
-//                    names[0] = "Links not work";
-                    namesDinamic.add("Links not work");
-                    descrptionDinamic.add("no one link");
-                }
+//                if (type.equals("Link")) {//Вывод Связей
+//                    //TO DO for links output && matcher
+////                    names = new String[1];
+////                    names[0] = "Links not work";
+//                    namesDinamic.add("Links not work");
+//                    descrptionDinamic.add("no one link");
+//                }
+
                 ArrayList<Item> items = new ArrayList<Item>();
 //                items.addAll(namesDinamic,descrptionDinamic);
                 int i=0;
@@ -204,13 +205,7 @@ public class MonteMoiEF extends ListActivity {
                 userHelper.close();
                 efHelper.close();
                 linksHelper.close();
-//                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-////                        String value; // Это то что вам надо
-////                        value = (String) a.getItemAtPosition(position);
-//                        ItemClickListener(a, v, position, id);
-//                    }
-//                });
+                cursor.close();
                 break;
             }
         }
@@ -261,8 +256,6 @@ public class MonteMoiEF extends ListActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        userHelper.close();
-        efHelper.close();
     }
 
 //    @Override
@@ -274,8 +267,6 @@ public class MonteMoiEF extends ListActivity {
 
     protected void onStop() {
         super.onStop();
-        userHelper.close();
-        efHelper.close();
         setResult(RESULT_OK);
         finish();
     }
@@ -300,16 +291,15 @@ public class MonteMoiEF extends ListActivity {
                 Intent intent = new Intent(MonteMoiEF.this, EditEF.class);
                 intent.putExtra(EFDbAdapted.KEY_ROWID, Long.parseLong(_id));
                 startActivityForResult(intent, 1);
-                Log.i("try : ", "7");
             }
             if (type.equals("User")) {
                 //TODO users edit && rights
                 Log.i("Users Editor", "Not Created");
             }
-            if (type.equals("Link")) {
-                //TODO links edit
-                Log.i("Links Editor", "Not Created");
-            }
+//            if (type.equals("Link")) {
+//                //TO DO links edit
+//                Log.i("Links Editor", "Not Created");
+//            }
             userHelper.close();
             efHelper.close();
         }catch (NullPointerException e){
@@ -320,76 +310,6 @@ public class MonteMoiEF extends ListActivity {
 //            efHelper.close();
 //        }
     }
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-//    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-//
-//        public SectionsPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            // getItem is called to instantiate the fragment for the given page.
-//            // Return a PlaceholderFragment (defined as a static inner class below).
-//            return PlaceholderFragment.newInstance(position + 1);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            // Show 3 total pages.
-//            return 3;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            Locale l = Locale.getDefault();
-//            switch (position) {
-//                case 0:
-//                    return getString(R.string.title_section1).toUpperCase(l);
-//                case 1:
-//                    return getString(R.string.title_section2).toUpperCase(l);
-//                case 2:
-//                    return getString(R.string.title_section3).toUpperCase(l);
-//            }
-//            return null;
-//        }
-//    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_monte_moi_e, container, false);
-//            return rootView;
-//        }
-//    }
 
     public class Item {
 

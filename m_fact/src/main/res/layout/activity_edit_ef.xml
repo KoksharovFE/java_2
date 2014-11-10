@@ -40,8 +40,8 @@
             android:entries="@array/Category"></Spinner>
 
         <EditText
-            android:layout_width="227dp"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/ef_edit_description"
             android:hint="Description"
             android:gravity="top"
@@ -50,6 +50,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/ef_edit_Name"></EditText>
+
     </TableLayout>
 
 </RelativeLayout>

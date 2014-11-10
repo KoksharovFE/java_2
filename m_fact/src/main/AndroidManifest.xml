@@ -44,6 +44,10 @@
             android:name=".EditEF"
             android:label="@string/title_activity_edit_ef" >
         </activity>
+        <activity
+            android:name=".Links"
+            android:label="@string/title_activity_links" >
+        </activity>
     </application>
 
 </manifest>

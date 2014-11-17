@@ -32,8 +32,8 @@ public class EditEF extends Activity implements View.OnTouchListener{
     private Spinner mCategory;
     private Spinner mType;
     protected float fromPosition;
-    protected int counter = 0;
-    protected float MOVE_LENGTH = 200;
+    protected int counter = 0, flipDisp=0, flipMax=0;
+    protected float MOVE_LENGTH = 100;
     ViewFlipper flipper;
     LayoutInflater inflater;
 
@@ -42,17 +42,18 @@ public class EditEF extends Activity implements View.OnTouchListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_ef);
         mDbHelper = new EFDbAdapted(this);
-        mDbHelper.open();
+
         mCategory = (Spinner) findViewById(R.id.category);
         mType = (Spinner) findViewById(R.id.type);
         mName = (EditText) findViewById(R.id.ef_edit_Name);
         mDescription = (EditText) findViewById(R.id.ef_edit_description);
 
         //Button confirmButton = (Button) findViewById(R.id.todo_edit_button);
-        flipper = (ViewFlipper) findViewById(R.id.flipper);
+        flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        int layouts[] = new int[] {R.layout.edit_ef_links, R.layout.void_layout};//TODO tag layout
-         try {//TODO check the problem
+        int layouts[] = new int[] {R.layout.edit_ef_links, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
+        flipMax=layouts.length;
+        try {//TODO check the problem
             for (int layout : layouts) {
                 //flipper.addView(inflater.inflate(layout, null));
                 View views= inflater.inflate(layout,null);
@@ -68,7 +69,9 @@ public class EditEF extends Activity implements View.OnTouchListener{
         if (extras != null) {
             mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
         }
+
         populateFields();
+        mDbHelper.close();
 
     }
 //        try {
@@ -107,10 +110,75 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 //TODO Delete link
                 break;
             }
+            case R.id.ef_image_previous: {
+                //flipper.showPrevious();//flipper.showNext();
+                if(flipDisp>0) {
+                    flipDisp--;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
+            case R.id.ef_links_previous: {
+                //flipper.showPrevious();//flipper.showNext();
+                if(flipDisp>0) {
+                    flipDisp--;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
+            case R.id.ef_music_previous: {
+                //flipper.showPrevious();//flipper.showNext();
+                if(flipDisp>0) {
+                    flipDisp--;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
+            case R.id.void_previous: {
+                flipper.showPrevious();//flipper.showNext();
+                if(flipDisp>0) {
+                    flipDisp--;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
+            case R.id.ef_image_next: {
+                //flipper.showNext();
+                if(flipDisp<flipMax) {
+                    flipDisp++;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
+            case R.id.ef_links_next: {
+                //flipper.showNext();
+                if(flipDisp<flipMax) {
+                    flipDisp++;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
+            case R.id.ef_music_next: {
+                //flipper.showNext();
+                if(flipDisp<flipMax) {
+                    flipDisp++;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
+            case R.id.void_next: {
+                //flipper.showNext();
+                if(flipDisp<flipMax) {
+                    flipDisp++;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
         }
     }
 
     private void populateFields() {
+        mDbHelper.open();
         if (mRowId != null) {
             Cursor todo = mDbHelper.fetchTodo(mRowId);
             startManagingCursor(todo);
@@ -137,6 +205,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
             mDescription.setText(todo.getString(todo
                     .getColumnIndexOrThrow(EFDbAdapted.KEY_DESCRIPTION)));
         }
+        mDbHelper.close();
     }
 
     protected void onSaveInstanceState(Bundle outState) {
@@ -168,23 +237,23 @@ public class EditEF extends Activity implements View.OnTouchListener{
     protected void onPause() {
         super.onPause();
         saveState();
-        mDbHelper.close();
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mDbHelper.open();
         populateFields();
     }
-    protected void onStop() {
-        super.onStop();
-        mDbHelper.close();
-        setResult(RESULT_OK);
-        finish();
-    }
+//    protected void onStop() {
+//        super.onStop();
+//        setResult(RESULT_OK);
+//        finish();
+//    }
     private void saveState() {
         //TODO rights
+        mDbHelper.open();
         String category = (String) mCategory.getSelectedItem();
         String type = (String) mType.getSelectedItem();
         String name = mName.getText().toString();
@@ -199,6 +268,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 mDbHelper.updateTodo(mRowId, name, type, description, category);
             }
         }
+        mDbHelper.close();
     }
 
     @Override
@@ -220,6 +290,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
                     fromPosition = toPosition;
                     counter--;
                     flipper.showPrevious();
+                    flipper.forceLayout();
                 }
                 break;
             default:

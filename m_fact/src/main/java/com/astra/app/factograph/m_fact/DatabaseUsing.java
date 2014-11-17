@@ -11,7 +11,7 @@ import android.util.Log;
 public class DatabaseUsing extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "applicationdata";
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     // запрос на создание базы данных
     private static final String DATABASE_CREATE = "create table todo (_id integer primary key autoincrement, "

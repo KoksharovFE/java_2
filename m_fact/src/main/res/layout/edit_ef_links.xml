@@ -10,6 +10,30 @@
         android:layout_height="fill_parent">
 
         <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/next"
+                    android:id="@+id/ef_links_next"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/previous"
+                    android:id="@+id/ef_links_previous"/>
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 
@@ -38,6 +62,7 @@
                     android:onClick="buttonClicked"
                     android:text="@string/delete"
                     android:id="@+id/ef_links_delete_selected"/>
+
             </LinearLayout>
 
         </TableRow>
@@ -49,13 +74,6 @@
             android:text="@string/links_header"
             android:id="@+id/textView"
             android:layout_gravity="center_horizontal"/>
-
-        <ViewFlipper
-            android:id="@+id/flipper"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/orange"
-            android:autoStart="false"/>
 
         <TableRow
             android:layout_width="fill_parent"

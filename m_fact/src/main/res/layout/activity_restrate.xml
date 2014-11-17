@@ -12,10 +12,9 @@
         android:text="@string/registration_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/regText"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="216dp"
-        android:id="@+id/regText" />
+        android:layout_centerHorizontal="true"/>
 
     <EditText
         android:layout_width="wrap_content"

@@ -27,6 +27,8 @@
     <string name="edit">Edit</string>
     <string name="search">Search</string>
     <string name="create">Create</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
     <string name="button_auth">Sign in</string>
     <string name="button_registration">Sign up</string>
     <string name="voids"></string>
@@ -37,8 +39,12 @@
     <string name="title_section1">Fact</string>
     <string name="title_section2">Event</string>
     <string name="title_section3">Place</string>
+    <string name="links_header">Links View</string>
+    <string name="pattern">.*</string>
     <string name="EFview">Event/Fact/Place view</string>
     <string name="title_activity_edit_ef">EditEF</string>
-
+    <string name="title_activity_links">Links</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
 
 </resources>

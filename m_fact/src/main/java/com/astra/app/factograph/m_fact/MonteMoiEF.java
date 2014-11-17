@@ -2,6 +2,8 @@ package com.astra.app.factograph.m_fact;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.*;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -37,6 +39,7 @@ import android.widget.TextView;
 public class MonteMoiEF extends ListActivity {
     private EFDbAdapted efHelper;
     private UserDbAdapter userHelper;
+    private LinksDbAdapter linksHelper;
     //    private static final int ACTIVITY_CREATE = 0;
 //    private static final int ACTIVITY_EDIT = 1;
 //    private static final int DELETE_ID = Menu.FIRST + 1;
@@ -77,9 +80,9 @@ public class MonteMoiEF extends ListActivity {
         mType = (Spinner) findViewById(R.id.monte_moi_spinner);
         mSearch = (EditText) findViewById(R.id.monte_moi_search);
         //mListView = (ListView) findViewById(R.id.monte_moi_list_view);
-        //TODO databasetalbe_links
         efHelper = new EFDbAdapted(this);
         userHelper = new UserDbAdapter(this);
+        linksHelper = new LinksDbAdapter(this);
         mListView = (ListView) this.getListView();
 //        userHelper.open();
 //        efHelper.open();
@@ -113,10 +116,14 @@ public class MonteMoiEF extends ListActivity {
                 //TODO search
                 userHelper.open();
                 efHelper.open();
+                linksHelper.open();
+//шаблоны
+//http://javagu.ru/portal/dt?last=false&provider=javaguru&ArticleId=GURU_ARTICLE_64530&SecID=GURU_SECTION_63111
                 String type = (String) mType.getSelectedItem();
 //                String[] names = new String[0];
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
+
                 if (type.equals("User")) {//Вывод Пользователей
                     cursor = userHelper.fetchAllTodos();
                     if (cursor.moveToFirst()) {
@@ -125,14 +132,25 @@ public class MonteMoiEF extends ListActivity {
                             String ulogin = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_LOGIN));
                             String upass = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_PASSWORD));
                             String urights = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_RIGHTS));
-                            namesDinamic.add(ulogin);
-                            descrptionDinamic.add(_id.toString());
+
+                            try {
+                                Pattern p = Pattern.compile(mSearch.getText().toString());
+                                Matcher m = p.matcher(ulogin);
+                                boolean matches = m.matches();
+                                if(matches) {
+                                    namesDinamic.add(ulogin);
+                                    descrptionDinamic.add(_id.toString());
+                                }
+                            } catch(Exception e){
+                                Log.e("Pattern err","in monte moi ef users");
+                            }
                         } while (cursor.moveToNext());
 //                        names = new String[namesDinamic.size()];
 //                        namesDinamic.toArray(names);
                     }
 
                 }
+
                 if (type.equals("Fact") || type.equals("Event") || type.equals("Place")) {
                     //Вывод Фактов || Вывод Событий || Вывод Мест
                     cursor = efHelper.fetchAllTodos();
@@ -143,22 +161,35 @@ public class MonteMoiEF extends ListActivity {
                             String eftype = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_TYPE));
                             String efdescription = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_DESCRIPTION));
                             String efcategory = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_CATEGORY));
+
                             if (type.equals(eftype)) {
-                                namesDinamic.add(efname);
-                                descrptionDinamic.add(_id.toString());
+                                try {
+                                    Pattern p = Pattern.compile(mSearch.getText().toString());
+                                    Matcher m = p.matcher(efname);
+                                    boolean matches = m.matches();
+                                    if(matches){
+                                        namesDinamic.add(efname);
+                                        descrptionDinamic.add(_id.toString());
+                                    }
+                                } catch(Exception e){
+                                    Log.e("Pattern err","in monte moi ef ef");
+                                }
                             }
+
                         } while (cursor.moveToNext());
 //                        names = new String[namesDinamic.size()];
 //                        namesDinamic.toArray(names);
                     }
                 }
-                if (type.equals("Link")) {//Вывод Связей
-                    //TODO for links output
-//                    names = new String[1];
-//                    names[0] = "Links not work";
-                    namesDinamic.add("Links not work");
-                    descrptionDinamic.add("no one link");
-                }
+
+//                if (type.equals("Link")) {//Вывод Связей
+//                    //TO DO for links output && matcher
+////                    names = new String[1];
+////                    names[0] = "Links not work";
+//                    namesDinamic.add("Links not work");
+//                    descrptionDinamic.add("no one link");
+//                }
+
                 ArrayList<Item> items = new ArrayList<Item>();
 //                items.addAll(namesDinamic,descrptionDinamic);
                 int i=0;
@@ -173,13 +204,8 @@ public class MonteMoiEF extends ListActivity {
                 mListView.setTextFilterEnabled(true);
                 userHelper.close();
                 efHelper.close();
-//                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-////                        String value; // Это то что вам надо
-////                        value = (String) a.getItemAtPosition(position);
-//                        ItemClickListener(a, v, position, id);
-//                    }
-//                });
+                linksHelper.close();
+                cursor.close();
                 break;
             }
         }
@@ -230,8 +256,6 @@ public class MonteMoiEF extends ListActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        userHelper.close();
-        efHelper.close();
     }
 
 //    @Override
@@ -243,8 +267,6 @@ public class MonteMoiEF extends ListActivity {
 
     protected void onStop() {
         super.onStop();
-        userHelper.close();
-        efHelper.close();
         setResult(RESULT_OK);
         finish();
     }
@@ -269,96 +291,25 @@ public class MonteMoiEF extends ListActivity {
                 Intent intent = new Intent(MonteMoiEF.this, EditEF.class);
                 intent.putExtra(EFDbAdapted.KEY_ROWID, Long.parseLong(_id));
                 startActivityForResult(intent, 1);
-                Log.i("try : ", "7");
             }
             if (type.equals("User")) {
                 //TODO users edit && rights
                 Log.i("Users Editor", "Not Created");
             }
-            if (type.equals("Link")) {
-                //TODO links edit
-                Log.i("Links Editor", "Not Created");
-            }
+//            if (type.equals("Link")) {
+//                //TO DO links edit
+//                Log.i("Links Editor", "Not Created");
+//            }
             userHelper.close();
             efHelper.close();
         }catch (NullPointerException e){
-            Log.e("null err", "in monte moi ef");
+            Log.e("null err", "in monte moi ef on ite click");
         }
 //        finally { not work
 //            userHelper.close();
 //            efHelper.close();
 //        }
     }
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-//    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-//
-//        public SectionsPagerAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            // getItem is called to instantiate the fragment for the given page.
-//            // Return a PlaceholderFragment (defined as a static inner class below).
-//            return PlaceholderFragment.newInstance(position + 1);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            // Show 3 total pages.
-//            return 3;
-//        }
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            Locale l = Locale.getDefault();
-//            switch (position) {
-//                case 0:
-//                    return getString(R.string.title_section1).toUpperCase(l);
-//                case 1:
-//                    return getString(R.string.title_section2).toUpperCase(l);
-//                case 2:
-//                    return getString(R.string.title_section3).toUpperCase(l);
-//            }
-//            return null;
-//        }
-//    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-//    public static class PlaceholderFragment extends Fragment {
-//        /**
-//         * The fragment argument representing the section number for this
-//         * fragment.
-//         */
-//        private static final String ARG_SECTION_NUMBER = "section_number";
-//
-//        /**
-//         * Returns a new instance of this fragment for the given section
-//         * number.
-//         */
-//        public static PlaceholderFragment newInstance(int sectionNumber) {
-//            PlaceholderFragment fragment = new PlaceholderFragment();
-//            Bundle args = new Bundle();
-//            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-//            fragment.setArguments(args);
-//            return fragment;
-//        }
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_monte_moi_e, container, false);
-//            return rootView;
-//        }
-//    }
 
     public class Item {
 

@@ -18,7 +18,7 @@
         <item>Fact</item>
         <item>Place</item>
         <item>User</item>
-        <item>Link</item>
+        <!--<item>Link</item>-->
     </string-array>
     <string-array name="Category">
         <item>Art</item>

@@ -55,7 +55,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
         }
 
         //Button confirmButton = (Button) findViewById(R.id.todo_edit_button);
-        flipper = (ViewFlipper) findViewById(R.id.edit_ef_flipper);
+        flipper = (ViewFlipper) findViewById(R.id.ef_edit_flipper);
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int layouts[];
         if(update) {
@@ -120,7 +120,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 //TODO Delete link
                 break;
             }
-            case R.id.ef_image_previous: {
+            case R.id.ef_previous_button: {
                 //flipper.showPrevious();//flipper.showNext();
                 if(flipDisp>0) {
                     flipDisp--;
@@ -128,70 +128,15 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 }
                 break;
             }
-            case R.id.ef_links_previous: {
-                //flipper.showPrevious();//flipper.showNext();
-                if(flipDisp>0) {
-                    flipDisp--;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.ef_music_previous: {
-                //flipper.showPrevious();//flipper.showNext();
-                if(flipDisp>0) {
-                    flipDisp--;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.void_previous: {
-                flipper.showPrevious();//flipper.showNext();
-                if(flipDisp>0) {
-                    flipDisp--;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.ef_image_next: {
+            case R.id.ef_next_button: {
                 //flipper.showNext();
-                if(flipDisp<flipMax) {
+                if(flipDisp<flipMax-1) {
                     flipDisp++;
                     flipper.setDisplayedChild(flipDisp);
                 }
                 break;
             }
-            case R.id.ef_links_next: {
-                //flipper.showNext();
-                if(flipDisp<flipMax) {
-                    flipDisp++;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.ef_music_next: {
-                //flipper.showNext();
-                if(flipDisp<flipMax) {
-                    flipDisp++;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.void_next: {
-                //flipper.showNext();
-                if(flipDisp<flipMax) {
-                    flipDisp++;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.ef_main_next: {
-                //flipper.showNext();
-                if(flipDisp<flipMax) {
-                    flipDisp++;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
+
         }
     }
 

@@ -9,28 +9,54 @@
     android:orientation="vertical"
     tools:context="com.astra.app.factograph.m_fact.EditEF">
 
-        <Button
-            android:layout_width="318dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/ef_edit_button"
-            android:onClick="buttonClicked"
-            android:text="@string/ef_edit_confirm"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"></Button>
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="56dp">
 
-        <ViewFlipper
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="344dp"
-            android:layout_height="412dp"
-            android:id="@+id/edit_ef_flipper"
-            android:background="@color/listcolor"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/ef_edit_button"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/previous"
+                android:onClick="buttonClicked"
+                android:id="@+id/ef_previous_button"
+                android:layout_column="2"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ef_edit_button"
+                android:onClick="buttonClicked"
+                android:text="@string/ef_edit_confirm"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_column="3"></Button>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/next"
+                android:onClick="buttonClicked"
+                android:id="@+id/ef_next_button"
+                android:layout_column="5"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <ViewFlipper
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/ef_edit_flipper"
+        android:background="@color/listcolor"
+        android:animateFirstView="true">
+
+    </ViewFlipper>
 
 </LinearLayout>

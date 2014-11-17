@@ -101,7 +101,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
             case R.id.ef_edit_button: {
                 Intent intent = new Intent(EditEF.this, MonteMoiEF.class);
                 startActivityForResult(intent, 1);
-                setResult(RESULT_OK);
+                //setResult(RESULT_OK);
                 finish();
                 break;
             }

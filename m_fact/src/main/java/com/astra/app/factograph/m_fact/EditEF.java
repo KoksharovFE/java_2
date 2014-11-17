@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
     private Spinner mType;
     protected float fromPosition;
     protected int counter = 0, flipDisp=0, flipMax=0;
+    private boolean update=false;
     protected float MOVE_LENGTH = 100;
     ViewFlipper flipper;
     LayoutInflater inflater;
@@ -43,15 +45,24 @@ public class EditEF extends Activity implements View.OnTouchListener{
         setContentView(R.layout.activity_edit_ef);
         mDbHelper = new EFDbAdapted(this);
 
-        mCategory = (Spinner) findViewById(R.id.category);
-        mType = (Spinner) findViewById(R.id.type);
-        mName = (EditText) findViewById(R.id.ef_edit_Name);
-        mDescription = (EditText) findViewById(R.id.ef_edit_description);
+        mRowId = null;
+        Bundle extras = getIntent().getExtras();
+        mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
+                .getSerializable(EFDbAdapted.KEY_ROWID);
+        if (extras != null) {
+            mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
+            update=true;
+        }
 
         //Button confirmButton = (Button) findViewById(R.id.todo_edit_button);
-        flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+        flipper = (ViewFlipper) findViewById(R.id.edit_ef_flipper);
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        int layouts[] = new int[] {R.layout.edit_ef_links, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
+        int layouts[];
+        if(update) {
+            layouts = new int[] {R.layout.ef_main, R.layout.edit_ef_links, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
+        } else {
+            layouts =new int[] {R.layout.ef_main, R.layout.void_layout};
+        }
         flipMax=layouts.length;
         try {//TODO check the problem
             for (int layout : layouts) {
@@ -62,17 +73,16 @@ public class EditEF extends Activity implements View.OnTouchListener{
         } catch(NullPointerException e){
             Log.e("NullPointerException","flipper/s");
         }
-        mRowId = null;
-        Bundle extras = getIntent().getExtras();
-        mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
-                .getSerializable(EFDbAdapted.KEY_ROWID);
-        if (extras != null) {
-            mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
-        }
+
+        mCategory = (Spinner) findViewById(R.id.category);
+        mType = (Spinner) findViewById(R.id.type);
+        mName = (EditText) findViewById(R.id.ef_edit_Name);
+        mDescription = (EditText) findViewById(R.id.ef_edit_description);
 
         populateFields();
         mDbHelper.close();
 
+        Log.i("flipper is flipping?",flipper.isFlipping()+"");
     }
 //        try {
 //            confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +177,14 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 break;
             }
             case R.id.void_next: {
+                //flipper.showNext();
+                if(flipDisp<flipMax) {
+                    flipDisp++;
+                    flipper.setDisplayedChild(flipDisp);
+                }
+                break;
+            }
+            case R.id.ef_main_next: {
                 //flipper.showNext();
                 if(flipDisp<flipMax) {
                     flipDisp++;
@@ -285,12 +303,16 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 if ((fromPosition - MOVE_LENGTH) > toPosition) {
                     fromPosition = toPosition;
                     counter++;
+                    flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.go_next_in));
+                    flipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.go_next_out));
                     flipper.showNext();
                 } else if ((fromPosition + MOVE_LENGTH) < toPosition) {
                     fromPosition = toPosition;
                     counter--;
+                    flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.go_prev_in));
+                    flipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.go_prev_out));
                     flipper.showPrevious();
-                    flipper.forceLayout();
+
                 }
                 break;
             default:

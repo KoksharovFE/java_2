@@ -55,7 +55,7 @@
                     android:layout_column="1"/>
 
                 <Spinner
-                    android:layout_width="wrap_content"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/idSpinner2"/>
 
@@ -94,9 +94,16 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/create"
+                    android:text="@string/ef_edit_confirm"
                     android:onClick="buttonClicked"
                     android:id="@+id/links_create"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/update_fields"
+                    android:onClick="buttonClicked"
+                    android:id="@+id/links_update_fields"/>
             </LinearLayout>
 
         </TableRow>

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -97,20 +98,25 @@ public class Links extends Activity {
                         namesDinamic.add(efname);
                         descrptionDinamic.add(_id.toString());
                         typeDinamic.add(eftype);
+
                     } while (cursor.moveToNext());
                 }
                 for(int i=0;i<namesDinamic.size();i++){
-                    if(typeDinamic.get(i)==type1.getSelectedItem()){
+                    //Log.i("element "+i,namesDinamic.get(i)+" "+descrptionDinamic.get(i)+" "+typeDinamic.get(i));
+                    if(typeDinamic.get(i).equals(type1.getSelectedItem())){
                         Item item = new Item(namesDinamic.get(i),descrptionDinamic.get(i));
                         itemsDinamic1.add(item);
+                        //Log.i("add item to iD1",namesDinamic.get(i)+" "+descrptionDinamic.get(i));
                     }
-                    if(typeDinamic.get(i)==type2.getSelectedItem()){
+                    if(typeDinamic.get(i).equals(type2.getSelectedItem())){
                         Item item = new Item(namesDinamic.get(i),descrptionDinamic.get(i));
                         itemsDinamic2.add(item);
+                        //Log.i("add item to iD2",namesDinamic.get(i)+" "+descrptionDinamic.get(i));
+
                     }
                 }
-                id1.setAdapter(new LinksSpinnerViewAdapter(this, itemsDinamic1));
-                id2.setAdapter(new LinksSpinnerViewAdapter(this, itemsDinamic1));
+                id1.setAdapter(new LinksSpinnerViewAdapter(this, R.layout.custom_spinner, itemsDinamic1));
+                id2.setAdapter(new LinksSpinnerViewAdapter(this, R.layout.custom_spinner, itemsDinamic1));
                 efDbHelper.close();
                 break;
             }
@@ -225,8 +231,9 @@ public class Links extends Activity {
         private final Context context;
         private final ArrayList<Item> itemsArrayList;
 
-        public LinksSpinnerViewAdapter(Context context, ArrayList<Item> itemsArrayList) {
-            super(context, R.layout.row, itemsArrayList);
+        public LinksSpinnerViewAdapter(Context context,int  txtViewResourceId, ArrayList<Item> itemsArrayList) {
+//            RelativeLayout lin = (RelativeLayout)findViewById(txtViewResourceId);
+            super(context, txtViewResourceId, itemsArrayList);
             this.context = context;
             this.itemsArrayList = itemsArrayList;
         }
@@ -241,6 +248,7 @@ public class Links extends Activity {
             // 2. Get rowView from inflater
             View rowView = inflater.inflate(R.layout.custom_spinner, parent, false);
 
+//            RelativeLayout rl = (RelativeLayout) rowView.findViewById(R.id.spinner_relative_layout);
             // 3. Get the two text view from the rowView
             TextView labelView = (TextView) rowView.findViewById(R.id.spinner_text);
             TextView descriptionView = (TextView) rowView.findViewById(R.id.spinner_description);
@@ -248,6 +256,9 @@ public class Links extends Activity {
             // 4. Set the text for textView
             labelView.setText(itemsArrayList.get(position).getTitle());
             descriptionView.setText(itemsArrayList.get(position).getDescription());
+//            rl.removeAllViewsInLayout();
+//            rl.addView(labelView);
+//            rl.addView(descriptionView);
 
             // 5. retrn rowView
             return rowView;

@@ -110,6 +110,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 Intent intent = new Intent(EditEF.this, Links.class);
                 intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
                 startActivityForResult(intent, 1);
+                finish();
                 break;
             }
             case R.id.ef_links_montre: {

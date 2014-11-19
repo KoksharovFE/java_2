@@ -42,14 +42,14 @@ public class Links extends Activity {
         mDbHelper = new LinksDbAdapter(this);
         efDbHelper = new EFDbAdapted(this);
 
-        mRowId = null;
-        Bundle extras = getIntent().getExtras();
-        mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
-                .getSerializable(EFDbAdapted.KEY_ROWID);
-        if (extras != null) {
-            mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
-            update=true;
-        }
+//        mRowId = null;
+//        Bundle extras = getIntent().getExtras();
+//        mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
+//                .getSerializable(EFDbAdapted.KEY_ROWID);
+//        if (extras != null) {
+//            mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
+//            update=true;
+//        }
         type1 = (Spinner) findViewById(R.id.typeSpinner1);
         id1 = (Spinner) findViewById(R.id.idSpinner1);
         type2 = (Spinner) findViewById(R.id.typeSpinner2);
@@ -71,12 +71,11 @@ public class Links extends Activity {
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.links_create: {
-
+                saveState();
                 finish();
                 break;
             }
-            case R.id.links_delete: {
-                
+            case R.id.links_cancel: {
                 finish();
                 break;
             }
@@ -308,5 +307,27 @@ public class Links extends Activity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveState() {
+        mDbHelper.open();
+        String names = name.getText().toString();
+        String type1s = (String) type1.getSelectedItem();
+        Item id1s = (Item) id1.getSelectedItem();
+        String type2s =(String) type2.getSelectedItem();
+        Item id2s = (Item) id2.getSelectedItem();
+//        if (mRowId == null) {
+//            long id = mDbHelper.createTodo(names, type1s,Integer.parseInt(id1s.getDescription()),
+//                    type2s, Integer.parseInt(id2s.getDescription()));
+//            if (id > 0) {
+//                mRowId = id;
+//            }
+//        } else {
+//            mDbHelper.updateTodo(mRowId, names, type1s, Integer.parseInt(id1s.getDescription()),
+//                    type2s, Integer.parseInt(id2s.getDescription()));
+//        }
+        long id = mDbHelper.createTodo(names, type1s,Integer.parseInt(id1s.getDescription()),
+                    type2s, Integer.parseInt(id2s.getDescription()));
+        mDbHelper.close();
     }
 }

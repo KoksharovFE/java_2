@@ -273,28 +273,6 @@ public class Links extends Activity {
     };
 
 
-//public class MyAdapter extends ArrayAdapter<String> {
-//    public MyAdapter(Context ctx, int txtViewResourceId, String[] objects) {
-//        super(ctx, txtViewResourceId, objects); }
-//    @Override
-//    public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
-//        return getCustomView(position, cnvtView, prnt);
-//    }
-//    @Override public View getView(int pos, View cnvtView, ViewGroup prnt) {
-//        return getCustomView(pos, cnvtView, prnt);
-//    }
-//    public View getCustomView(int position, View convertView, ViewGroup parent) {
-//        LayoutInflater inflater = getLayoutInflater();
-//        View mySpinner = inflater.inflate(R.layout.custom_spinner, parent, false);
-//        TextView main_text = (TextView) mySpinner.findViewById(R.id.text_main_seen);
-//        main_text.setText(spinnerValues[position]);
-//        TextView subSpinner = (TextView) mySpinner.findViewById(R.id.sub_text_seen);
-//        subSpinner.setText(spinnerSubs[position]);
-//        ImageView left_icon = (ImageView) mySpinner.findViewById(R.id.left_pic);
-//        left_icon.setImageResource(total_images[position]); return mySpinner;
-//    }
-//}
-
 
 
     @Override

@@ -10,8 +10,8 @@ import android.util.Log;
  */
 public class LinksDbUsing extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "applicationdata";
-    private static final int DATABASE_VERSION = 6;
-    private static final String DATABASE_TABLE = "links";
+    private static final int DATABASE_VERSION = 7;
+    private static final String DATABASE_TABLE = "linksForEF";
     // запрос на создание базы данных
     private static final String DATABASE_CREATE = "create table "+ DATABASE_TABLE+ " (_id integer primary key autoincrement, "
             + "name text not null, type1 text not null, id1 integer not null, type2 text not null, id2 integer not null);";

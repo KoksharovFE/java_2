@@ -31,6 +31,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
     private Long mRowId;
     private EFDbAdapted mDbHelper;
     private Spinner mCategory;
+    private LinksDbAdapter linksDbHelper;
     private Spinner mType;
     protected float fromPosition;
     protected int counter = 0, flipDisp=0, flipMax=0;
@@ -44,6 +45,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_ef);
         mDbHelper = new EFDbAdapted(this);
+        linksDbHelper = new LinksDbAdapter(this);
 
         mRowId = null;
         Bundle extras = getIntent().getExtras();
@@ -114,6 +116,31 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 break;
             }
             case R.id.ef_links_montre: {
+                linksDbHelper.open();
+                ArrayList<String> namesDinamic = new ArrayList<String>();
+                ArrayList<String> descrptionDinamic = new ArrayList<String>();
+                ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
+                Cursor cursor=linksDbHelper.fetchAllTodos();
+                if (cursor.moveToFirst()) {
+                    do {
+                        mDbHelper.open();
+                        Cursor cursor2;
+                        Integer _id = cursor.getInt(cursor.getColumnIndex(LinksDbAdapter.KEY_ROWID));
+                        String name = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_NAME));
+                        String type1 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE1));
+                        String id1 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID1));
+                        String type2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE2));
+                        String id2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID2));
+                        cursor2=mDbHelper.fetchTodo(Long.parseLong(id1));
+                        String nameEF1=cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        cursor2=mDbHelper.fetchTodo(Long.parseLong(id2));
+                        String nameEF2=cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        namesDinamic.add(name+":  "+type1+"/"+nameEF1+" - "+type2+"/"+nameEF2);
+                        descrptionDinamic.add(_id.toString());
+                        mDbHelper.close();
+                    } while (cursor.moveToNext());
+                }
+                linksDbHelper.close();
                 //TODO Montre link
                 break;
             }
@@ -322,5 +349,53 @@ public class EditEF extends Activity implements View.OnTouchListener{
         }
 
     };
+
+    private class LinksSpinnerViewAdapter extends ArrayAdapter<Item> {
+
+        private final Context context;
+        private final ArrayList<Item> itemsArrayList;
+
+        public LinksSpinnerViewAdapter(Context context,int  txtViewResourceId, ArrayList<Item> itemsArrayList) {
+//            RelativeLayout lin = (RelativeLayout)findViewById(txtViewResourceId);
+            super(context, txtViewResourceId, itemsArrayList);
+            this.context = context;
+            this.itemsArrayList = itemsArrayList;
+        }
+        @Override
+        public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
+            return getView(position, cnvtView, prnt);
+        }
+        @Override public View getView(int pos, View cnvtView, ViewGroup prnt) {
+            return getCustomView(pos, cnvtView, prnt);
+        }
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+
+            // 1. Create inflater
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            // 2. Get rowView from inflater
+            View rowView = inflater.inflate(R.layout.custom_spinner, parent, false);
+
+//            RelativeLayout rl = (RelativeLayout) rowView.findViewById(R.id.spinner_relative_layout);
+            // 3. Get the two text view from the rowView
+            TextView labelView = (TextView) rowView.findViewById(R.id.spinner_text);
+            TextView descriptionView = (TextView) rowView.findViewById(R.id.spinner_description);
+
+            // 4. Set the text for textView
+            labelView.setText(itemsArrayList.get(position).getTitle());
+            descriptionView.setText(itemsArrayList.get(position).getDescription());
+//            rl.removeAllViewsInLayout();
+//            rl.addView(labelView);
+//            rl.addView(descriptionView);
+
+            // 5. retrn rowView
+            return rowView;
+        }
+
+    };
+
+
+
 
 }

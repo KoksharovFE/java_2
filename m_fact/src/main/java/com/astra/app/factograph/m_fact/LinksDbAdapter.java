@@ -17,7 +17,7 @@ public class LinksDbAdapter {
     public static final String KEY_ID1 = "id1";
     public static final String KEY_TYPE2 = "type2";
     public static final String KEY_ID2 = "id2";
-    private static final String DATABASE_TABLE = "links";
+    private static final String DATABASE_TABLE = "linksForEF";
     private Context context;
     private SQLiteDatabase database;
     private EFDbUsing dbHelper;

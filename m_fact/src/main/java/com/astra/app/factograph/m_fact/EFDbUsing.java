@@ -11,7 +11,7 @@ import android.util.Log;
 public class EFDbUsing extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "applicationdata";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
     private static final String DATABASE_TABLE = "eventFact";
     // запрос на создание базы данных
     private static final String DATABASE_CREATE = "create table "+ DATABASE_TABLE+ " (_id integer primary key autoincrement, "

@@ -3,6 +3,9 @@ java_2
 ___________
 Factograph android project
 ________________________________
+v0.3.54
+ minor changes
+ links db bug not fixed
 v0.3.51
  begin of working in links Db errors(WHY???)
 v0.3.50
@@ -21,18 +24,6 @@ v0.3.10
  working fleeper editEF
 v0.3.01 
  before viewAnimator
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

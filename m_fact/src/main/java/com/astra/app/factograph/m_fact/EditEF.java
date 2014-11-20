@@ -124,7 +124,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 if (cursor.moveToFirst()) {
                     do {
                         mDbHelper.open();
-                        Cursor cursor2;
+                        Cursor cursor2;//TODO links limiters
                         Integer _id = cursor.getInt(cursor.getColumnIndex(LinksDbAdapter.KEY_ROWID));
                         String name = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_NAME));
                         String type1 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE1));

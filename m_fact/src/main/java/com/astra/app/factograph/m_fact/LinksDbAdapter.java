@@ -17,15 +17,15 @@ public class LinksDbAdapter {
     public static final String KEY_ID1 = "id1";
     public static final String KEY_TYPE2 = "type2";
     public static final String KEY_ID2 = "id2";
-    private static final String DATABASE_TABLE = "linksForEF";
+    private static final String DATABASE_TABLE = "links";
     private Context context;
     private SQLiteDatabase database;
-    private EFDbUsing dbHelper;
+    private LinksDbUsing dbHelper;
     public LinksDbAdapter(Context context) {
         this.context = context;
     }
     public LinksDbAdapter open() throws SQLException {
-        dbHelper = new EFDbUsing(context);
+        dbHelper = new LinksDbUsing(context);
         database = dbHelper.getWritableDatabase();
         return this;
     }
@@ -79,7 +79,8 @@ public class LinksDbAdapter {
         }
         return mCursor;
     }
-    private ContentValues createContentValues(String name, String type1, Integer id1, String type2, Integer id2) {
+    private ContentValues createContentValues(String name, String type1, Integer id1,
+                                              String type2, Integer id2) {
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, name);
         values.put(KEY_TYPE1, type1);

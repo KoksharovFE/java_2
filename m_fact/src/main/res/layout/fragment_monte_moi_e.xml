@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/back"
-                    android:id="@+id/button"
+                    android:id="@+id/tags_update"
                     android:onClick="buttonClicked"
                     android:layout_toEndOf="@+id/section_label"
                     android:layout_below="@+id/section_label"
@@ -42,9 +42,9 @@
                     android:text="@string/create"
                     android:id="@+id/button2"
                     android:onClick="buttonClicked"
-                    android:layout_alignTop="@+id/button"
-                    android:layout_toRightOf="@+id/button"
-                    android:layout_toEndOf="@+id/button"/>
+                    android:layout_alignTop="@+id/tags_update"
+                    android:layout_toRightOf="@+id/tags_update"
+                    android:layout_toEndOf="@+id/tags_update"/>
 
                 <TextView
                     android:id="@+id/section_label"
@@ -93,7 +93,7 @@
                     android:layout_toEndOf="@+id/section_label"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_below="@+id/button"
+                    android:layout_below="@+id/tags_update"
                     android:layout_toRightOf="@+id/section_label"/>
 
             </LinearLayout>

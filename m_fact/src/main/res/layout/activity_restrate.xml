@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_registration"
-        android:id="@+id/button"
+        android:id="@+id/tags_update"
         android:onClick="buttonClicked"
         android:layout_below="@+id/category"
         android:layout_alignRight="@+id/regText"
@@ -54,7 +54,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/voids"
         android:id="@+id/text_reg_below"
-        android:layout_below="@+id/button"
+        android:layout_below="@+id/tags_update"
         android:textColor="#ffff0000"
         android:layout_alignLeft="@+id/password_field_reg"
         android:layout_alignStart="@+id/password_field_reg" />
@@ -65,9 +65,9 @@
         android:text="@string/back"
         android:id="@+id/button2"
         android:onClick="buttonClicked"
-        android:layout_toStartOf="@+id/button"
+        android:layout_toStartOf="@+id/tags_update"
         android:layout_above="@+id/text_reg_below"
-        android:layout_toLeftOf="@+id/button" />
+        android:layout_toLeftOf="@+id/tags_update" />
 
     <Spinner
         android:id="@+id/category"

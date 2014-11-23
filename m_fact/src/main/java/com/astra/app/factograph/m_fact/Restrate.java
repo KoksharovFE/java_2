@@ -5,9 +5,7 @@ package com.astra.app.factograph.m_fact;
  */
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,12 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
-
-import static com.astra.app.factograph.m_fact.R.id.login_field;
-import static com.astra.app.factograph.m_fact.R.id.password_field;
-import static com.astra.app.factograph.m_fact.R.string;
 
 
 public class Restrate extends Activity {
@@ -51,7 +44,7 @@ public class Restrate extends Activity {
     @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
-            case R.id.button: {
+            case R.id.tags_update: {
                 cursor = dbHelper.fetchAllTodos();
                 try {
 //              Log.i("cursor.getString(1);", cursor.getString(1));

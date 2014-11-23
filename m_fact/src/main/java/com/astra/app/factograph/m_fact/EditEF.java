@@ -31,6 +31,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
     private Long mRowId;
     private EFDbAdapted mDbHelper;
     private Spinner mCategory;
+    private TagsAdapter tagsDbHelper;
     private LinksDbAdapter linksDbHelper;
     private Spinner mType;
     protected float fromPosition;
@@ -132,11 +133,14 @@ public class EditEF extends Activity implements View.OnTouchListener{
                         String type2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE2));
                         String id2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID2));
                         cursor2=mDbHelper.fetchTodo(Long.parseLong(id1));
-                        String nameEF1=cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        String nameEF1=cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
                         cursor2=mDbHelper.fetchTodo(Long.parseLong(id2));
-                        String nameEF2=cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
-                        namesDinamic.add(name+":  "+type1+"/"+nameEF1+" - "+type2+"/"+nameEF2);
-                        descrptionDinamic.add(_id.toString());
+                        String nameEF2=cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        if(id1.equals(mRowId) || id2.equals(mRowId)) {
+                            namesDinamic.add(name + ":  " + type1 + "/" + nameEF1 + " - " + type2 + "/" + nameEF2);
+                            descrptionDinamic.add(_id.toString());
+//                            itemsDinamic1.add(new Item());
+                        }
                         mDbHelper.close();
                     } while (cursor.moveToNext());
                 }
@@ -164,7 +168,37 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 }
                 break;
             }
+            case R.id.ef_edit_tags_show: {
+                //flipper.showNext();
 
+                ArrayList<String> namesDinamic = new ArrayList<String>();
+                ArrayList<String> descrptionDinamic = new ArrayList<String>();
+                ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
+                tagsDbHelper.open();
+                Cursor cursor2;//TODO tags output
+                cursor2=tagsDbHelper.fetchAllTodos();
+
+                if (cursor2.moveToFirst()) {
+                    do {
+                        Integer _id = cursor2.getInt(cursor2.getColumnIndex(TagsAdapter.KEY_ROWID));
+                        String tags = cursor2.getString(cursor2.getColumnIndex(TagsAdapter.KEY_TAG));
+                        String ef_id = cursor2.getString(cursor2.getColumnIndex(TagsAdapter.KEY_EF_ID));
+                        if(mRowId.toString().equals(ef_id)){
+                            namesDinamic.add(tags);
+                            descrptionDinamic.add(_id.toString());
+                        }
+                    } while (cursor2.moveToNext());
+                }
+                tagsDbHelper.close();
+                break;
+            }
+            case R.id.ef_edit_tags_create: {
+                //flipper.showNext();
+                Intent intent = new Intent(EditEF.this, Tags.class);
+                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
+                startActivityForResult(intent, 1);
+                break;
+            }
         }
     }
 
@@ -294,26 +328,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
         return true;
     }
 
-    public class Item {
 
-        private String title;
-        private String description;
-
-        public Item(String title, String description) {
-            super();
-            this.title = title;
-            this.description = description;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-        // getters and setters...
-    }
 
     private class MyEDListViewAdapter extends ArrayAdapter<Item> {
 

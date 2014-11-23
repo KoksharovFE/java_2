@@ -1,16 +1,10 @@
 package com.astra.app.factograph.m_fact;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.*;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +13,6 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -91,7 +84,7 @@ public class MonteMoiEF extends ListActivity {
     @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
-            case R.id.button: {
+            case R.id.tags_update: {
                 //cursor.close();
                 super.onStop();
                 setResult(RESULT_OK);

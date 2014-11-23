@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
 
     public void buttonClicked(View view) {
         switch (view.getId()) {
-            case R.id.button: {
+            case R.id.tags_update: {
                 Intent intent = new Intent(MainActivity.this, Overview.class);
                 startActivityForResult(intent, 1);
                 //startActivity(intent);

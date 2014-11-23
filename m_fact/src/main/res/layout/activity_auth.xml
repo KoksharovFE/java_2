@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_auth"
-        android:id="@+id/button"
+        android:id="@+id/tags_update"
         android:layout_below="@+id/password_field"
         android:onClick="buttonClicked"
         android:layout_centerVertical="true"
@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/text_auth_below"
-        android:layout_below="@+id/button"
+        android:layout_below="@+id/tags_update"
         android:textColor="#ffff0000"
         android:layout_alignRight="@+id/password_field"
         android:layout_alignEnd="@+id/password_field" />

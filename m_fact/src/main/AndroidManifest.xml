@@ -48,9 +48,15 @@
             android:name=".Links"
             android:label="@string/title_activity_links" >
         </activity>
+        <activity
+            android:name=".Tags"
+            android:label="@string/title_activity_tags" >
+        </activity>
     </application>
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 </manifest>

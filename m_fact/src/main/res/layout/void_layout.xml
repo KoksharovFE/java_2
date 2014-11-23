@@ -12,16 +12,5 @@
         android:text="@string/voids"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/previous"
-        android:id="@+id/void_previous"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/next"
-        android:id="@+id/void_next"
         />
 </LinearLayout>

@@ -45,6 +45,11 @@
     <string name="title_activity_edit_ef">EditEF</string>
     <string name="title_activity_links">Links</string>
     <string name="next">Next</string>
+    <string name="tags_show">Show</string>
+    <string name="tags_title">Tags</string>
     <string name="previous">Previous</string>
+    <string name="update_fields">Update spinners data</string>
+    <string name="cancel">Cancel</string>
+    <string name="title_activity_tags">Tags</string>
 
 </resources>

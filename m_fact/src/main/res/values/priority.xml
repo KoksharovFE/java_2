@@ -28,4 +28,9 @@
         <item>Health</item>
         <item>Other</item>
     </string-array>
+    <string-array name="TypeForLinks">
+        <item>Event</item>
+        <item>Fact</item>
+        <item>Place</item>
+    </string-array>
 </resources>

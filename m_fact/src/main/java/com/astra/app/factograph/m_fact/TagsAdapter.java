@@ -7,25 +7,22 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Created by teodor on 09.11.2014.
+ * Created by teodor on 21.11.2014.
  */
-public class LinksDbAdapter {
+public class TagsAdapter{
     // поля базы данных
     public static final String KEY_ROWID = "_id";
-    public static final String KEY_NAME = "name";
-    public static final String KEY_TYPE1 = "type1";
-    public static final String KEY_ID1 = "id1";
-    public static final String KEY_TYPE2 = "type2";
-    public static final String KEY_ID2 = "id2";
-    private static final String DATABASE_TABLE = "links";
+    public static final String KEY_TAG = "tag";
+    public static final String KEY_EF_ID = "ef_id";
+    private static final String DATABASE_TABLE = "tags";
     private Context context;
     private SQLiteDatabase database;
-    private LinksDbUsing dbHelper;
-    public LinksDbAdapter(Context context) {
+    private TagUsing dbHelper;
+    public TagsAdapter(Context context) {
         this.context = context;
     }
-    public LinksDbAdapter open() throws SQLException {
-        dbHelper = new LinksDbUsing(context);
+    public TagsAdapter open() throws SQLException {
+        dbHelper = new TagUsing(context);
         database = dbHelper.getWritableDatabase();
         return this;
     }
@@ -37,15 +34,15 @@ public class LinksDbAdapter {
      * создать новый элемент списка юхеров. если создан успешно - возвращается номер строки rowId
      * иначе -1
      */
-    public long createTodo(String name, String type1, Integer id1, String type2, Integer id2) {
-        ContentValues initialValues = createContentValues(name, type1, id1, type2, id2);
+    public long createTodo(String tag, String ef_id) {
+        ContentValues initialValues = createContentValues(tag, ef_id);
         return database.insert(DATABASE_TABLE, null, initialValues);
     }
     /**
      * обновить список
      */
-    public boolean updateTodo(long rowId, String name, String type1, Integer id1, String type2, Integer id2) {
-        ContentValues updateValues = createContentValues(name, type1, id1, type2, id2);
+    public boolean updateTodo(long rowId, String tag, String ef_id) {
+        ContentValues updateValues = createContentValues(tag, ef_id);
         return database.update(DATABASE_TABLE, updateValues, KEY_ROWID + "="
                 + rowId, null) > 0;
     }
@@ -62,7 +59,7 @@ public class LinksDbAdapter {
      */
     public Cursor fetchAllTodos() {
         return database.query(DATABASE_TABLE, new String[]{KEY_ROWID,
-                        KEY_NAME, KEY_TYPE1, KEY_ID1, KEY_TYPE2, KEY_ID2}, null, null, null,
+                        KEY_TAG, KEY_EF_ID}, null, null, null,
                 null, null
         );
     }
@@ -70,8 +67,9 @@ public class LinksDbAdapter {
      * возвращает курсор, спозиционированный на указанной записи
      */
     public Cursor fetchTodo(long rowId) throws SQLException {
-        Cursor mCursor = database.query(true, DATABASE_TABLE, new String[]{KEY_ROWID,
-                        KEY_NAME, KEY_TYPE1, KEY_ID1, KEY_TYPE2, KEY_ID2},
+        Cursor mCursor = database.query(true, DATABASE_TABLE, new String[]{
+                        KEY_ROWID, KEY_TAG,
+                        KEY_EF_ID},
                 KEY_ROWID + "=" + rowId, null, null, null, null, null
         );
         if (mCursor != null) {
@@ -79,14 +77,10 @@ public class LinksDbAdapter {
         }
         return mCursor;
     }
-    private ContentValues createContentValues(String name, String type1, Integer id1,
-                                              String type2, Integer id2) {
+    private ContentValues createContentValues(String tag, String ef_id) {
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, name);
-        values.put(KEY_TYPE1, type1);
-        values.put(KEY_ID1, id1);
-        values.put(KEY_TYPE2, type2);
-        values.put(KEY_ID2, id2);
+        values.put(KEY_TAG, tag);
+        values.put(KEY_EF_ID, ef_id);
         return values;
     }
 }

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,9 +31,12 @@ public class EditEF extends Activity implements View.OnTouchListener{
     private Long mRowId;
     private EFDbAdapted mDbHelper;
     private Spinner mCategory;
+    private TagsAdapter tagsDbHelper;
+    private LinksDbAdapter linksDbHelper;
     private Spinner mType;
     protected float fromPosition;
     protected int counter = 0, flipDisp=0, flipMax=0;
+    private boolean update=false;
     protected float MOVE_LENGTH = 100;
     ViewFlipper flipper;
     LayoutInflater inflater;
@@ -42,16 +46,26 @@ public class EditEF extends Activity implements View.OnTouchListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_ef);
         mDbHelper = new EFDbAdapted(this);
+        linksDbHelper = new LinksDbAdapter(this);
 
-        mCategory = (Spinner) findViewById(R.id.category);
-        mType = (Spinner) findViewById(R.id.type);
-        mName = (EditText) findViewById(R.id.ef_edit_Name);
-        mDescription = (EditText) findViewById(R.id.ef_edit_description);
+        mRowId = null;
+        Bundle extras = getIntent().getExtras();
+        mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
+                .getSerializable(EFDbAdapted.KEY_ROWID);
+        if (extras != null) {
+            mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
+            update=true;
+        }
 
         //Button confirmButton = (Button) findViewById(R.id.todo_edit_button);
-        flipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+        flipper = (ViewFlipper) findViewById(R.id.ef_edit_flipper);
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        int layouts[] = new int[] {R.layout.edit_ef_links, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
+        int layouts[];
+        if(update) {
+            layouts = new int[] {R.layout.ef_main, R.layout.edit_ef_links, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
+        } else {
+            layouts =new int[] {R.layout.ef_main, R.layout.void_layout};
+        }
         flipMax=layouts.length;
         try {//TODO check the problem
             for (int layout : layouts) {
@@ -62,17 +76,16 @@ public class EditEF extends Activity implements View.OnTouchListener{
         } catch(NullPointerException e){
             Log.e("NullPointerException","flipper/s");
         }
-        mRowId = null;
-        Bundle extras = getIntent().getExtras();
-        mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
-                .getSerializable(EFDbAdapted.KEY_ROWID);
-        if (extras != null) {
-            mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
-        }
+
+        mCategory = (Spinner) findViewById(R.id.category);
+        mType = (Spinner) findViewById(R.id.type);
+        mName = (EditText) findViewById(R.id.ef_edit_Name);
+        mDescription = (EditText) findViewById(R.id.ef_edit_description);
 
         populateFields();
         mDbHelper.close();
 
+        Log.i("flipper is flipping?",flipper.isFlipping()+"");
     }
 //        try {
 //            confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +104,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
             case R.id.ef_edit_button: {
                 Intent intent = new Intent(EditEF.this, MonteMoiEF.class);
                 startActivityForResult(intent, 1);
-                setResult(RESULT_OK);
+                //setResult(RESULT_OK);
                 finish();
                 break;
             }
@@ -100,9 +113,38 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 Intent intent = new Intent(EditEF.this, Links.class);
                 intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
                 startActivityForResult(intent, 1);
+                finish();
                 break;
             }
             case R.id.ef_links_montre: {
+                linksDbHelper.open();
+                ArrayList<String> namesDinamic = new ArrayList<String>();
+                ArrayList<String> descrptionDinamic = new ArrayList<String>();
+                ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
+                Cursor cursor=linksDbHelper.fetchAllTodos();
+                if (cursor.moveToFirst()) {
+                    do {
+                        mDbHelper.open();
+                        Cursor cursor2;//TODO links limiters
+                        Integer _id = cursor.getInt(cursor.getColumnIndex(LinksDbAdapter.KEY_ROWID));
+                        String name = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_NAME));
+                        String type1 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE1));
+                        String id1 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID1));
+                        String type2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE2));
+                        String id2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID2));
+                        cursor2=mDbHelper.fetchTodo(Long.parseLong(id1));
+                        String nameEF1=cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        cursor2=mDbHelper.fetchTodo(Long.parseLong(id2));
+                        String nameEF2=cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        if(id1.equals(mRowId) || id2.equals(mRowId)) {
+                            namesDinamic.add(name + ":  " + type1 + "/" + nameEF1 + " - " + type2 + "/" + nameEF2);
+                            descrptionDinamic.add(_id.toString());
+//                            itemsDinamic1.add(new Item());
+                        }
+                        mDbHelper.close();
+                    } while (cursor.moveToNext());
+                }
+                linksDbHelper.close();
                 //TODO Montre link
                 break;
             }
@@ -110,7 +152,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 //TODO Delete link
                 break;
             }
-            case R.id.ef_image_previous: {
+            case R.id.ef_previous_button: {
                 //flipper.showPrevious();//flipper.showNext();
                 if(flipDisp>0) {
                     flipDisp--;
@@ -118,60 +160,43 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 }
                 break;
             }
-            case R.id.ef_links_previous: {
-                //flipper.showPrevious();//flipper.showNext();
-                if(flipDisp>0) {
-                    flipDisp--;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.ef_music_previous: {
-                //flipper.showPrevious();//flipper.showNext();
-                if(flipDisp>0) {
-                    flipDisp--;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.void_previous: {
-                flipper.showPrevious();//flipper.showNext();
-                if(flipDisp>0) {
-                    flipDisp--;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.ef_image_next: {
+            case R.id.ef_next_button: {
                 //flipper.showNext();
-                if(flipDisp<flipMax) {
+                if(flipDisp<flipMax-1) {
                     flipDisp++;
                     flipper.setDisplayedChild(flipDisp);
                 }
                 break;
             }
-            case R.id.ef_links_next: {
+            case R.id.ef_edit_tags_show: {
                 //flipper.showNext();
-                if(flipDisp<flipMax) {
-                    flipDisp++;
-                    flipper.setDisplayedChild(flipDisp);
+
+                ArrayList<String> namesDinamic = new ArrayList<String>();
+                ArrayList<String> descrptionDinamic = new ArrayList<String>();
+                ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
+                tagsDbHelper.open();
+                Cursor cursor2;//TODO tags output
+                cursor2=tagsDbHelper.fetchAllTodos();
+
+                if (cursor2.moveToFirst()) {
+                    do {
+                        Integer _id = cursor2.getInt(cursor2.getColumnIndex(TagsAdapter.KEY_ROWID));
+                        String tags = cursor2.getString(cursor2.getColumnIndex(TagsAdapter.KEY_TAG));
+                        String ef_id = cursor2.getString(cursor2.getColumnIndex(TagsAdapter.KEY_EF_ID));
+                        if(mRowId.toString().equals(ef_id)){
+                            namesDinamic.add(tags);
+                            descrptionDinamic.add(_id.toString());
+                        }
+                    } while (cursor2.moveToNext());
                 }
+                tagsDbHelper.close();
                 break;
             }
-            case R.id.ef_music_next: {
+            case R.id.ef_edit_tags_create: {
                 //flipper.showNext();
-                if(flipDisp<flipMax) {
-                    flipDisp++;
-                    flipper.setDisplayedChild(flipDisp);
-                }
-                break;
-            }
-            case R.id.void_next: {
-                //flipper.showNext();
-                if(flipDisp<flipMax) {
-                    flipDisp++;
-                    flipper.setDisplayedChild(flipDisp);
-                }
+                Intent intent = new Intent(EditEF.this, Tags.class);
+                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
+                startActivityForResult(intent, 1);
                 break;
             }
         }
@@ -285,12 +310,16 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 if ((fromPosition - MOVE_LENGTH) > toPosition) {
                     fromPosition = toPosition;
                     counter++;
+                    flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.go_next_in));
+                    flipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.go_next_out));
                     flipper.showNext();
                 } else if ((fromPosition + MOVE_LENGTH) < toPosition) {
                     fromPosition = toPosition;
                     counter--;
+                    flipper.setInAnimation(AnimationUtils.loadAnimation(this, R.anim.go_prev_in));
+                    flipper.setOutAnimation(AnimationUtils.loadAnimation(this, R.anim.go_prev_out));
                     flipper.showPrevious();
-                    flipper.forceLayout();
+
                 }
                 break;
             default:
@@ -299,26 +328,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
         return true;
     }
 
-    public class Item {
 
-        private String title;
-        private String description;
-
-        public Item(String title, String description) {
-            super();
-            this.title = title;
-            this.description = description;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-        // getters and setters...
-    }
 
     private class MyEDListViewAdapter extends ArrayAdapter<Item> {
 
@@ -354,5 +364,53 @@ public class EditEF extends Activity implements View.OnTouchListener{
         }
 
     };
+
+    private class LinksSpinnerViewAdapter extends ArrayAdapter<Item> {
+
+        private final Context context;
+        private final ArrayList<Item> itemsArrayList;
+
+        public LinksSpinnerViewAdapter(Context context,int  txtViewResourceId, ArrayList<Item> itemsArrayList) {
+//            RelativeLayout lin = (RelativeLayout)findViewById(txtViewResourceId);
+            super(context, txtViewResourceId, itemsArrayList);
+            this.context = context;
+            this.itemsArrayList = itemsArrayList;
+        }
+        @Override
+        public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
+            return getView(position, cnvtView, prnt);
+        }
+        @Override public View getView(int pos, View cnvtView, ViewGroup prnt) {
+            return getCustomView(pos, cnvtView, prnt);
+        }
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+
+            // 1. Create inflater
+            LayoutInflater inflater = (LayoutInflater) context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            // 2. Get rowView from inflater
+            View rowView = inflater.inflate(R.layout.custom_spinner, parent, false);
+
+//            RelativeLayout rl = (RelativeLayout) rowView.findViewById(R.id.spinner_relative_layout);
+            // 3. Get the two text view from the rowView
+            TextView labelView = (TextView) rowView.findViewById(R.id.spinner_text);
+            TextView descriptionView = (TextView) rowView.findViewById(R.id.spinner_description);
+
+            // 4. Set the text for textView
+            labelView.setText(itemsArrayList.get(position).getTitle());
+            descriptionView.setText(itemsArrayList.get(position).getDescription());
+//            rl.removeAllViewsInLayout();
+//            rl.addView(labelView);
+//            rl.addView(descriptionView);
+
+            // 5. retrn rowView
+            return rowView;
+        }
+
+    };
+
+
+
 
 }

@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Button_start"
-        android:id="@+id/button"
+        android:id="@+id/tags_update"
         android:onClick="buttonClicked"
         android:layout_marginTop="105dp"
         android:layout_alignParentTop="true"

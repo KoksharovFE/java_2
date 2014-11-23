@@ -6,13 +6,9 @@ package com.astra.app.factograph.m_fact;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -45,7 +41,7 @@ public class Auth extends Activity {
     @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
-            case R.id.button: {
+            case R.id.tags_update: {
                 cursor = dbHelper.fetchAllTodos();
                 String login_input = Auth.this.login_field.getText().toString();
                 String password_input = Auth.this.password_field.getText().toString();

@@ -9,8 +9,9 @@ import android.util.Log;
  * Created by teodor on 09.11.2014.
  */
 public class LinksDbUsing extends SQLiteOpenHelper {
+
     private static final String DATABASE_NAME = "applicationdata";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_TABLE = "links";
     // запрос на создание базы данных
     private static final String DATABASE_CREATE = "create table "+ DATABASE_TABLE+ " (_id integer primary key autoincrement, "
@@ -19,11 +20,13 @@ public class LinksDbUsing extends SQLiteOpenHelper {
     public LinksDbUsing(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
     // метод вызывается при создании базы данных
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE);
     }
+
     // метод вызывается при обновлении базы данных, например, когда вы увеличиваете номер версии базы данных
 
     @Override

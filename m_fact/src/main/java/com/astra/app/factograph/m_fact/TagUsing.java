@@ -10,11 +10,13 @@ import android.util.Log;
  */
 public class TagUsing extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "applicationdata";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
     private static final String DATABASE_TABLE = "tags";
     // запрос на создание базы данных
-    private static final String DATABASE_CREATE = "create table "+ DATABASE_TABLE+ " (_id integer primary key autoincrement, "
-            + "tag text not null, ef_id integer not null);";
+    private static final String DATABASE_CREATE = "create table "+ DATABASE_TABLE+ " (_id integer " +
+            "primary key autoincrement, "
+            + "tag text not null, " +
+            "ef_id integer not null);";
     public TagUsing(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

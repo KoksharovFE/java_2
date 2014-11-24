@@ -42,22 +42,21 @@ public class Tags extends Activity {
     @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
-            case R.id.links_create: {
+            case R.id.tags_create: {
                 saveState();
                 finish();
                 break;
             }
-            case R.id.links_cancel: {
+            case R.id.tags_cancel: {
                 finish();
                 break;
             }
-            case R.id.links_update_fields: {
+            case R.id.tags_update: {
                 efDbHelper.open();
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
                 ArrayList<String> typeDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
-                ArrayList<Item> itemsDinamic2 = new ArrayList<Item>();
 
                 cursor=efDbHelper.fetchAllTodos();
                 if (cursor.moveToFirst()) {

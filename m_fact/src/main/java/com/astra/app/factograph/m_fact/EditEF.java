@@ -47,6 +47,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
         setContentView(R.layout.activity_edit_ef);
         mDbHelper = new EFDbAdapted(this);
         linksDbHelper = new LinksDbAdapter(this);
+        tagsDbHelper = new TagsAdapter(this);
 
         mRowId = null;
         Bundle extras = getIntent().getExtras();
@@ -62,7 +63,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int layouts[];
         if(update) {
-            layouts = new int[] {R.layout.ef_main, R.layout.edit_ef_links, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
+            layouts = new int[] {R.layout.ef_main, R.layout.edit_ef_links, R.layout.edit_ef_tags, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
         } else {
             layouts =new int[] {R.layout.ef_main, R.layout.void_layout};
         }
@@ -194,9 +195,15 @@ public class EditEF extends Activity implements View.OnTouchListener{
             }
             case R.id.ef_edit_tags_create: {
                 //flipper.showNext();
-                Intent intent = new Intent(EditEF.this, Tags.class);
-                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
-                startActivityForResult(intent, 1);
+//                Intent intent = new Intent(EditEF.this, Tags.class);
+//                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
+//                startActivityForResult(intent, 1);
+                tagsDbHelper.open();
+                EditText ef_edit_tag_name = (EditText) findViewById(R.id.ef_edit_tag_name);
+                String tag_name = ef_edit_tag_name.getText().toString();
+                tagsDbHelper.createTodo(tag_name,mRowId.toString());
+                tagsDbHelper.close();
+
                 break;
             }
         }

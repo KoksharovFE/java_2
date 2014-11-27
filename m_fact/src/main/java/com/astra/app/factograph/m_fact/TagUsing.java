@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class TagUsing extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "applicationdata";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 12;
     private static final String DATABASE_TABLE = "tags";
     // запрос на создание базы данных
     private static final String DATABASE_CREATE = "create table "+ DATABASE_TABLE+ " (_id integer " +

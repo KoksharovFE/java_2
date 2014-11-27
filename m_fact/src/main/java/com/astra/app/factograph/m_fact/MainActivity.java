@@ -4,19 +4,41 @@ package com.astra.app.factograph.m_fact;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import java.sql.SQLException;
+
 
 public class MainActivity extends Activity {
+
+//    String DATABASE_NAME = "applicationdata";
+//    private final int DATABASE_VERSION = 12;
+//    private Context context;
+//    final String ef_Create = "create table IF NOT EXISTS eventFact (_id integer primary key autoincrement, "
+//            + "name text not null, type text not null, description text, category text not null, image_url text, music_url text);";
+//    final String usersData_Create = "create table IF NOT EXISTS usersData (_id integer primary key autoincrement, "
+//            + "login text not null, password text not null, rights text not null);";
+//    final String tags_Create = "create table IF NOT EXISTS tags (_id integer " +
+//            "primary key autoincrement, "
+//            + "tag text not null, " +
+//            "ef_id integer not null);";
+//    final String links_Create = "create table IF NOT EXISTS links (_id integer primary key autoincrement, "
+//            + "name text not null, type1 text not null, id1 integer not null, type2 text not null, id2 integer not null);";
+//    final String todo_Create = "create table IF NOT EXISTS todo (_id integer primary key autoincrement, "
+//            + "category text not null, summary text not null, description text not null);";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        DatabaseHelper DBhelper = new DatabaseHelper(context);
     }
 
 
@@ -62,7 +84,6 @@ public class MainActivity extends Activity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -75,4 +96,24 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+
+//    private class DatabaseHelper extends SQLiteOpenHelper {
+//        DatabaseHelper(Context context) {
+//            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+//        }
+//
+//        @Override
+//        public void onCreate(SQLiteDatabase db) {
+//            db.execSQL(ef_Create);
+//            db.execSQL(usersData_Create);
+//            db.execSQL(tags_Create);
+//            db.execSQL(links_Create);
+//            db.execSQL(todo_Create);
+//        }
+//
+//        @Override
+//        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+//            onCreate(db);
+//        }
+//    }
 }

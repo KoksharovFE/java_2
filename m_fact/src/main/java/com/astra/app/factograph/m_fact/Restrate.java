@@ -5,6 +5,7 @@ package com.astra.app.factograph.m_fact;
  */
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,8 @@ import android.widget.TextView;
 
 
 public class Restrate extends Activity {
-    private UserDbAdapter dbHelper;
+//    private UserDbAdapter dbHelper;
+    private final ContentProviderForDb cpfDB = new ContentProviderForDb();
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
     private static final int DELETE_ID = Menu.FIRST + 1;
@@ -32,8 +34,8 @@ public class Restrate extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restrate);
-        dbHelper = new UserDbAdapter(this);
-        dbHelper.open();
+//        dbHelper = new UserDbAdapter(this);
+//        dbHelper.open();
         rowId = null;
         loginInput=(EditText) this.findViewById(R.id.login_field_reg);
         passwordInput=(EditText) this.findViewById(R.id.password_field_reg);
@@ -45,8 +47,9 @@ public class Restrate extends Activity {
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.tags_update: {
-                cursor = dbHelper.fetchAllTodos();
+//                cursor = dbHelper.fetchAllTodos();
                 try {
+                cursor = cpfDB.query(ContentProviderForDb.PROVIDER_USERS,ContentProviderForDb.PROJECTION_USERS,null,null,null);
 //              Log.i("cursor.getString(1);", cursor.getString(1));
                 cursor.moveToFirst();
                 //Log.i("UserDbAdapter.KEY_LOGIN;", cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_LOGIN)));
@@ -134,13 +137,11 @@ public class Restrate extends Activity {
         return super.onOptionsItemSelected(item);
     }
     protected void onStop() {
-        cursor.close();
         super.onStop();
         setResult(RESULT_OK);
         finish();
     }
     protected void onPause() {
-        cursor.close();
         super.onStop();
         setResult(RESULT_OK);
         finish();
@@ -151,24 +152,25 @@ public class Restrate extends Activity {
         String login= "";
 //        login_field_reg.setText("Login/2");
 //        password_field_reg.setText("Login/2");
-        try {
+//        try {
             rights = (String) spinnerInput.getSelectedItem();
             login =(String) Restrate.this.loginInput.getText().toString();
             password =(String) Restrate.this.passwordInput.getText().toString();
             if (rowId == null) {
-                long id = dbHelper.createTodo(login, password, rights);
-                if (id > 0) {
-                    rowId = id;
-                }
+//                long id = dbHelper.createTodo(login, password, rights);
+                ContentValues inBase = new ContentValues();
+                inBase.put(ContentProviderForDb.COLUMN_NAME,login);
+                inBase.put(ContentProviderForDb.COLUMN_PASSWORD,login);
+                inBase.put(ContentProviderForDb.COLUMN_RIGHTS,login);
+                cpfDB.insert(ContentProviderForDb.PROVIDER_USERS, inBase);
             }
             //Log.i("fields",rights+" "+password+" "+login);
-        } catch (Exception e) {
-            Log.e(e.toString(),"null fields try to write in database");
-            Log.i("fields",rights+" "+password+" "+login);
-            cursor.close();
-            super.onStop();
-            setResult(RESULT_CANCELED);
-        }
+//        } catch (NullPointerException e) {
+//            Log.e(e.toString(),"null fields try to write in database");
+//            Log.i("fields",rights+" "+password+" "+login);
+//            super.onStop();
+//            setResult(RESULT_CANCELED);
+//        }
 
     }
 }

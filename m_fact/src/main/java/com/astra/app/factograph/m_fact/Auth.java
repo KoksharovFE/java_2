@@ -16,13 +16,14 @@ import android.widget.TextView;
 
 
 public class Auth extends Activity {
-    private UserDbAdapter dbHelper;
+//    private UserDbAdapter dbHelper;
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
     private static final int DELETE_ID = Menu.FIRST + 1;
     private Cursor cursor;
     private EditText login_field,password_field;
     private TextView auth_below;
+    private final ContentProviderForDb cpfDB = new ContentProviderForDb();
 
     /**
      * Called when the activity is first created.
@@ -31,18 +32,32 @@ public class Auth extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
-        dbHelper = new UserDbAdapter(this);
-        dbHelper.open();
+//        dbHelper = new UserDbAdapter(this);
+//        dbHelper.open();
         login_field=(EditText) findViewById(R.id.login_field);
         password_field=(EditText) findViewById(R.id.password_field);
         auth_below=(TextView) findViewById(R.id.text_auth_below);
+//        cursor = dbHelper.fetchAllTodos();
+        try {
+            cursor = cpfDB.query(ContentProviderForDb.PROVIDER_USERS,ContentProviderForDb.PROJECTION_USERS,null,null,null);
+        } catch (NullPointerException e) {
+            Intent intent = new Intent(Auth.this, Restrate.class);
+            startActivityForResult(intent, 1);
+//            e.getMessage().toString();
+        }
+//        if(cursor.getCount() == 0){
+//
+//            Intent intent = new Intent(Auth.this, Restrate.class);
+//            startActivityForResult(intent, 1);
+//        }
     }
 
     @SuppressLint("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.tags_update: {
-                cursor = dbHelper.fetchAllTodos();
+//                cursor = dbHelper.fetchAllTodos();
+                cursor = cpfDB.query(ContentProviderForDb.PROVIDER_USERS,ContentProviderForDb.PROJECTION_USERS,null,null,null);
                 String login_input = Auth.this.login_field.getText().toString();
                 String password_input = Auth.this.password_field.getText().toString();
                 boolean correct_credentials = false;
@@ -80,7 +95,6 @@ public class Auth extends Activity {
         }
     }
     protected void onStop() {
-        cursor.close();
         super.onStop();
         setResult(RESULT_OK);
         this.finish();

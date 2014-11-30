@@ -2,6 +2,7 @@ package com.astra.app.factograph.m_fact;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
@@ -25,8 +26,8 @@ public class Links extends Activity {
     private Long mRowId;
     private Spinner type1, id1, type2, id2;
     private EditText name;
-    private LinksDbAdapter mDbHelper;
-    private EFDbAdapted efDbHelper;
+//    private LinksDbAdapter mDbHelper;
+//    private EFDbAdapted efDbHelper;
     private boolean update = false;
     Cursor cursor;
 
@@ -34,8 +35,8 @@ public class Links extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_links);
-        mDbHelper = new LinksDbAdapter(this);
-        efDbHelper = new EFDbAdapted(this);
+//        mDbHelper = new LinksDbAdapter(this);
+//        efDbHelper = new EFDbAdapted(this);
 
 //        mRowId = null;
 //        Bundle extras = getIntent().getExtras();
@@ -75,21 +76,22 @@ public class Links extends Activity {
                 break;
             }
             case R.id.links_update_fields: {
-                efDbHelper.open();
+//                efDbHelper.open();
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
                 ArrayList<String> typeDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
                 ArrayList<Item> itemsDinamic2 = new ArrayList<Item>();
 
-                cursor = efDbHelper.fetchAllTodos();
+//                cursor = efDbHelper.fetchAllTodos();
+                cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS,ContentProviderForDb.PROJECTION_EVENTS,null,null,null);
                 if (cursor.moveToFirst()) {
                     do {
-                        Integer _id = cursor.getInt(cursor.getColumnIndex(EFDbAdapted.KEY_ROWID));
-                        String efname = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
-                        String eftype = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_TYPE));
-                        String efdescription = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_DESCRIPTION));
-                        String efcategory = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_CATEGORY));
+                        Integer _id = cursor.getInt(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                        String efname = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
+                        String eftype = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_TYPE));
+                        String efdescription = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_DESCRIPTION));
+                        String efcategory = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_CATEGORY));
 
                         namesDinamic.add(efname);
                         descrptionDinamic.add(_id.toString());
@@ -113,7 +115,7 @@ public class Links extends Activity {
                 }
                 id1.setAdapter(new LinksSpinnerViewAdapter(this, R.layout.custom_spinner, itemsDinamic1));
                 id2.setAdapter(new LinksSpinnerViewAdapter(this, R.layout.custom_spinner, itemsDinamic2));
-                efDbHelper.close();
+//                efDbHelper.close();
                 break;
             }
         }
@@ -185,22 +187,6 @@ public class Links extends Activity {
 //        mDbHelper.close();
 //    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //saveState();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            //populateFields();
-        } catch (SQLiteException s) {
-            Log.e("sql not exists", "sqlerror in links");
-        }
-    }
-
     private class LinksSpinnerViewAdapter extends ArrayAdapter<Item> {
 
         private final Context context;
@@ -266,7 +252,7 @@ public class Links extends Activity {
     }
 
     private void saveState() {
-        mDbHelper.open();
+//        mDbHelper.open();
         String names = name.getText().toString();
         String type1s = (String) type1.getSelectedItem();
         Item id1s = (Item) id1.getSelectedItem();
@@ -282,8 +268,15 @@ public class Links extends Activity {
 //            mDbHelper.updateTodo(mRowId, names, type1s, Integer.parseInt(id1s.getDescription()),
 //                    type2s, Integer.parseInt(id2s.getDescription()));
 //        }
-        long id = mDbHelper.createTodo(names, type1s, Integer.parseInt(id1s.getDescription()),
-                type2s, Integer.parseInt(id2s.getDescription()));
-        mDbHelper.close();
+        ContentValues lvalues = new ContentValues();
+        lvalues.put(ContentProviderForDb.COLUMN_NAME,names);
+        lvalues.put(ContentProviderForDb.COLUMN_TYPE1,type1s);
+        lvalues.put(ContentProviderForDb.COLUMN_ID1,id1s.getDescription());
+        lvalues.put(ContentProviderForDb.COLUMN_TYPE2,type2s);
+        lvalues.put(ContentProviderForDb.COLUMN_ID2,id2s.getDescription());
+        getContentResolver().insert(ContentProviderForDb.PROVIDER_LINKS,lvalues);
+//        long id = mDbHelper.createTodo(names, type1s, Integer.parseInt(id1s.getDescription()),
+//                type2s, Integer.parseInt(id2s.getDescription()));
+//        mDbHelper.close();
     }
 }

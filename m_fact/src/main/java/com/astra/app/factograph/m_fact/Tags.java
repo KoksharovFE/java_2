@@ -2,6 +2,7 @@ package com.astra.app.factograph.m_fact;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -22,8 +23,8 @@ public class Tags extends Activity {
     private Long mRowId;
     private Spinner type1, id1, type2, id2;
     private EditText name;
-    private TagsAdapter mDbHelper;
-    private EFDbAdapted efDbHelper;
+//    private TagsAdapter mDbHelper;
+//    private EFDbAdapted efDbHelper;
     private boolean update = false;
     Cursor cursor;
 
@@ -31,8 +32,8 @@ public class Tags extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tags);
-        mDbHelper = new TagsAdapter(this);
-        efDbHelper = new EFDbAdapted(this);
+//        mDbHelper = new TagsAdapter(this);
+//        efDbHelper = new EFDbAdapted(this);
         type1 = (Spinner) this.findViewById(R.id.typeSpinner);
         id1 = (Spinner) this.findViewById(R.id.idSpinner);
         name = (EditText) findViewById(R.id.tags_name);
@@ -52,20 +53,21 @@ public class Tags extends Activity {
                 break;
             }
             case R.id.tags_update: {
-                efDbHelper.open();
+//                efDbHelper.open();
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
                 ArrayList<String> typeDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
 
-                cursor = efDbHelper.fetchAllTodos();
+//                cursor = efDbHelper.fetchAllTodos();
+                cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS,ContentProviderForDb.PROJECTION_EVENTS,null,null,null);
                 if (cursor.moveToFirst()) {
                     do {
-                        Integer _id = cursor.getInt(cursor.getColumnIndex(EFDbAdapted.KEY_ROWID));
-                        String efname = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
-                        String eftype = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_TYPE));
-                        String efdescription = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_DESCRIPTION));
-                        String efcategory = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_CATEGORY));
+                        Integer _id = cursor.getInt(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                        String efname = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
+                        String eftype = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_TYPE));
+                        String efdescription = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_DESCRIPTION));
+                        String efcategory = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_CATEGORY));
 
                         namesDinamic.add(efname);
                         descrptionDinamic.add(_id.toString());
@@ -82,7 +84,7 @@ public class Tags extends Activity {
                     }
                 }
                 id1.setAdapter(new LinksSpinnerViewAdapter(this, R.layout.custom_spinner, itemsDinamic1));
-                efDbHelper.close();
+//                efDbHelper.close();
                 break;
             }
         }
@@ -161,11 +163,15 @@ public class Tags extends Activity {
     }
 
     private void saveState() {
-        mDbHelper.open();
+//        mDbHelper.open();
         String names = name.getText().toString();
         String type1s = (String) type1.getSelectedItem();
         Item id1s = (Item) id1.getSelectedItem();
-        long id = mDbHelper.createTodo(names, id1s.getDescription());
-        mDbHelper.close();
+        ContentValues lvalues = new ContentValues();
+        lvalues.put(ContentProviderForDb.COLUMN_NAME,names);
+        lvalues.put(ContentProviderForDb.COLUMN_EFID,id1s.getDescription());
+        getContentResolver().insert(ContentProviderForDb.PROVIDER_TAGS,lvalues);
+//        long id = mDbHelper.createTodo(names, id1s.getDescription());
+//        mDbHelper.close();
     }
 }

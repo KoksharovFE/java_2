@@ -6,6 +6,7 @@ package com.astra.app.factograph.m_fact;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,8 +49,9 @@ public class MainActivity extends Activity {
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.tags_update: {
-                Intent intent = new Intent(MainActivity.this, Overview.class);
-                startActivityForResult(intent, 1);
+//                Intent intent = new Intent(MainActivity.this, Overview.class);
+//                startActivityForResult(intent, 1);
+                Log.d("tags_update","in MainActivity");
                 //startActivity(intent);
                 break;
             }

@@ -2,9 +2,11 @@ package com.astra.app.factograph.m_fact;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,10 +29,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
     private EditText mName;
     private EditText mDescription;
     private Long mRowId;
-    private EFDbAdapted mDbHelper;
+//    private EFDbAdapted mDbHelper;
     private Spinner mCategory;
-    private TagsAdapter tagsDbHelper;
-    private LinksDbAdapter linksDbHelper;
+//    private TagsAdapter tagsDbHelper;
+//    private LinksDbAdapter linksDbHelper;
     private Spinner mType;
     protected float fromPosition;
     protected int counter = 0, flipDisp = 0, flipMax = 0;
@@ -43,16 +45,16 @@ public class EditEF extends Activity implements View.OnTouchListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_ef);
-        mDbHelper = new EFDbAdapted(this);
-        linksDbHelper = new LinksDbAdapter(this);
-        tagsDbHelper = new TagsAdapter(this);
+//        mDbHelper = new EFDbAdapted(this);
+//        linksDbHelper = new LinksDbAdapter(this);
+//        tagsDbHelper = new TagsAdapter(this);
 
         mRowId = null;
         Bundle extras = getIntent().getExtras();
         mRowId = (savedInstanceState == null) ? null : (Long) savedInstanceState
-                .getSerializable(EFDbAdapted.KEY_ROWID);
+                .getSerializable(ContentProviderForDb.COLUMN_ID);
         if (extras != null) {
-            mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
+            mRowId = extras.getLong(ContentProviderForDb.COLUMN_ID);
             update = true;
         }
 
@@ -82,7 +84,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
         mDescription = (EditText) findViewById(R.id.ef_edit_description);
 
         populateFields();
-        mDbHelper.close();
+//        mDbHelper.close();
 
         Log.i("flipper is flipping?", flipper.isFlipping() + "");
     }
@@ -111,40 +113,44 @@ public class EditEF extends Activity implements View.OnTouchListener {
             case R.id.ef_links_create: {
                 //TODO Create link
                 Intent intent = new Intent(EditEF.this, Links.class);
-                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
+                intent.putExtra(ContentProviderForDb.COLUMN_ID, mRowId);
                 startActivityForResult(intent, 1);
                 finish();
                 break;
             }
             case R.id.ef_links_montre: {
-                linksDbHelper.open();
+//                linksDbHelper.open();
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
-                Cursor cursor = linksDbHelper.fetchAllTodos();
+                Cursor cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_LINKS,ContentProviderForDb.PROJECTION_LINKS,null,null,null);
+//                Cursor cursor = linksDbHelper.fetchAllTodos();
                 if (cursor.moveToFirst()) {
                     do {
-                        mDbHelper.open();
+//                        mDbHelper.open();
                         Cursor cursor2;//TODO links limiters
-                        Integer _id = cursor.getInt(cursor.getColumnIndex(LinksDbAdapter.KEY_ROWID));
-                        String name = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_NAME));
-                        String type1 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE1));
-                        String id1 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID1));
-                        String type2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE2));
-                        String id2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID2));
-                        cursor2 = mDbHelper.fetchTodo(Long.parseLong(id1));
-                        String nameEF1 = cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
-                        cursor2 = mDbHelper.fetchTodo(Long.parseLong(id2));
-                        String nameEF2 = cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        Integer _id = cursor.getInt(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                        String name = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
+                        String type1 = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_TYPE1));
+                        String id1 = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID1));
+                        String type2 = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_TYPE2));
+                        String id2 = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID2));
+//                        cursor2 = mDbHelper.fetchTodo(Long.parseLong(id1));
+                        cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS,ContentProviderForDb.PROJECTION_EVENTS,
+                                ContentProviderForDb.COLUMN_ID + "=" + id1,null,null);
+                        String nameEF1 = cursor2.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
+                        cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS, ContentProviderForDb.PROJECTION_EVENTS,
+                                ContentProviderForDb.COLUMN_ID + "=" + id2, null, null);
+                        String nameEF2 = cursor2.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
                         if (id1.equals(mRowId) || id2.equals(mRowId)) {
                             namesDinamic.add(name + ":  " + type1 + "/" + nameEF1 + " - " + type2 + "/" + nameEF2);
                             descrptionDinamic.add(_id.toString());
 //                            itemsDinamic1.add(new Item());
                         }
-                        mDbHelper.close();
+//                        mDbHelper.close();
                     } while (cursor.moveToNext());
                 }
-                linksDbHelper.close();
+//                linksDbHelper.close();
                 //TODO Montre link
                 break;
             }
@@ -174,22 +180,23 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
-                tagsDbHelper.open();
+//                tagsDbHelper.open();
                 Cursor cursor2;//TODO tags output
-                cursor2 = tagsDbHelper.fetchAllTodos();
+//                cursor2 = tagsDbHelper.fetchAllTodos();
+                cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_TAGS,ContentProviderForDb.PROJECTION_TAGS,null,null,null);
 
                 if (cursor2.moveToFirst()) {
                     do {
-                        Integer _id = cursor2.getInt(cursor2.getColumnIndex(TagsAdapter.KEY_ROWID));
-                        String tags = cursor2.getString(cursor2.getColumnIndex(TagsAdapter.KEY_TAG));
-                        String ef_id = cursor2.getString(cursor2.getColumnIndex(TagsAdapter.KEY_EF_ID));
+                        Integer _id = cursor2.getInt(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                        String tags = cursor2.getString(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_TAG));
+                        String ef_id = cursor2.getString(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_EFID));
                         if (mRowId.toString().equals(ef_id)) {
                             namesDinamic.add(tags);
                             descrptionDinamic.add(_id.toString());
                         }
                     } while (cursor2.moveToNext());
                 }
-                tagsDbHelper.close();
+//                tagsDbHelper.close();
                 break;
             }
             case R.id.ef_edit_tags_create: {
@@ -197,11 +204,16 @@ public class EditEF extends Activity implements View.OnTouchListener {
 //                Intent intent = new Intent(EditEF.this, Tags.class);
 //                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
 //                startActivityForResult(intent, 1);
-                tagsDbHelper.open();
+//                tagsDbHelper.open();
                 EditText ef_edit_tag_name = (EditText) findViewById(R.id.ef_edit_tag_name);
                 String tag_name = ef_edit_tag_name.getText().toString();
-                tagsDbHelper.createTodo(tag_name, mRowId.toString());
-                tagsDbHelper.close();
+                ContentValues lvalues;
+                lvalues = new ContentValues();
+                lvalues.put(ContentProviderForDb.TABLE_TAGS,tag_name);
+                lvalues.put(ContentProviderForDb.COLUMN_EFID,mRowId.toString());
+                getContentResolver().insert(ContentProviderForDb.PROVIDER_TAGS,lvalues);
+//                tagsDbHelper.createTodo(tag_name, mRowId.toString());
+//                tagsDbHelper.close();
 
                 break;
             }
@@ -209,12 +221,15 @@ public class EditEF extends Activity implements View.OnTouchListener {
     }
 
     private void populateFields() {
-        mDbHelper.open();
+//        mDbHelper.open();
         if (mRowId != null) {
-            Cursor todo = mDbHelper.fetchTodo(mRowId);
+
+            Cursor todo = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS,ContentProviderForDb.PROJECTION_EVENTS,
+                    ContentProviderForDb.COLUMN_ID + "=" + mRowId,null,null);
             startManagingCursor(todo);
+            todo.moveToFirst();
             String category = todo.getString(todo
-                    .getColumnIndexOrThrow(EFDbAdapted.KEY_CATEGORY));
+                    .getColumnIndexOrThrow(ContentProviderForDb.COLUMN_CATEGORY));
             for (int i = 0; i < mCategory.getCount(); i++) {
                 String s = (String) mCategory.getItemAtPosition(i);
                 //Log.e(null, s + " " + category);
@@ -223,7 +238,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 }
             }
             String type = todo.getString(todo
-                    .getColumnIndexOrThrow(EFDbAdapted.KEY_TYPE));
+                    .getColumnIndexOrThrow(ContentProviderForDb.COLUMN_TYPE));
             for (int i = 0; i < mType.getCount(); i++) {
                 String s = (String) mType.getItemAtPosition(i);
                 //Log.e(null, s + " " + type);
@@ -232,17 +247,17 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 }
             }
             mName.setText(todo.getString(todo
-                    .getColumnIndexOrThrow(EFDbAdapted.KEY_NAME)));
+                    .getColumnIndexOrThrow(ContentProviderForDb.COLUMN_NAME)));
             mDescription.setText(todo.getString(todo
-                    .getColumnIndexOrThrow(EFDbAdapted.KEY_DESCRIPTION)));
+                    .getColumnIndexOrThrow(ContentProviderForDb.COLUMN_DESCRIPTION)));
         }
-        mDbHelper.close();
+//        mDbHelper.close();
     }
 
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         saveState();
-        outState.putSerializable(DBadapter.KEY_ROWID, mRowId);
+        outState.putSerializable(ContentProviderForDb.COLUMN_ID, mRowId);
     }
 
     @Override
@@ -268,8 +283,6 @@ public class EditEF extends Activity implements View.OnTouchListener {
     protected void onPause() {
         super.onPause();
         saveState();
-
-
     }
 
     @Override
@@ -285,22 +298,30 @@ public class EditEF extends Activity implements View.OnTouchListener {
 //    }
     private void saveState() {
         //TODO rights
-        mDbHelper.open();
+//        mDbHelper.open();
         String category = (String) mCategory.getSelectedItem();
         String type = (String) mType.getSelectedItem();
         String name = mName.getText().toString();
         String description = mDescription.getText().toString();
+        ContentValues lvalues = new ContentValues();
+        lvalues.put(ContentProviderForDb.COLUMN_NAME,name);
+        lvalues.put(ContentProviderForDb.COLUMN_TYPE,type);
+        lvalues.put(ContentProviderForDb.COLUMN_DESCRIPTION,description);
         if (name.length() > 0) {
             if (mRowId == null) {
-                long id = mDbHelper.createTodo(name, type, description, category);
-                if (id > 0) {
-                    mRowId = id;
-                }
+                Uri uriId = getContentResolver().insert(ContentProviderForDb.PROVIDER_EVENTS,lvalues);//mDbHelper.createTodo(name, type, description, category);
+//                Long lId = getContentResolver().acquireContentProviderClient(uriId).;
+//                if (lId > 0) {
+//                    mRowId = lId;
+//                }
             } else {
-                mDbHelper.updateTodo(mRowId, name, type, description, category);
+                lvalues.put(ContentProviderForDb.COLUMN_ID,mRowId);
+                getContentResolver().update(ContentProviderForDb.PROVIDER_EVENTS,lvalues,
+                        mRowId.toString() + "=" + ContentProviderForDb.COLUMN_ID,null);
+//                mDbHelper.updateTodo(mRowId, name, type, description, category);
             }
         }
-        mDbHelper.close();
+//        mDbHelper.close();
     }
 
     @Override

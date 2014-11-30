@@ -35,9 +35,9 @@ public class UserDbAdapter {
     }
 
     /**
-    * создать новый элемент списка юхеров. если создан успешно - возвращается номер строки rowId
-    * иначе -1
-            */
+     * создать новый элемент списка юхеров. если создан успешно - возвращается номер строки rowId
+     * иначе -1
+     */
     public long createTodo(String login, String password, String rights) {
         ContentValues initialValues = createContentValues(login, password,
                 rights);
@@ -70,7 +70,7 @@ public class UserDbAdapter {
      * @return курсор с результатами всех записей
      */
     public Cursor fetchAllTodos() {
-        return database.query(DATABASE_TABLE, new String[]{KEY_ROWID,
+        return database.query(DATABASE_TABLE, new String[] {KEY_ROWID,
                         KEY_LOGIN, KEY_PASSWORD, KEY_RIGHTS}, null, null, null,
                 null, null
         );
@@ -80,7 +80,7 @@ public class UserDbAdapter {
      * возвращает курсор, спозиционированный на указанной записи
      */
     public Cursor fetchTodo(long rowId) throws SQLException {
-        Cursor mCursor = database.query(true, DATABASE_TABLE, new String[]{
+        Cursor mCursor = database.query(true, DATABASE_TABLE, new String[] {
                         KEY_ROWID, KEY_LOGIN, KEY_PASSWORD, KEY_RIGHTS},
                 KEY_ROWID + "=" + rowId, null, null, null, null, null
         );

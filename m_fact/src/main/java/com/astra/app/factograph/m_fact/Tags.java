@@ -20,11 +20,11 @@ import java.util.ArrayList;
 
 public class Tags extends Activity {
     private Long mRowId;
-    private Spinner type1,id1,type2,id2;
+    private Spinner type1, id1, type2, id2;
     private EditText name;
     private TagsAdapter mDbHelper;
     private EFDbAdapted efDbHelper;
-    private boolean update=false;
+    private boolean update = false;
     Cursor cursor;
 
     @Override
@@ -39,7 +39,7 @@ public class Tags extends Activity {
     }
 
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint ("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.tags_create: {
@@ -58,7 +58,7 @@ public class Tags extends Activity {
                 ArrayList<String> typeDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
 
-                cursor=efDbHelper.fetchAllTodos();
+                cursor = efDbHelper.fetchAllTodos();
                 if (cursor.moveToFirst()) {
                     do {
                         Integer _id = cursor.getInt(cursor.getColumnIndex(EFDbAdapted.KEY_ROWID));
@@ -73,10 +73,10 @@ public class Tags extends Activity {
 
                     } while (cursor.moveToNext());
                 }
-                for(int i=0;i<namesDinamic.size();i++){
+                for (int i = 0; i < namesDinamic.size(); i++) {
                     //Log.i("element "+i,namesDinamic.get(i)+" "+descrptionDinamic.get(i)+" "+typeDinamic.get(i));
-                    if(typeDinamic.get(i).equals(type1.getSelectedItem())){
-                        Item item = new Item(namesDinamic.get(i),descrptionDinamic.get(i));
+                    if (typeDinamic.get(i).equals(type1.getSelectedItem())) {
+                        Item item = new Item(namesDinamic.get(i), descrptionDinamic.get(i));
                         itemsDinamic1.add(item);
                         //Log.i("add item to iD1",namesDinamic.get(i)+" "+descrptionDinamic.get(i));
                     }
@@ -94,19 +94,23 @@ public class Tags extends Activity {
         private final Context context;
         private final ArrayList<Item> itemsArrayList;
 
-        public LinksSpinnerViewAdapter(Context context,int  txtViewResourceId, ArrayList<Item> itemsArrayList) {
+        public LinksSpinnerViewAdapter(Context context, int txtViewResourceId, ArrayList<Item> itemsArrayList) {
 //            RelativeLayout lin = (RelativeLayout)findViewById(txtViewResourceId);
             super(context, txtViewResourceId, itemsArrayList);
             this.context = context;
             this.itemsArrayList = itemsArrayList;
         }
+
         @Override
         public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
             return getView(position, cnvtView, prnt);
         }
-        @Override public View getView(int pos, View cnvtView, ViewGroup prnt) {
+
+        @Override
+        public View getView(int pos, View cnvtView, ViewGroup prnt) {
             return getCustomView(pos, cnvtView, prnt);
         }
+
         public View getCustomView(int position, View convertView, ViewGroup parent) {
 
             // 1. Create inflater
@@ -132,8 +136,9 @@ public class Tags extends Activity {
             return rowView;
         }
 
-    };
+    }
 
+    ;
 
 
     @Override

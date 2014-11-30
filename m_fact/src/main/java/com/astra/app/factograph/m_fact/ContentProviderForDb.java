@@ -45,28 +45,29 @@ public class ContentProviderForDb extends ContentProvider {
     public final static String COLUMN_IMAGEID = "image_id";
     public final static String COLUMN_TAG = "tag";
     public final static String COLUMN_EFID = "ef_id";
+    public final static String COLUMN_LOGIN = "login";
 
-    public final static String[] PROJECTION_VISITORS = new String[]{
+    public final static String[] PROJECTION_VISITORS = new String[] {
             COLUMN_ID,
             COLUMN_FACTID,
             COLUMN_USERID,
             COLUMN_BEGINTIME,
             COLUMN_ENDTIME
     };
-    public final static String[] PROJECTION_USERS = new String[]{
+    public final static String[] PROJECTION_USERS = new String[] {
             COLUMN_ID,
             COLUMN_NAME,
             COLUMN_PASSWORD,
             COLUMN_RIGHTS
     };
-    public final static String[] PROJECTION_LINKS = new String[]{
+    public final static String[] PROJECTION_LINKS = new String[] {
             COLUMN_ID,
             COLUMN_TYPE1,
             COLUMN_ID1,
             COLUMN_TYPE2,
             COLUMN_ID2
     };
-    public final static String[] PROJECTION_EVENTS = new String[]{
+    public final static String[] PROJECTION_EVENTS = new String[] {
             COLUMN_ID,
             COLUMN_NAME,
             COLUMN_DESCRIPTION,
@@ -74,7 +75,7 @@ public class ContentProviderForDb extends ContentProvider {
             COLUMN_MUSICID,
             COLUMN_IMAGEID
     };
-    public final static String[] PROJECTION_TAGS = new String[]{
+    public final static String[] PROJECTION_TAGS = new String[] {
             COLUMN_ID,
             COLUMN_TAG,
             COLUMN_EFID
@@ -87,7 +88,7 @@ public class ContentProviderForDb extends ContentProvider {
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
-        private static final int VERSION = 13;
+        private static final int VERSION = 16;
 
         DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, VERSION);
@@ -109,7 +110,7 @@ public class ContentProviderForDb extends ContentProvider {
                     + COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, "
                     + COLUMN_NAME + " VARCHAR, "
                     + COLUMN_PASSWORD + " VARCHAR, "
-                    +  COLUMN_RIGHTS + " VARCHAR"
+                    + COLUMN_RIGHTS + " VARCHAR"
                     + ");");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS "
@@ -205,27 +206,27 @@ public class ContentProviderForDb extends ContentProvider {
         String table = null;
         switch (sURIMatcher.match(uri)) {
             case URI_TABLE_VISITORS:
-                Log.d( ((Integer)URI_TABLE_VISITORS).toString(),TABLE_VISITORS);
+                Log.d(((Integer) URI_TABLE_VISITORS).toString(), TABLE_VISITORS);
                 table = TABLE_VISITORS;
                 break;
             case URI_TABLE_USERS:
-                Log.d( ((Integer)URI_TABLE_USERS).toString(),TABLE_USERS);
+                Log.d(((Integer) URI_TABLE_USERS).toString(), TABLE_USERS);
                 table = TABLE_USERS;
                 break;
             case URI_TABLE_EVENTS:
-                Log.d( ((Integer)URI_TABLE_EVENTS).toString(),TABLE_EVENTS);
+                Log.d(((Integer) URI_TABLE_EVENTS).toString(), TABLE_EVENTS);
                 table = TABLE_EVENTS;
                 break;
             case URI_TABLE_LINKS:
-                Log.d( ((Integer)URI_TABLE_LINKS).toString(),TABLE_LINKS);
+                Log.d(((Integer) URI_TABLE_LINKS).toString(), TABLE_LINKS);
                 table = TABLE_LINKS;
                 break;
             case URI_TABLE_TAGS:
-                Log.d( ((Integer)URI_TABLE_TAGS).toString(),TABLE_TAGS);
+                Log.d(((Integer) URI_TABLE_TAGS).toString(), TABLE_TAGS);
                 table = TABLE_TAGS;
                 break;
             default:
-                Log.d( ((Integer)sURIMatcher.match(uri)).toString(),"not found");
+                Log.d(((Integer) sURIMatcher.match(uri)).toString(), "not found");
                 break;
         }
         return table;

@@ -36,8 +36,8 @@ public class DBadapter {
     }
 
     /**
-     * создать новый элемент списка дел. если создан успешно - возвращается номер строки rowId
-     * иначе -1
+     * создать новый элемент списка дел. если создан успешно - возвращается номер строки rowId иначе
+     * -1
      */
     public long createTodo(String category, String summary, String description) {
         ContentValues initialValues = createContentValues(category, summary,
@@ -71,7 +71,7 @@ public class DBadapter {
      * @return курсор с результатами всех записей
      */
     public Cursor fetchAllTodos() {
-        return database.query(DATABASE_TABLE, new String[]{KEY_ROWID,
+        return database.query(DATABASE_TABLE, new String[] {KEY_ROWID,
                         KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION}, null, null, null,
                 null, null
         );
@@ -81,7 +81,7 @@ public class DBadapter {
      * возвращает курсор, спозиционированный на указанной записи
      */
     public Cursor fetchTodo(long rowId) throws SQLException {
-        Cursor mCursor = database.query(true, DATABASE_TABLE, new String[]{
+        Cursor mCursor = database.query(true, DATABASE_TABLE, new String[] {
                         KEY_ROWID, KEY_CATEGORY, KEY_SUMMARY, KEY_DESCRIPTION},
                 KEY_ROWID + "=" + rowId, null, null, null, null, null
         );

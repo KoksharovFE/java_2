@@ -3,12 +3,13 @@ package com.astra.app.factograph.m_fact;
 /**
  * Created by teodor on 19.10.2014.
  */
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class UserDbUsing extends SQLiteOpenHelper{
+public class UserDbUsing extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "applicationdata";
     private static final int DATABASE_VERSION = 12;
     // запрос на создание базы данных

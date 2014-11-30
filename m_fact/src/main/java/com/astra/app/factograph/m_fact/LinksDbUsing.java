@@ -14,7 +14,7 @@ public class LinksDbUsing extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 12;
     private static final String DATABASE_TABLE = "links";
     // запрос на создание базы данных
-    private static final String DATABASE_CREATE = "create table "+ DATABASE_TABLE+ " (_id integer primary key autoincrement, "
+    private static final String DATABASE_CREATE = "create table " + DATABASE_TABLE + " (_id integer primary key autoincrement, "
             + "name text not null, type1 text not null, id1 integer not null, type2 text not null, id2 integer not null);";
 
     public LinksDbUsing(Context context) {
@@ -36,7 +36,7 @@ public class LinksDbUsing extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data"
         );
-        database.execSQL("DROP TABLE IF EXISTS "+ DATABASE_TABLE);
+        database.execSQL("DROP TABLE IF EXISTS " + DATABASE_TABLE);
         onCreate(database);
     }
 }

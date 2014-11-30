@@ -7,12 +7,13 @@ import android.app.Application;
  */
 public class MyGlobalSigns extends Application {
 
-    private String Rights="";
+    private String Rights = "";
 
-    public String getRights(){
+    public String getRights() {
         return Rights;
     }
-    public void setRights(String s){
+
+    public void setRights(String s) {
         Rights = s;
     }
 }

@@ -16,14 +16,14 @@ public class Details extends Activity {
     private EditText mTitleText;
     private EditText mBodyText;
     private Long mRowId;
-    private DBadapter mDbHelper;
+    //    private DBadapter mDbHelper;
     private Spinner mCategory;
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        mDbHelper = new DBadapter(this);
-        mDbHelper.open();
+//        mDbHelper = new DBadapter(this);
+//        mDbHelper.open();
         setContentView(R.layout.important_edit);
         mCategory = (Spinner) findViewById(R.id.category);
         mTitleText = (EditText) findViewById(R.id.todo_edit_summary);
@@ -32,11 +32,11 @@ public class Details extends Activity {
         Button confirmButton = (Button) findViewById(R.id.todo_edit_button);
         mRowId = null;
         Bundle extras = getIntent().getExtras();
-        mRowId = (bundle == null) ? null : (Long) bundle
-                .getSerializable(DBadapter.KEY_ROWID);
-        if (extras != null) {
-            mRowId = extras.getLong(DBadapter.KEY_ROWID);
-        }
+//        mRowId = (bundle == null) ? null : (Long) bundle
+//                .getSerializable(DBadapter.KEY_ROWID);
+//        if (extras != null) {
+//            mRowId = extras.getLong(DBadapter.KEY_ROWID);
+//        }
         populateFields();
         confirmButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -49,31 +49,31 @@ public class Details extends Activity {
 
     private void populateFields() {
         if (mRowId != null) {
-            Cursor todo = mDbHelper.fetchTodo(mRowId);
-            startManagingCursor(todo);
-            String category = todo.getString(todo
-                    .getColumnIndexOrThrow(DBadapter.KEY_CATEGORY));
+//            Cursor todo = mDbHelper.fetchTodo(mRowId);
+//            startManagingCursor(todo);
+//            String category = todo.getString(todo
+//                    .getColumnIndexOrThrow(DBadapter.KEY_CATEGORY));
 
             for (int i = 0; i < mCategory.getCount(); i++) {
 
                 String s = (String) mCategory.getItemAtPosition(i);
-                Log.e(null, s + " " + category);
-                if (s.equalsIgnoreCase(category)) {
-                    mCategory.setSelection(i);
-                }
+//                Log.e(null, s + " " + category);
+//                if (s.equalsIgnoreCase(category)) {
+//                    mCategory.setSelection(i);
+//                }
             }
 
-            mTitleText.setText(todo.getString(todo
-                    .getColumnIndexOrThrow(DBadapter.KEY_SUMMARY)));
-            mBodyText.setText(todo.getString(todo
-                    .getColumnIndexOrThrow(DBadapter.KEY_DESCRIPTION)));
+//            mTitleText.setText(todo.getString(todo
+//                    .getColumnIndexOrThrow(DBadapter.KEY_SUMMARY)));
+//            mBodyText.setText(todo.getString(todo
+//                    .getColumnIndexOrThrow(DBadapter.KEY_DESCRIPTION)));
         }
     }
 
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         saveState();
-        outState.putSerializable(DBadapter.KEY_ROWID, mRowId);
+//        outState.putSerializable(DBadapter.KEY_ROWID, mRowId);
     }
 
     @Override
@@ -94,13 +94,14 @@ public class Details extends Activity {
         String description = mBodyText.getText().toString();
 
         if (mRowId == null) {
-            long id = mDbHelper.createTodo(category, summary, description);
-            if (id > 0) {
-                mRowId = id;
-            }
-        } else {
-            mDbHelper.updateTodo(mRowId, category, summary, description);
+//            long id = mDbHelper.createTodo(category, summary, description);
+//            if (id > 0) {
+//                mRowId = id;
+//            }
+//        } else {
+//            mDbHelper.updateTodo(mRowId, category, summary, description);
+//        }
         }
-    }
 
+    }
 }

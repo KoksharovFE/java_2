@@ -31,9 +31,9 @@ import java.util.regex.Pattern;
  */
 
 public class MonteMoiEF extends ListActivity {
-    private EFDbAdapted efHelper;
-    private UserDbAdapter userHelper;
-    private LinksDbAdapter linksHelper;
+//    private EFDbAdapted efHelper;
+//    private UserDbAdapter userHelper;
+//    private LinksDbAdapter linksHelper;
     //    private static final int ACTIVITY_CREATE = 0;
 //    private static final int ACTIVITY_EDIT = 1;
 //    private static final int DELETE_ID = Menu.FIRST + 1;
@@ -74,9 +74,9 @@ public class MonteMoiEF extends ListActivity {
         mType = (Spinner) findViewById(R.id.monte_moi_spinner);
         mSearch = (EditText) findViewById(R.id.monte_moi_search);
         //mListView = (ListView) findViewById(R.id.monte_moi_list_view);
-        efHelper = new EFDbAdapted(this);
-        userHelper = new UserDbAdapter(this);
-        linksHelper = new LinksDbAdapter(this);
+//        efHelper = new EFDbAdapted(this);
+//        userHelper = new UserDbAdapter(this);
+//        linksHelper = new LinksDbAdapter(this);
         mListView = (ListView) this.getListView();
 //        userHelper.open();
 //        efHelper.open();
@@ -108,9 +108,9 @@ public class MonteMoiEF extends ListActivity {
 //            intent.putExtra("lname", etLName.getText().toString());
             case R.id.button3: {
                 //TODO search
-                userHelper.open();
-                efHelper.open();
-                linksHelper.open();
+//                userHelper.open();
+//                efHelper.open();
+//                linksHelper.open();
 //шаблоны
 //http://javagu.ru/portal/dt?last=false&provider=javaguru&ArticleId=GURU_ARTICLE_64530&SecID=GURU_SECTION_63111
                 String type = (String) mType.getSelectedItem();
@@ -119,13 +119,15 @@ public class MonteMoiEF extends ListActivity {
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
 
                 if (type.equals("User")) {//Вывод Пользователей
-                    cursor = userHelper.fetchAllTodos();
+                    cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_USERS,
+                            ContentProviderForDb.PROJECTION_USERS,null,null,null);
+//                    cursor = ContentProviderForDb.fetchAllTodos();
                     if (cursor.moveToFirst()) {
                         do {
-                            Integer _id = cursor.getInt(cursor.getColumnIndex(UserDbAdapter.KEY_ROWID));
-                            String ulogin = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_LOGIN));
-                            String upass = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_PASSWORD));
-                            String urights = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_RIGHTS));
+                            Integer _id = cursor.getInt(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                            String ulogin = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
+                            String upass = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_PASSWORD));
+                            String urights = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_RIGHTS));
 
                             try {
                                 Pattern p = Pattern.compile(mSearch.getText().toString());
@@ -147,14 +149,15 @@ public class MonteMoiEF extends ListActivity {
 
                 if (type.equals("Fact") || type.equals("Event") || type.equals("Place")) {
                     //Вывод Фактов || Вывод Событий || Вывод Мест
-                    cursor = efHelper.fetchAllTodos();
+//                    cursor = efHelper.fetchAllTodos();
+                    cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS,ContentProviderForDb.PROJECTION_EVENTS,null,null,null);
                     if (cursor.moveToFirst()) {
                         do {
-                            Integer _id = cursor.getInt(cursor.getColumnIndex(EFDbAdapted.KEY_ROWID));
-                            String efname = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
-                            String eftype = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_TYPE));
-                            String efdescription = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_DESCRIPTION));
-                            String efcategory = cursor.getString(cursor.getColumnIndex(EFDbAdapted.KEY_CATEGORY));
+                            Integer _id = cursor.getInt(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                            String efname = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
+                            String eftype = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_TYPE));
+                            String efdescription = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_DESCRIPTION));
+                            String efcategory = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_CATEGORY));
 
                             if (type.equals(eftype)) {
                                 try {
@@ -195,10 +198,10 @@ public class MonteMoiEF extends ListActivity {
 //                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 //                        android.R.layout.simple_list_item_1, names);
                 mListView.setAdapter(adapter);
-                mListView.setTextFilterEnabled(true);
-                userHelper.close();
-                efHelper.close();
-                linksHelper.close();
+//                mListView.setTextFilterEnabled(true);
+//                userHelper.close();
+//                efHelper.close();
+//                linksHelper.close();
                 cursor.close();
                 break;
             }
@@ -213,7 +216,7 @@ public class MonteMoiEF extends ListActivity {
         String type = (String) mType.getSelectedItem();
         if (type.equals("Fact") || type.equals("Event") || type.equals("Place")) {
             Intent intent = new Intent(MonteMoiEF.this, EditEF.class);
-            intent.putExtra(EFDbAdapted.KEY_ROWID, Long.parseLong(_id));
+            intent.putExtra(ContentProviderForDb.COLUMN_ID, Long.parseLong(_id));
             startActivityForResult(intent, 1);
         }
         if (type.equals("User")) {
@@ -284,7 +287,7 @@ public class MonteMoiEF extends ListActivity {
             String type = (String) mType.getSelectedItem();
             if (type.equals("Fact") || type.equals("Event") || type.equals("Place")) {
                 Intent intent = new Intent(MonteMoiEF.this, EditEF.class);
-                intent.putExtra(EFDbAdapted.KEY_ROWID, Long.parseLong(_id));
+                intent.putExtra(ContentProviderForDb.COLUMN_ID, Long.parseLong(_id));
                 startActivityForResult(intent, 1);
             }
             if (type.equals("User")) {
@@ -295,8 +298,8 @@ public class MonteMoiEF extends ListActivity {
 //                //TO DO links edit
 //                Log.i("Links Editor", "Not Created");
 //            }
-            userHelper.close();
-            efHelper.close();
+//            userHelper.close();
+//            efHelper.close();
         } catch (NullPointerException e) {
             Log.e("null err", "in monte moi ef on ite click");
         }

@@ -58,8 +58,8 @@ public class Auth extends Activity {
             case R.id.tags_update: {
 //                cursor = dbHelper.fetchAllTodos();
                 cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_USERS, ContentProviderForDb.PROJECTION_USERS, null, null, null);
-                String login_input = Auth.this.login_field.getText().toString();
-                String password_input = Auth.this.password_field.getText().toString();
+                String login_input = login_field.getText().toString();
+                String password_input = password_field.getText().toString();
                 boolean correct_credentials = false;
                 if (cursor.moveToFirst()) {
                     do {
@@ -67,7 +67,7 @@ public class Auth extends Activity {
                         String login = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
                         String pass = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_PASSWORD));
                         String rights = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_RIGHTS));
-                        if (login_input.equals(login) && password_input.equals(password_input)) {
+                        if (login_input.equals(login) && password_input.equals(pass)) {
                             correct_credentials = true;
 //                            MyGlobalSigns appState = ((MyGlobalSigns)this.getApplicationContext());
 //                            String s=rights; TODO global

@@ -18,7 +18,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 public class Overview extends ListActivity {
-    private DBadapter dbHelper;
+//    private DBadapter dbHelper;
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
     private static final int DELETE_ID = Menu.FIRST + 1;
@@ -32,8 +32,8 @@ public class Overview extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.important_list);
         this.getListView().setDividerHeight(2);
-        dbHelper = new DBadapter(this);
-        dbHelper.open();
+//        dbHelper = new DBadapter(this);
+//        dbHelper.open();
         fillData();
         registerForContextMenu(getListView());
     }
@@ -73,7 +73,7 @@ public class Overview extends ListActivity {
             case DELETE_ID:
                 AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
                         .getMenuInfo();
-                dbHelper.deleteTodo(info.id);
+//                dbHelper.deleteTodo(info.id);
                 fillData();
                 return true;
         }
@@ -89,7 +89,7 @@ public class Overview extends ListActivity {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         Intent i = new Intent(this, Details.class);
-        i.putExtra(DBadapter.KEY_ROWID, id);
+//        i.putExtra(DBadapter.KEY_ROWID, id);
         // активити вернет результат если будет вызвано с помощью этого метода
         startActivityForResult(i, ACTIVITY_EDIT);
     }
@@ -103,16 +103,16 @@ public class Overview extends ListActivity {
     }
 
     private void fillData() {
-        cursor = dbHelper.fetchAllTodos();
-        startManagingCursor(cursor);
+//        cursor = dbHelper.fetchAllTodos();
+//        startManagingCursor(cursor);
 
-        String[] from = new String[] {DBadapter.KEY_SUMMARY};
+//        String[] from = new String[] {DBadapter.KEY_SUMMARY};
         int[] to = new int[] {R.id.label};
 
         // Теперь создадим адаптер массива и установим его для отображения наших данных
-        SimpleCursorAdapter notes = new SimpleCursorAdapter(this,
-                R.layout.important_row, cursor, from, to);
-        setListAdapter(notes);
+//        SimpleCursorAdapter notes = new SimpleCursorAdapter(this,
+//                R.layout.important_row, cursor, from, to);
+//        setListAdapter(notes);
     }
 
     @Override
@@ -125,15 +125,15 @@ public class Overview extends ListActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (dbHelper != null) {
-            dbHelper.close();
-        }
+//        if (dbHelper != null) {
+//            dbHelper.close();
+//        }
     }
 
     protected void onStop() {
-        if (dbHelper != null) {
-            dbHelper.close();
-        }
+//        if (dbHelper != null) {
+//            dbHelper.close();
+//        }
         super.onStop();
         setResult(RESULT_OK);
     }

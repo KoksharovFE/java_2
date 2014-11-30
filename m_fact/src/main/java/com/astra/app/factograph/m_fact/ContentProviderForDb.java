@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
+import java.security.acl.LastOwnerException;
+
 public class ContentProviderForDb extends ContentProvider {
 
     public static final String DATABASE_NAME = "factographDb";
@@ -27,6 +29,7 @@ public class ContentProviderForDb extends ContentProvider {
 
     public static final String COLUMN_ID = "_id";
     public final static String COLUMN_NAME = "name";
+    public final static String COLUMN_TYPE = "type";
     public final static String COLUMN_PASSWORD = "password";
     public final static String COLUMN_RIGHTS = "rights";
     public final static String COLUMN_FACTID = "fact_id";
@@ -45,7 +48,7 @@ public class ContentProviderForDb extends ContentProvider {
     public final static String COLUMN_IMAGEID = "image_id";
     public final static String COLUMN_TAG = "tag";
     public final static String COLUMN_EFID = "ef_id";
-    public final static String COLUMN_LOGIN = "login";
+//    public final static String COLUMN_LOGIN = "login";
 
     public final static String[] PROJECTION_VISITORS = new String[] {
             COLUMN_ID,
@@ -62,6 +65,7 @@ public class ContentProviderForDb extends ContentProvider {
     };
     public final static String[] PROJECTION_LINKS = new String[] {
             COLUMN_ID,
+            COLUMN_NAME,
             COLUMN_TYPE1,
             COLUMN_ID1,
             COLUMN_TYPE2,
@@ -70,6 +74,7 @@ public class ContentProviderForDb extends ContentProvider {
     public final static String[] PROJECTION_EVENTS = new String[] {
             COLUMN_ID,
             COLUMN_NAME,
+            COLUMN_TYPE,
             COLUMN_DESCRIPTION,
             COLUMN_CATEGORY,
             COLUMN_MUSICID,
@@ -88,7 +93,7 @@ public class ContentProviderForDb extends ContentProvider {
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
-        private static final int VERSION = 16;
+        private static final int VERSION = 19;
 
         DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, VERSION);
@@ -116,6 +121,7 @@ public class ContentProviderForDb extends ContentProvider {
             db.execSQL("CREATE TABLE IF NOT EXISTS "
                     + TABLE_LINKS + " ("
                     + COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, "
+                    + COLUMN_NAME + " VARCHAR,"
                     + COLUMN_TYPE1 + " VARCHAR, "
                     + COLUMN_ID1 + " VARCHAR,"
                     + COLUMN_TYPE2 + " VARCHAR, "
@@ -126,6 +132,7 @@ public class ContentProviderForDb extends ContentProvider {
                     + TABLE_EVENTS + " ("
                     + COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, "
                     + COLUMN_NAME + " VARCHAR, "
+                    + COLUMN_TYPE + " VARCHAR, "
                     + COLUMN_DESCRIPTION + " VARCHAR,"
                     + COLUMN_CATEGORY + " VARCHAR, "
                     + COLUMN_MUSICID + " VARCHAR, "
@@ -171,9 +178,17 @@ public class ContentProviderForDb extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        mDatabase.insert(getTable(uri), null, values);
+        Long id = mDatabase.insert(getTable(uri), null, values);
         return null;
     }
+
+//    public Long insert(Uri uri, ContentValues values,boolean needIdReturn) {
+//        Long id = mDatabase.insert(getTable(uri), null, values);
+//        if (needIdReturn){
+//            return id;
+//        }
+//        return null;
+//    }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {

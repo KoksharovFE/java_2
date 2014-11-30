@@ -138,9 +138,11 @@ public class EditEF extends Activity implements View.OnTouchListener {
 //                        cursor2 = mDbHelper.fetchTodo(Long.parseLong(id1));
                         cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS,ContentProviderForDb.PROJECTION_EVENTS,
                                 ContentProviderForDb.COLUMN_ID + "=" + id1,null,null);
+                        cursor2.moveToFirst();
                         String nameEF1 = cursor2.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
                         cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS, ContentProviderForDb.PROJECTION_EVENTS,
                                 ContentProviderForDb.COLUMN_ID + "=" + id2, null, null);
+                        cursor2.moveToFirst();
                         String nameEF2 = cursor2.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
                         if (id1.equals(mRowId) || id2.equals(mRowId)) {
                             namesDinamic.add(name + ":  " + type1 + "/" + nameEF1 + " - " + type2 + "/" + nameEF2);
@@ -209,7 +211,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 String tag_name = ef_edit_tag_name.getText().toString();
                 ContentValues lvalues;
                 lvalues = new ContentValues();
-                lvalues.put(ContentProviderForDb.TABLE_TAGS,tag_name);
+                lvalues.put(ContentProviderForDb.COLUMN_TAG,tag_name);
                 lvalues.put(ContentProviderForDb.COLUMN_EFID,mRowId.toString());
                 getContentResolver().insert(ContentProviderForDb.PROVIDER_TAGS,lvalues);
 //                tagsDbHelper.createTodo(tag_name, mRowId.toString());

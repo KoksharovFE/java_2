@@ -93,7 +93,7 @@ public class ContentProviderForDb extends ContentProvider {
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
-        private static final int VERSION = 17;
+        private static final int VERSION = 19;
 
         DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, VERSION);
@@ -121,6 +121,7 @@ public class ContentProviderForDb extends ContentProvider {
             db.execSQL("CREATE TABLE IF NOT EXISTS "
                     + TABLE_LINKS + " ("
                     + COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, "
+                    + COLUMN_NAME + " VARCHAR,"
                     + COLUMN_TYPE1 + " VARCHAR, "
                     + COLUMN_ID1 + " VARCHAR,"
                     + COLUMN_TYPE2 + " VARCHAR, "

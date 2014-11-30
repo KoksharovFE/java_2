@@ -13,6 +13,11 @@
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"/>
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ef_edit_tag_name"/>
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -33,17 +38,6 @@
             android:onClick="buttonClicked"
             android:id="@+id/ef_edit_tags_create"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cancel"
-            android:onClick="buttonClicked"
-            android:id="@+id/ef_edit_tags_cancel"/>
     </LinearLayout>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ef_edit_tags_listView"
-        android:layout_gravity="center_horizontal"/>
 </LinearLayout>

@@ -106,8 +106,8 @@ public class Overview extends ListActivity {
         cursor = dbHelper.fetchAllTodos();
         startManagingCursor(cursor);
 
-        String[] from = new String[]{DBadapter.KEY_SUMMARY};
-        int[] to = new int[]{R.id.label};
+        String[] from = new String[] {DBadapter.KEY_SUMMARY};
+        int[] to = new int[] {R.id.label};
 
         // Теперь создадим адаптер массива и установим его для отображения наших данных
         SimpleCursorAdapter notes = new SimpleCursorAdapter(this,

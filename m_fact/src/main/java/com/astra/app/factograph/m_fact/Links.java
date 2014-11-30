@@ -3,37 +3,31 @@ package com.astra.app.factograph.m_fact;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class Links extends Activity {
 
     private Long mRowId;
-    private Spinner type1,id1,type2,id2;
+    private Spinner type1, id1, type2, id2;
     private EditText name;
     private LinksDbAdapter mDbHelper;
     private EFDbAdapted efDbHelper;
-    private boolean update=false;
+    private boolean update = false;
     Cursor cursor;
 
     @Override
@@ -68,8 +62,7 @@ public class Links extends Activity {
 //        }
 
 
-
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint ("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.links_create: {
@@ -89,7 +82,7 @@ public class Links extends Activity {
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
                 ArrayList<Item> itemsDinamic2 = new ArrayList<Item>();
 
-                cursor=efDbHelper.fetchAllTodos();
+                cursor = efDbHelper.fetchAllTodos();
                 if (cursor.moveToFirst()) {
                     do {
                         Integer _id = cursor.getInt(cursor.getColumnIndex(EFDbAdapted.KEY_ROWID));
@@ -104,15 +97,15 @@ public class Links extends Activity {
 
                     } while (cursor.moveToNext());
                 }
-                for(int i=0;i<namesDinamic.size();i++){
+                for (int i = 0; i < namesDinamic.size(); i++) {
                     //Log.i("element "+i,namesDinamic.get(i)+" "+descrptionDinamic.get(i)+" "+typeDinamic.get(i));
-                    if(typeDinamic.get(i).equals(type1.getSelectedItem())){
-                        Item item = new Item(namesDinamic.get(i),descrptionDinamic.get(i));
+                    if (typeDinamic.get(i).equals(type1.getSelectedItem())) {
+                        Item item = new Item(namesDinamic.get(i), descrptionDinamic.get(i));
                         itemsDinamic1.add(item);
                         //Log.i("add item to iD1",namesDinamic.get(i)+" "+descrptionDinamic.get(i));
                     }
-                    if(typeDinamic.get(i).equals(type2.getSelectedItem())){
-                        Item item = new Item(namesDinamic.get(i),descrptionDinamic.get(i));
+                    if (typeDinamic.get(i).equals(type2.getSelectedItem())) {
+                        Item item = new Item(namesDinamic.get(i), descrptionDinamic.get(i));
                         itemsDinamic2.add(item);
                         //Log.i("add item to iD2",namesDinamic.get(i)+" "+descrptionDinamic.get(i));
 
@@ -164,6 +157,7 @@ public class Links extends Activity {
         //saveState();
         //outState.putSerializable(DBadapter.KEY_ROWID, mRowId);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -200,11 +194,10 @@ public class Links extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        try{
+        try {
             //populateFields();
-        }
-        catch(SQLiteException s){
-            Log.e("sql not exists","sqlerror in links");
+        } catch (SQLiteException s) {
+            Log.e("sql not exists", "sqlerror in links");
         }
     }
 
@@ -213,19 +206,23 @@ public class Links extends Activity {
         private final Context context;
         private final ArrayList<Item> itemsArrayList;
 
-        public LinksSpinnerViewAdapter(Context context,int  txtViewResourceId, ArrayList<Item> itemsArrayList) {
+        public LinksSpinnerViewAdapter(Context context, int txtViewResourceId, ArrayList<Item> itemsArrayList) {
 //            RelativeLayout lin = (RelativeLayout)findViewById(txtViewResourceId);
             super(context, txtViewResourceId, itemsArrayList);
             this.context = context;
             this.itemsArrayList = itemsArrayList;
         }
+
         @Override
         public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
             return getView(position, cnvtView, prnt);
         }
-        @Override public View getView(int pos, View cnvtView, ViewGroup prnt) {
+
+        @Override
+        public View getView(int pos, View cnvtView, ViewGroup prnt) {
             return getCustomView(pos, cnvtView, prnt);
         }
+
         public View getCustomView(int position, View convertView, ViewGroup parent) {
 
             // 1. Create inflater
@@ -251,9 +248,9 @@ public class Links extends Activity {
             return rowView;
         }
 
-    };
+    }
 
-
+    ;
 
 
     @Override
@@ -273,7 +270,7 @@ public class Links extends Activity {
         String names = name.getText().toString();
         String type1s = (String) type1.getSelectedItem();
         Item id1s = (Item) id1.getSelectedItem();
-        String type2s =(String) type2.getSelectedItem();
+        String type2s = (String) type2.getSelectedItem();
         Item id2s = (Item) id2.getSelectedItem();
 //        if (mRowId == null) {
 //            long id = mDbHelper.createTodo(names, type1s,Integer.parseInt(id1s.getDescription()),
@@ -285,8 +282,8 @@ public class Links extends Activity {
 //            mDbHelper.updateTodo(mRowId, names, type1s, Integer.parseInt(id1s.getDescription()),
 //                    type2s, Integer.parseInt(id2s.getDescription()));
 //        }
-        long id = mDbHelper.createTodo(names, type1s,Integer.parseInt(id1s.getDescription()),
-                    type2s, Integer.parseInt(id2s.getDescription()));
+        long id = mDbHelper.createTodo(names, type1s, Integer.parseInt(id1s.getDescription()),
+                type2s, Integer.parseInt(id2s.getDescription()));
         mDbHelper.close();
     }
 }

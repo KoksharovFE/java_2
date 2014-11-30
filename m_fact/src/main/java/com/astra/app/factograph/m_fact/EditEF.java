@@ -1,7 +1,6 @@
 package com.astra.app.factograph.m_fact;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,7 +23,7 @@ import android.widget.ViewFlipper;
 import java.util.ArrayList;
 
 
-public class EditEF extends Activity implements View.OnTouchListener{
+public class EditEF extends Activity implements View.OnTouchListener {
     private EditText mName;
     private EditText mDescription;
     private Long mRowId;
@@ -35,8 +33,8 @@ public class EditEF extends Activity implements View.OnTouchListener{
     private LinksDbAdapter linksDbHelper;
     private Spinner mType;
     protected float fromPosition;
-    protected int counter = 0, flipDisp=0, flipMax=0;
-    private boolean update=false;
+    protected int counter = 0, flipDisp = 0, flipMax = 0;
+    private boolean update = false;
     protected float MOVE_LENGTH = 100;
     ViewFlipper flipper;
     LayoutInflater inflater;
@@ -47,6 +45,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
         setContentView(R.layout.activity_edit_ef);
         mDbHelper = new EFDbAdapted(this);
         linksDbHelper = new LinksDbAdapter(this);
+        tagsDbHelper = new TagsAdapter(this);
 
         mRowId = null;
         Bundle extras = getIntent().getExtras();
@@ -54,27 +53,27 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 .getSerializable(EFDbAdapted.KEY_ROWID);
         if (extras != null) {
             mRowId = extras.getLong(EFDbAdapted.KEY_ROWID);
-            update=true;
+            update = true;
         }
 
         //Button confirmButton = (Button) findViewById(R.id.todo_edit_button);
         flipper = (ViewFlipper) findViewById(R.id.ef_edit_flipper);
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int layouts[];
-        if(update) {
-            layouts = new int[] {R.layout.ef_main, R.layout.edit_ef_links, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
+        if (update) {
+            layouts = new int[] {R.layout.ef_main, R.layout.edit_ef_links, R.layout.edit_ef_tags, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
         } else {
-            layouts =new int[] {R.layout.ef_main, R.layout.void_layout};
+            layouts = new int[] {R.layout.ef_main, R.layout.void_layout};
         }
-        flipMax=layouts.length;
+        flipMax = layouts.length;
         try {//TODO check the problem
             for (int layout : layouts) {
                 //flipper.addView(inflater.inflate(layout, null));
-                View views= inflater.inflate(layout,null);
+                View views = inflater.inflate(layout, null);
                 flipper.addView(views);
             }
-        } catch(NullPointerException e){
-            Log.e("NullPointerException","flipper/s");
+        } catch (NullPointerException e) {
+            Log.e("NullPointerException", "flipper/s");
         }
 
         mCategory = (Spinner) findViewById(R.id.category);
@@ -85,9 +84,10 @@ public class EditEF extends Activity implements View.OnTouchListener{
         populateFields();
         mDbHelper.close();
 
-        Log.i("flipper is flipping?",flipper.isFlipping()+"");
+        Log.i("flipper is flipping?", flipper.isFlipping() + "");
     }
-//        try {
+
+    //        try {
 //            confirmButton.setOnClickListener(new View.OnClickListener() {
 //                public void onClick(View view) {
 //                    setResult(RESULT_OK);
@@ -98,7 +98,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
 //        }catch (NullPointerException e){
 //            Log.i("EditEF button not work", "NullPointerException when button listener created");
 //        }
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint ("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.ef_edit_button: {
@@ -121,7 +121,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
-                Cursor cursor=linksDbHelper.fetchAllTodos();
+                Cursor cursor = linksDbHelper.fetchAllTodos();
                 if (cursor.moveToFirst()) {
                     do {
                         mDbHelper.open();
@@ -132,11 +132,11 @@ public class EditEF extends Activity implements View.OnTouchListener{
                         String id1 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID1));
                         String type2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_TYPE2));
                         String id2 = cursor.getString(cursor.getColumnIndex(LinksDbAdapter.KEY_ID2));
-                        cursor2=mDbHelper.fetchTodo(Long.parseLong(id1));
-                        String nameEF1=cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
-                        cursor2=mDbHelper.fetchTodo(Long.parseLong(id2));
-                        String nameEF2=cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
-                        if(id1.equals(mRowId) || id2.equals(mRowId)) {
+                        cursor2 = mDbHelper.fetchTodo(Long.parseLong(id1));
+                        String nameEF1 = cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        cursor2 = mDbHelper.fetchTodo(Long.parseLong(id2));
+                        String nameEF2 = cursor2.getString(cursor.getColumnIndex(EFDbAdapted.KEY_NAME));
+                        if (id1.equals(mRowId) || id2.equals(mRowId)) {
                             namesDinamic.add(name + ":  " + type1 + "/" + nameEF1 + " - " + type2 + "/" + nameEF2);
                             descrptionDinamic.add(_id.toString());
 //                            itemsDinamic1.add(new Item());
@@ -154,7 +154,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
             }
             case R.id.ef_previous_button: {
                 //flipper.showPrevious();//flipper.showNext();
-                if(flipDisp>0) {
+                if (flipDisp > 0) {
                     flipDisp--;
                     flipper.setDisplayedChild(flipDisp);
                 }
@@ -162,7 +162,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
             }
             case R.id.ef_next_button: {
                 //flipper.showNext();
-                if(flipDisp<flipMax-1) {
+                if (flipDisp < flipMax - 1) {
                     flipDisp++;
                     flipper.setDisplayedChild(flipDisp);
                 }
@@ -176,14 +176,14 @@ public class EditEF extends Activity implements View.OnTouchListener{
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
                 tagsDbHelper.open();
                 Cursor cursor2;//TODO tags output
-                cursor2=tagsDbHelper.fetchAllTodos();
+                cursor2 = tagsDbHelper.fetchAllTodos();
 
                 if (cursor2.moveToFirst()) {
                     do {
                         Integer _id = cursor2.getInt(cursor2.getColumnIndex(TagsAdapter.KEY_ROWID));
                         String tags = cursor2.getString(cursor2.getColumnIndex(TagsAdapter.KEY_TAG));
                         String ef_id = cursor2.getString(cursor2.getColumnIndex(TagsAdapter.KEY_EF_ID));
-                        if(mRowId.toString().equals(ef_id)){
+                        if (mRowId.toString().equals(ef_id)) {
                             namesDinamic.add(tags);
                             descrptionDinamic.add(_id.toString());
                         }
@@ -194,9 +194,15 @@ public class EditEF extends Activity implements View.OnTouchListener{
             }
             case R.id.ef_edit_tags_create: {
                 //flipper.showNext();
-                Intent intent = new Intent(EditEF.this, Tags.class);
-                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
-                startActivityForResult(intent, 1);
+//                Intent intent = new Intent(EditEF.this, Tags.class);
+//                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
+//                startActivityForResult(intent, 1);
+                tagsDbHelper.open();
+                EditText ef_edit_tag_name = (EditText) findViewById(R.id.ef_edit_tag_name);
+                String tag_name = ef_edit_tag_name.getText().toString();
+                tagsDbHelper.createTodo(tag_name, mRowId.toString());
+                tagsDbHelper.close();
+
                 break;
             }
         }
@@ -271,7 +277,8 @@ public class EditEF extends Activity implements View.OnTouchListener{
         super.onResume();
         populateFields();
     }
-//    protected void onStop() {
+
+    //    protected void onStop() {
 //        super.onStop();
 //        setResult(RESULT_OK);
 //        finish();
@@ -283,7 +290,7 @@ public class EditEF extends Activity implements View.OnTouchListener{
         String type = (String) mType.getSelectedItem();
         String name = mName.getText().toString();
         String description = mDescription.getText().toString();
-        if(name.length() > 0){
+        if (name.length() > 0) {
             if (mRowId == null) {
                 long id = mDbHelper.createTodo(name, type, description, category);
                 if (id > 0) {
@@ -329,7 +336,6 @@ public class EditEF extends Activity implements View.OnTouchListener{
     }
 
 
-
     private class MyEDListViewAdapter extends ArrayAdapter<Item> {
 
         private final Context context;
@@ -363,26 +369,32 @@ public class EditEF extends Activity implements View.OnTouchListener{
             return rowView;
         }
 
-    };
+    }
+
+    ;
 
     private class LinksSpinnerViewAdapter extends ArrayAdapter<Item> {
 
         private final Context context;
         private final ArrayList<Item> itemsArrayList;
 
-        public LinksSpinnerViewAdapter(Context context,int  txtViewResourceId, ArrayList<Item> itemsArrayList) {
+        public LinksSpinnerViewAdapter(Context context, int txtViewResourceId, ArrayList<Item> itemsArrayList) {
 //            RelativeLayout lin = (RelativeLayout)findViewById(txtViewResourceId);
             super(context, txtViewResourceId, itemsArrayList);
             this.context = context;
             this.itemsArrayList = itemsArrayList;
         }
+
         @Override
         public View getDropDownView(int position, View cnvtView, ViewGroup prnt) {
             return getView(position, cnvtView, prnt);
         }
-        @Override public View getView(int pos, View cnvtView, ViewGroup prnt) {
+
+        @Override
+        public View getView(int pos, View cnvtView, ViewGroup prnt) {
             return getCustomView(pos, cnvtView, prnt);
         }
+
         public View getCustomView(int position, View convertView, ViewGroup parent) {
 
             // 1. Create inflater
@@ -408,9 +420,9 @@ public class EditEF extends Activity implements View.OnTouchListener{
             return rowView;
         }
 
-    };
+    }
 
-
+    ;
 
 
 }

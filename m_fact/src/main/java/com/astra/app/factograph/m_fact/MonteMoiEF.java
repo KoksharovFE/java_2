@@ -1,16 +1,12 @@
 package com.astra.app.factograph.m_fact;
 
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.*;
-
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +21,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by teodor on 27.10.2014.
  */
@@ -81,7 +82,7 @@ public class MonteMoiEF extends ListActivity {
 //        efHelper.open();
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint ("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.tags_update: {
@@ -130,12 +131,12 @@ public class MonteMoiEF extends ListActivity {
                                 Pattern p = Pattern.compile(mSearch.getText().toString());
                                 Matcher m = p.matcher(ulogin);
                                 boolean matches = m.matches();
-                                if(matches) {
+                                if (matches) {
                                     namesDinamic.add(ulogin);
                                     descrptionDinamic.add(_id.toString());
                                 }
-                            } catch(Exception e){
-                                Log.e("Pattern err","in monte moi ef users");
+                            } catch (Exception e) {
+                                Log.e("Pattern err", "in monte moi ef users");
                             }
                         } while (cursor.moveToNext());
 //                        names = new String[namesDinamic.size()];
@@ -160,12 +161,12 @@ public class MonteMoiEF extends ListActivity {
                                     Pattern p = Pattern.compile(mSearch.getText().toString());
                                     Matcher m = p.matcher(efname);
                                     boolean matches = m.matches();
-                                    if(matches){
+                                    if (matches) {
                                         namesDinamic.add(efname);
                                         descrptionDinamic.add(_id.toString());
                                     }
-                                } catch(Exception e){
-                                    Log.e("Pattern err","in monte moi ef ef");
+                                } catch (Exception e) {
+                                    Log.e("Pattern err", "in monte moi ef ef");
                                 }
                             }
 
@@ -185,12 +186,12 @@ public class MonteMoiEF extends ListActivity {
 
                 ArrayList<Item> items = new ArrayList<Item>();
 //                items.addAll(namesDinamic,descrptionDinamic);
-                int i=0;
-                while(i<namesDinamic.size()){
-                    items.add(new Item(namesDinamic.get(i),descrptionDinamic.get(i)));
+                int i = 0;
+                while (i < namesDinamic.size()) {
+                    items.add(new Item(namesDinamic.get(i), descrptionDinamic.get(i)));
                     i++;
                 }
-                MyEDListViewAdapter adapter = new MyEDListViewAdapter(this,items);
+                MyEDListViewAdapter adapter = new MyEDListViewAdapter(this, items);
 //                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 //                        android.R.layout.simple_list_item_1, names);
                 mListView.setAdapter(adapter);
@@ -210,20 +211,21 @@ public class MonteMoiEF extends ListActivity {
         String name = chosenItem.getTitle();
         String _id = chosenItem.getDescription();
         String type = (String) mType.getSelectedItem();
-        if(type.equals("Fact") || type.equals("Event") || type.equals("Place")){
+        if (type.equals("Fact") || type.equals("Event") || type.equals("Place")) {
             Intent intent = new Intent(MonteMoiEF.this, EditEF.class);
-            intent.putExtra(EFDbAdapted.KEY_ROWID,Long.parseLong(_id));
+            intent.putExtra(EFDbAdapted.KEY_ROWID, Long.parseLong(_id));
             startActivityForResult(intent, 1);
         }
         if (type.equals("User")) {
             //TODO users edit
-            Log.i("Users Editor","Not Created");
+            Log.i("Users Editor", "Not Created");
         }
         if (type.equals("Link")) {
             //TODO links edit
-            Log.i("Links Editor","Not Created");
+            Log.i("Links Editor", "Not Created");
         }
     }
+
     // Создаем меню, основанное на XML-файле
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -275,7 +277,7 @@ public class MonteMoiEF extends ListActivity {
             //TODO not work, try to catch error
 //            userHelper.open();
 //            efHelper.open();
-            MyEDListViewAdapter adapter =(MyEDListViewAdapter) l.getAdapter();
+            MyEDListViewAdapter adapter = (MyEDListViewAdapter) l.getAdapter();
             Item chosenItem = adapter.getItem(position);
             String name = chosenItem.getTitle();
             String _id = chosenItem.getDescription();
@@ -295,7 +297,7 @@ public class MonteMoiEF extends ListActivity {
 //            }
             userHelper.close();
             efHelper.close();
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Log.e("null err", "in monte moi ef on ite click");
         }
 //        finally { not work
@@ -358,5 +360,7 @@ public class MonteMoiEF extends ListActivity {
             return rowView;
         }
 
-    };
+    }
+
+    ;
 }

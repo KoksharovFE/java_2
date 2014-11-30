@@ -20,17 +20,21 @@ public class EFDbAdapted {
     private Context context;
     private SQLiteDatabase database;
     private EFDbUsing dbHelper;
+
     public EFDbAdapted(Context context) {
         this.context = context;
     }
+
     public EFDbAdapted open() throws SQLException {
         dbHelper = new EFDbUsing(context);
         database = dbHelper.getWritableDatabase();
         return this;
     }
+
     public void close() {
         dbHelper.close();
     }
+
     /**
      * создать новый элемент списка юхеров. если создан успешно - возвращается номер строки rowId
      * иначе -1
@@ -40,6 +44,7 @@ public class EFDbAdapted {
                 description, category);
         return database.insert(DATABASE_TABLE, null, initialValues);
     }
+
     /**
      * обновить список
      */
@@ -49,28 +54,31 @@ public class EFDbAdapted {
         return database.update(DATABASE_TABLE, updateValues, KEY_ROWID + "="
                 + rowId, null) > 0;
     }
+
     /**
      * удаляет элемент списка
      */
     public boolean deleteTodo(long rowId) {
         return database.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
+
     /**
      * возвращает курсор со всеми элементами списка дел
      *
      * @return курсор с результатами всех записей
      */
     public Cursor fetchAllTodos() {
-        return database.query(DATABASE_TABLE, new String[]{KEY_ROWID,
-                        KEY_NAME, KEY_TYPE, KEY_DESCRIPTION,KEY_CATEGORY}, null, null, null,
+        return database.query(DATABASE_TABLE, new String[] {KEY_ROWID,
+                        KEY_NAME, KEY_TYPE, KEY_DESCRIPTION, KEY_CATEGORY}, null, null, null,
                 null, null
         );
     }
+
     /**
      * возвращает курсор, спозиционированный на указанной записи
      */
     public Cursor fetchTodo(long rowId) throws SQLException {
-        Cursor mCursor = database.query(true, DATABASE_TABLE, new String[]{
+        Cursor mCursor = database.query(true, DATABASE_TABLE, new String[] {
                         KEY_ROWID, KEY_NAME,
                         KEY_TYPE, KEY_DESCRIPTION, KEY_CATEGORY},
                 KEY_ROWID + "=" + rowId, null, null, null, null, null
@@ -80,6 +88,7 @@ public class EFDbAdapted {
         }
         return mCursor;
     }
+
     private ContentValues createContentValues(String name, String type,
                                               String description, String category) {
         ContentValues values = new ContentValues();

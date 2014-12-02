@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
                 break;
             }
 
-            case R.id.button2: {
+            case R.id.ef_edit_linked_users_add: {
                 this.finish();
                 System.exit(0);
                 break;

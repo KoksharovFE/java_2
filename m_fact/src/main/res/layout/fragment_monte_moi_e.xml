@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/create"
-                    android:id="@+id/button2"
+                    android:id="@+id/ef_edit_linked_users_add"
                     android:onClick="buttonClicked"
                     android:layout_alignTop="@+id/tags_update"
                     android:layout_toRightOf="@+id/tags_update"
@@ -72,9 +72,9 @@
                     android:text="@string/search"
                     android:id="@+id/button3"
                     android:onClick="buttonClicked"
-                    android:layout_toEndOf="@+id/button2"
-                    android:layout_alignTop="@+id/button2"
-                    android:layout_toRightOf="@+id/button2"/>
+                    android:layout_toEndOf="@+id/ef_edit_linked_users_add"
+                    android:layout_alignTop="@+id/ef_edit_linked_users_add"
+                    android:layout_toRightOf="@+id/ef_edit_linked_users_add"/>
 
                 <Spinner
                     android:layout_width="84dp"
@@ -86,7 +86,7 @@
                     android:layout_alignParentStart="true"/>
 
                 <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/monte_moi_search"
                     android:text="@string/pattern"

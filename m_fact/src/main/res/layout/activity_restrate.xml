@@ -63,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/back"
-        android:id="@+id/button2"
+        android:id="@+id/ef_edit_linked_users_add"
         android:onClick="buttonClicked"
         android:layout_toStartOf="@+id/tags_update"
         android:layout_above="@+id/text_reg_below"

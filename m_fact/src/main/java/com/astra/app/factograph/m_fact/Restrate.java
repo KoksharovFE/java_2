@@ -112,7 +112,7 @@ public class Restrate extends Activity {
                 break;
 
             }
-            case R.id.button2: {
+            case R.id.ef_edit_linked_users_add: {
                 cursor.close();
                 super.onStop();
                 setResult(RESULT_OK);

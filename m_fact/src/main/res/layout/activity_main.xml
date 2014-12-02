@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Button_exit"
-        android:id="@+id/button2"
+        android:id="@+id/ef_edit_linked_users_add"
         android:onClick="buttonClicked"
         android:layout_marginTop="145dp"
         android:layout_alignParentTop="true"

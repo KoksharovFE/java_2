@@ -51,5 +51,7 @@
     <string name="update_fields">Update spinners data</string>
     <string name="cancel">Cancel</string>
     <string name="title_activity_tags">Tags</string>
+    <string name="linqued_users_title">Linked Users</string>
+    <string name="add">Add</string>
 
 </resources>

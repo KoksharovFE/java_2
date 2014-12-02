@@ -69,7 +69,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
         inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         int layouts[];
         if (update) {
-            layouts = new int[] {R.layout.ef_main, R.layout.edit_ef_links, R.layout.edit_ef_tags, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
+            layouts = new int[] {R.layout.ef_main, R.layout.edit_ef_links, R.layout.edit_ef_tags, R.layout.ef_edit_linked_users, R.layout.edit_ef_music, R.layout.edit_ef_image, R.layout.void_layout};//TODO tag layout
         } else {
             layouts = new int[] {R.layout.ef_main, R.layout.void_layout};
         }
@@ -90,12 +90,13 @@ public class EditEF extends Activity implements View.OnTouchListener {
         mDescription = (EditText) findViewById(R.id.ef_edit_description);
         mEfLinksListView = (ListView) findViewById(R.id.ef_edit_links_listView);
         mEfTagsListView = (ListView) findViewById(R.id.ef_edit_tag_listView);
-
-        mEfLinksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
-                selectedFromList =(Item) (mEfLinksListView.getItemAtPosition(myItemInt));
-            }
-        });
+        if(update) {
+            mEfLinksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
+                    selectedFromList = (Item) (mEfLinksListView.getItemAtPosition(myItemInt));
+                }
+            });
+        }
         populateFields();
 //        mDbHelper.close();
 
@@ -124,11 +125,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 break;
             }
             case R.id.ef_links_create: {
-                //TODO Create link
                 Intent intent = new Intent(EditEF.this, Links.class);
                 intent.putExtra(ContentProviderForDb.COLUMN_ID, mRowId);
                 startActivityForResult(intent, 1);
-                finish();
+//                finish();
                 break;
             }
             case R.id.ef_links_montre: {
@@ -137,7 +137,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
-                Cursor cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_LINKS,ContentProviderForDb.PROJECTION_LINKS,null,null,null);
+                Cursor cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_LINKS, ContentProviderForDb.PROJECTION_LINKS, null, null, null);
 //                Cursor cursor = linksDbHelper.fetchAllTodos();
                 if (cursor.moveToFirst()) {
                     do {
@@ -150,8 +150,8 @@ public class EditEF extends Activity implements View.OnTouchListener {
                         String type2 = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_TYPE2));
                         String id2 = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID2));
 //                        cursor2 = mDbHelper.fetchTodo(Long.parseLong(id1));
-                        cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS,ContentProviderForDb.PROJECTION_EVENTS,
-                                ContentProviderForDb.COLUMN_ID + "=" + id1,null,null);
+                        cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS, ContentProviderForDb.PROJECTION_EVENTS,
+                                ContentProviderForDb.COLUMN_ID + "=" + id1, null, null);
                         cursor2.moveToFirst();
                         String nameEF1 = cursor2.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
                         cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS, ContentProviderForDb.PROJECTION_EVENTS,
@@ -159,7 +159,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
                         cursor2.moveToFirst();
                         String nameEF2 = cursor2.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
 //                        Log.d("edit_ef_links","id1 = " + id1 + " id2 = " + id2 + " mRowId = " + mRowId);
-                        if (Long.parseLong(id1) == mRowId || Long.parseLong(id2) ==mRowId) {
+                        if (Long.parseLong(id1) == mRowId || Long.parseLong(id2) == mRowId) {
                             namesDinamic.add(name + ":  " + nameEF1 + " - " + nameEF2);
                             descrptionDinamic.add(_id.toString() + " : " + type1 + " - " + type2);
                         }
@@ -177,19 +177,19 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 break;
             }
             case R.id.ef_links_delete_selected: {
-                Item lItem = new Item("","");
+                Item lItem = new Item("", "");
 //                    Adapter adapter = mEfLinksListView.getAdapter();
 //                    ;
 //                    int iterator = mEfLinksListView.getSelectedItemPosition();
-                    lItem = selectedFromList;
-                    //lItem = (Item) adapter.getItem(iterator);
-                    Log.d("links_delete", "lItem.getTitle() = "
-                            + lItem.getTitle()
-                            + "lItem.getDescription() = "
-                            + lItem.getDescription());
+                lItem = selectedFromList;
+                //lItem = (Item) adapter.getItem(iterator);
+                Log.d("links_delete", "lItem.getTitle() = "
+                        + lItem.getTitle()
+                        + "lItem.getDescription() = "
+                        + lItem.getDescription());
                 String[] parsingItemDescription = lItem.getDescription().split(" ");
 
-                getContentResolver().delete(ContentProviderForDb.PROVIDER_LINKS,ContentProviderForDb.COLUMN_ID.toString() + "=" +  parsingItemDescription[0],null);
+                getContentResolver().delete(ContentProviderForDb.PROVIDER_LINKS, ContentProviderForDb.COLUMN_ID.toString() + "=" + parsingItemDescription[0], null);
                 View viewLinksMontre = findViewById(R.id.ef_links_montre);
                 buttonClicked(viewLinksMontre);
                 break;
@@ -219,7 +219,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
 //                tagsDbHelper.open();
                 Cursor cursor2;//TODO tags output
 //                cursor2 = tagsDbHelper.fetchAllTodos();
-                cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_TAGS,ContentProviderForDb.PROJECTION_TAGS,null,null,null);
+                cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_TAGS, ContentProviderForDb.PROJECTION_TAGS, null, null, null);
 
                 if (cursor2.moveToFirst()) {
                     do {
@@ -253,14 +253,27 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 String tag_name = ef_edit_tag_name.getText().toString();
                 ContentValues lvalues;
                 lvalues = new ContentValues();
-                lvalues.put(ContentProviderForDb.COLUMN_TAG,tag_name);
-                lvalues.put(ContentProviderForDb.COLUMN_EFID,mRowId.toString());
-                if(tag_name.length()>0){
-                    getContentResolver().insert(ContentProviderForDb.PROVIDER_TAGS,lvalues);
+                tag_name = tag_name.replace(" ", "");
+                lvalues.put(ContentProviderForDb.COLUMN_TAG, tag_name);
+                lvalues.put(ContentProviderForDb.COLUMN_EFID, mRowId.toString());
+                if (tag_name.length() > 0) {
+                    getContentResolver().insert(ContentProviderForDb.PROVIDER_TAGS, lvalues);
                 }
 //                tagsDbHelper.createTodo(tag_name, mRowId.toString());
 //                tagsDbHelper.close();
 
+                break;
+            }
+            case R.id.ef_edit_linked_users_montre: {
+                break;
+            }
+            case R.id.ef_edit_linked_users_delete: {
+                break;
+            }
+            case R.id.ef_edit_linked_users_add: {
+//                Intent intent = new Intent(EditEF.this, Links.class);
+//                intent.putExtra(ContentProviderForDb.COLUMN_ID, mRowId);
+//                startActivityForResult(intent, 1);
                 break;
             }
         }

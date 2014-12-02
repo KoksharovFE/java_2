@@ -93,7 +93,7 @@ public class MonteMoiEF extends ListActivity {
                 break;
 
             }
-            case R.id.button2: {
+            case R.id.ef_edit_linked_users_add: {
                 //TODO rights && Global
 //                MyGlobalSigns appState = ((MyGlobalSigns)getApplicationContext());
 //                String state = appState.getRights();
@@ -130,13 +130,13 @@ public class MonteMoiEF extends ListActivity {
                             String urights = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_RIGHTS));
 
                             try {
-                                Pattern p = Pattern.compile(mSearch.getText().toString());
-                                Matcher m = p.matcher(ulogin);
-                                boolean matches = m.matches();
-                                if (matches) {
-                                    namesDinamic.add(ulogin);
-                                    descrptionDinamic.add(_id.toString());
-                                }
+                                    Pattern p = Pattern.compile(mSearch.getText().toString());
+                                    Matcher m = p.matcher(ulogin);
+                                    boolean matches = m.matches();
+                                    if (matches) {
+                                        namesDinamic.add(ulogin);
+                                        descrptionDinamic.add(_id.toString());
+                                    }
                             } catch (Exception e) {
                                 Log.e("Pattern err", "in monte moi ef users");
                             }
@@ -159,14 +159,35 @@ public class MonteMoiEF extends ListActivity {
 
                             if (type.equals(eftype)) {
                                 try {
-                                    Pattern p = Pattern.compile(mSearch.getText().toString());
-                                    Matcher m = p.matcher(efname);
-                                    boolean matches = m.matches();
-                                    //TODO filtering 
-                                    if (matches) {
-                                        namesDinamic.add(efname);
-                                        descrptionDinamic.add(_id.toString());
-                                    }
+                                    if(!mSearch.getText().toString().substring(0,1).equals("#")) {
+                                        Pattern p = Pattern.compile(mSearch.getText().toString());
+                                        Matcher m = p.matcher(efname);
+                                        boolean matches = m.matches();
+                                        //TODO filtering
+                                        if (matches) {
+                                            namesDinamic.add(efname);
+                                            descrptionDinamic.add(_id.toString());
+                                        }
+
+                                  } else {
+                                        String lTagName = mSearch.getText().toString().substring(1).replace(" ","");
+                                        Cursor cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_TAGS,
+                                                ContentProviderForDb.PROJECTION_TAGS,null,null,null);
+                                        boolean writeOnlyOne = false;
+                                        if (cursor2.moveToFirst()) {
+                                            do {
+                                                Integer _id_tag = cursor2.getInt(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                                                String efid = cursor2.getString(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_EFID));
+                                                String tag_name = cursor2.getString(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_TAG));
+                                                if( tag_name.equals(lTagName) && !writeOnlyOne && _id == Integer.parseInt(efid) ) { //efid.equals(_id) &&
+                                                    namesDinamic.add(efname);
+                                                    descrptionDinamic.add(_id.toString());
+                                                    writeOnlyOne = true;
+                                                }
+                                            } while (cursor2.moveToNext());
+                                        }
+                                        cursor2.close();
+                                  }
                                 } catch (Exception e) {
                                     Log.e("Pattern err", "in monte moi ef ef");
                                     namesDinamic.add("Pattern error");

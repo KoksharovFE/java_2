@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +17,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -29,6 +33,8 @@ public class EditEF extends Activity implements View.OnTouchListener {
     private EditText mName;
     private EditText mDescription;
     private Long mRowId;
+    Item selectedFromList;
+    private ListView mEfLinksListView, mEfTagsListView;
 //    private EFDbAdapted mDbHelper;
     private Spinner mCategory;
 //    private TagsAdapter tagsDbHelper;
@@ -82,7 +88,14 @@ public class EditEF extends Activity implements View.OnTouchListener {
         mType = (Spinner) findViewById(R.id.type);
         mName = (EditText) findViewById(R.id.ef_edit_Name);
         mDescription = (EditText) findViewById(R.id.ef_edit_description);
+        mEfLinksListView = (ListView) findViewById(R.id.ef_edit_links_listView);
+        mEfTagsListView = (ListView) findViewById(R.id.ef_edit_tag_listView);
 
+        mEfLinksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
+                selectedFromList =(Item) (mEfLinksListView.getItemAtPosition(myItemInt));
+            }
+        });
         populateFields();
 //        mDbHelper.close();
 
@@ -120,6 +133,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
             }
             case R.id.ef_links_montre: {
 //                linksDbHelper.open();
+
                 ArrayList<String> namesDinamic = new ArrayList<String>();
                 ArrayList<String> descrptionDinamic = new ArrayList<String>();
                 ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
@@ -144,20 +158,40 @@ public class EditEF extends Activity implements View.OnTouchListener {
                                 ContentProviderForDb.COLUMN_ID + "=" + id2, null, null);
                         cursor2.moveToFirst();
                         String nameEF2 = cursor2.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
-                        if (id1.equals(mRowId) || id2.equals(mRowId)) {
-                            namesDinamic.add(name + ":  " + type1 + "/" + nameEF1 + " - " + type2 + "/" + nameEF2);
-                            descrptionDinamic.add(_id.toString());
-//                            itemsDinamic1.add(new Item());
+//                        Log.d("edit_ef_links","id1 = " + id1 + " id2 = " + id2 + " mRowId = " + mRowId);
+                        if (Long.parseLong(id1) == mRowId || Long.parseLong(id2) ==mRowId) {
+                            namesDinamic.add(name + ":  " + nameEF1 + " - " + nameEF2);
+                            descrptionDinamic.add(_id.toString() + " : " + type1 + " - " + type2);
                         }
-//                        mDbHelper.close();
                     } while (cursor.moveToNext());
+                    ArrayList<Item> items = new ArrayList<Item>();
+                    int i = 0;
+                    while (i < namesDinamic.size()) {
+                        items.add(new Item(namesDinamic.get(i), descrptionDinamic.get(i)));
+                        i++;
+                    }
+                    MyEDListViewAdapter adapter = new MyEDListViewAdapter(this, items);
+                    mEfLinksListView.setAdapter(adapter);
                 }
-//                linksDbHelper.close();
-                //TODO Montre link
+                cursor.close();
                 break;
             }
             case R.id.ef_links_delete_selected: {
-                //TODO Delete link
+                Item lItem = new Item("","");
+//                    Adapter adapter = mEfLinksListView.getAdapter();
+//                    ;
+//                    int iterator = mEfLinksListView.getSelectedItemPosition();
+                    lItem = selectedFromList;
+                    //lItem = (Item) adapter.getItem(iterator);
+                    Log.d("links_delete", "lItem.getTitle() = "
+                            + lItem.getTitle()
+                            + "lItem.getDescription() = "
+                            + lItem.getDescription());
+                String[] parsingItemDescription = lItem.getDescription().split(" ");
+
+                getContentResolver().delete(ContentProviderForDb.PROVIDER_LINKS,ContentProviderForDb.COLUMN_ID.toString() + "=" +  parsingItemDescription[0],null);
+                View viewLinksMontre = findViewById(R.id.ef_links_montre);
+                buttonClicked(viewLinksMontre);
                 break;
             }
             case R.id.ef_previous_button: {
@@ -198,6 +232,14 @@ public class EditEF extends Activity implements View.OnTouchListener {
                         }
                     } while (cursor2.moveToNext());
                 }
+                ArrayList<Item> items = new ArrayList<Item>();
+                int i = 0;
+                while (i < namesDinamic.size()) {
+                    items.add(new Item(namesDinamic.get(i), descrptionDinamic.get(i)));
+                    i++;
+                }
+                MyEDListViewAdapter adapter = new MyEDListViewAdapter(this, items);
+                mEfTagsListView.setAdapter(adapter);
 //                tagsDbHelper.close();
                 break;
             }
@@ -213,7 +255,9 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 lvalues = new ContentValues();
                 lvalues.put(ContentProviderForDb.COLUMN_TAG,tag_name);
                 lvalues.put(ContentProviderForDb.COLUMN_EFID,mRowId.toString());
-                getContentResolver().insert(ContentProviderForDb.PROVIDER_TAGS,lvalues);
+                if(tag_name.length()>0){
+                    getContentResolver().insert(ContentProviderForDb.PROVIDER_TAGS,lvalues);
+                }
 //                tagsDbHelper.createTodo(tag_name, mRowId.toString());
 //                tagsDbHelper.close();
 

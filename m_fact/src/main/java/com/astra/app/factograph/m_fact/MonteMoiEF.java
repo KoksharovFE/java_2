@@ -148,8 +148,6 @@ public class MonteMoiEF extends ListActivity {
                 }
 
                 if (type.equals("Fact") || type.equals("Event") || type.equals("Place")) {
-                    //Вывод Фактов || Вывод Событий || Вывод Мест
-//                    cursor = efHelper.fetchAllTodos();
                     cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS,ContentProviderForDb.PROJECTION_EVENTS,null,null,null);
                     if (cursor.moveToFirst()) {
                         do {
@@ -164,18 +162,19 @@ public class MonteMoiEF extends ListActivity {
                                     Pattern p = Pattern.compile(mSearch.getText().toString());
                                     Matcher m = p.matcher(efname);
                                     boolean matches = m.matches();
+                                    //TODO filtering 
                                     if (matches) {
                                         namesDinamic.add(efname);
                                         descrptionDinamic.add(_id.toString());
                                     }
                                 } catch (Exception e) {
                                     Log.e("Pattern err", "in monte moi ef ef");
+                                    namesDinamic.add("Pattern error");
+                                    descrptionDinamic.add("Pattern not valid");
                                 }
                             }
 
                         } while (cursor.moveToNext());
-//                        names = new String[namesDinamic.size()];
-//                        namesDinamic.toArray(names);
                     }
                 }
 
@@ -198,10 +197,6 @@ public class MonteMoiEF extends ListActivity {
 //                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 //                        android.R.layout.simple_list_item_1, names);
                 mListView.setAdapter(adapter);
-//                mListView.setTextFilterEnabled(true);
-//                userHelper.close();
-//                efHelper.close();
-//                linksHelper.close();
                 cursor.close();
                 break;
             }

@@ -61,6 +61,11 @@
             android:enabled="true"
             android:exported="true" >
         </provider>
+
+        <activity
+            android:name=".LinkedUser"
+            android:label="@string/title_activity_linked_user" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />

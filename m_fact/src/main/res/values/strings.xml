@@ -53,5 +53,6 @@
     <string name="title_activity_tags">Tags</string>
     <string name="linqued_users_title">Linked Users</string>
     <string name="add">Add</string>
+    <string name="title_activity_linked_user">LinkedUser</string>
 
 </resources>

@@ -271,9 +271,9 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 break;
             }
             case R.id.ef_edit_linked_users_add: {
-//                Intent intent = new Intent(EditEF.this, Links.class);
-//                intent.putExtra(ContentProviderForDb.COLUMN_ID, mRowId);
-//                startActivityForResult(intent, 1);
+                Intent intent = new Intent(EditEF.this, LinkedUser.class);
+                intent.putExtra(ContentProviderForDb.COLUMN_ID, mRowId);
+                startActivityForResult(intent, 1);
                 break;
             }
         }

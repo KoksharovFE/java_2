@@ -22,6 +22,7 @@ public class Auth extends Activity {
     private static final int ACTIVITY_EDIT = 1;
     private static final int DELETE_ID = Menu.FIRST + 1;
     private Cursor cursor;
+    private String mRights;
     private EditText login_field, password_field;
     private TextView auth_below;
 //    private final ContentProviderForDb cpfDB = new ContentProviderForDb();
@@ -56,6 +57,7 @@ public class Auth extends Activity {
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.tags_update: {
+                mRights="";
 //                cursor = dbHelper.fetchAllTodos();
                 cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_USERS, ContentProviderForDb.PROJECTION_USERS, null, null, null);
                 String login_input = login_field.getText().toString();
@@ -68,6 +70,7 @@ public class Auth extends Activity {
                         String pass = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_PASSWORD));
                         String rights = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_RIGHTS));
                         if (login_input.equals(login) && password_input.equals(pass)) {
+                            mRights=rights;
                             correct_credentials = true;
 //                            MyGlobalSigns appState = ((MyGlobalSigns)this.getApplicationContext());
 //                            String s=rights; TODO global
@@ -85,6 +88,9 @@ public class Auth extends Activity {
                     auth_below.setTextColor(getResources().getColor(R.color.cyan));
                     auth_below.setText("correct credentials");
                     Intent intent = new Intent(Auth.this, MainActivity.class);
+
+                    MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                    app.setRights(mRights);
                     startActivity(intent);
                 } else {
                     auth_below.setTextColor(getResources().getColor(R.color.red));

@@ -3,7 +3,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:weightSum="1">
 
     <TextView
         android:layout_width="wrap_content"
@@ -16,15 +17,55 @@
         android:layout_column="0"
         android:layout_columnSpan="7"/>
 
-    <TableLayout
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="wrap_content">
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/update"
+            android:id="@+id/ef_edit_music_add_update"
+            android:onClick="buttonClicked"/>
 
-        </TableRow>
-    </TableLayout>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/play"
+            android:id="@+id/ef_edit_music_play"
+            android:onClick="buttonClicked"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stop"
+            android:id="@+id/ef_edit_music_stop"
+            android:onClick="buttonClicked"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="51dp"
+        android:id="@+id/ef_edit_music_linear_layout"
+        android:layout_weight="0.48">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="167dp"
+            android:id="@+id/ef_edit_music_stringfield"
+            android:layout_weight="1"
+            android:focusable="false"
+            android:ellipsize="middle"
+            android:text="@string/music_path"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/voides"
+        android:id="@+id/ef_edit_music_comment"/>
 
 </LinearLayout>

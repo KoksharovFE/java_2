@@ -7,8 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcel;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,24 +27,32 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class EditEF extends Activity implements View.OnTouchListener {
     private EditText mName;
-    private EditText mDescription;
+    private EditText mDescription, mMusicLink, mImageLink;
     private Long mRowId;
-    Item selectedFromList;
-    private ListView mEfLinksListView, mEfTagsListView;
+    private MediaPlayer mediaPlayer;
+    Item selectedFromList, selectedFromLinkedUsersList;
+    private ListView mEfLinksListView, mEfTagsListView, mEfLinkedUsersListView;
 //    private EFDbAdapted mDbHelper;
     private Spinner mCategory;
 //    private TagsAdapter tagsDbHelper;
 //    private LinksDbAdapter linksDbHelper;
+    public int FILE_CHOOSER = 112;
+    public int FILE_CHOOSER_IMAGE = 113;
     private Spinner mType;
     protected float fromPosition;
     protected int counter = 0, flipDisp = 0, flipMax = 0;
@@ -46,6 +60,14 @@ public class EditEF extends Activity implements View.OnTouchListener {
     protected float MOVE_LENGTH = 100;
     ViewFlipper flipper;
     LayoutInflater inflater;
+    ImageView mImage;
+
+    private int stateMediaPlayer;
+    private final int stateMP_Error = 0;
+    private final int stateMP_NotStarter = 1;
+    private final int stateMP_Playing = 2;
+    private final int stateMP_Pausing = 3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +96,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
             layouts = new int[] {R.layout.ef_main, R.layout.void_layout};
         }
         flipMax = layouts.length;
-        try {//TODO check the problem
+        try {
             for (int layout : layouts) {
                 //flipper.addView(inflater.inflate(layout, null));
                 View views = inflater.inflate(layout, null);
@@ -90,30 +112,28 @@ public class EditEF extends Activity implements View.OnTouchListener {
         mDescription = (EditText) findViewById(R.id.ef_edit_description);
         mEfLinksListView = (ListView) findViewById(R.id.ef_edit_links_listView);
         mEfTagsListView = (ListView) findViewById(R.id.ef_edit_tag_listView);
+        mEfLinkedUsersListView = (ListView) findViewById(R.id.ef_edit_linked_users_listView);
         if(update) {
             mEfLinksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                     selectedFromList = (Item) (mEfLinksListView.getItemAtPosition(myItemInt));
                 }
             });
+            mEfLinkedUsersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
+                    selectedFromLinkedUsersList = (Item) (mEfLinkedUsersListView.getItemAtPosition(myItemInt));
+                }
+            });
+            mMusicLink = (EditText) findViewById(R.id.ef_edit_music_stringfield);
+            mImageLink =  (EditText) findViewById(R.id.ef_edit_image_stringfield);
+            mImage = (ImageView) findViewById(R.id.imageView);
         }
-        populateFields();
-//        mDbHelper.close();
 
-        Log.i("flipper is flipping?", flipper.isFlipping() + "");
+//        mImageLink = "";//TODO image link
+        populateFields();
+//        Log.i("flipper is flipping?", flipper.isFlipping() + "");
     }
 
-    //        try {
-//            confirmButton.setOnClickListener(new View.OnClickListener() {
-//                public void onClick(View view) {
-//                    setResult(RESULT_OK);
-//                    finish();
-//                }
-//
-//            });
-//        }catch (NullPointerException e){
-//            Log.i("EditEF button not work", "NullPointerException when button listener created");
-//        }
     @SuppressLint ("ResourceAsColor")
     public void buttonClicked(View view) {
         switch (view.getId()) {
@@ -163,6 +183,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
                             namesDinamic.add(name + ":  " + nameEF1 + " - " + nameEF2);
                             descrptionDinamic.add(_id.toString() + " : " + type1 + " - " + type2);
                         }
+                        cursor2.close();
                     } while (cursor.moveToNext());
                     ArrayList<Item> items = new ArrayList<Item>();
                     int i = 0;
@@ -183,10 +204,6 @@ public class EditEF extends Activity implements View.OnTouchListener {
 //                    int iterator = mEfLinksListView.getSelectedItemPosition();
                 lItem = selectedFromList;
                 //lItem = (Item) adapter.getItem(iterator);
-                Log.d("links_delete", "lItem.getTitle() = "
-                        + lItem.getTitle()
-                        + "lItem.getDescription() = "
-                        + lItem.getDescription());
                 String[] parsingItemDescription = lItem.getDescription().split(" ");
 
                 getContentResolver().delete(ContentProviderForDb.PROVIDER_LINKS, ContentProviderForDb.COLUMN_ID.toString() + "=" + parsingItemDescription[0], null);
@@ -265,15 +282,107 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 break;
             }
             case R.id.ef_edit_linked_users_montre: {
+                ArrayList<Item> itemsDinamic1 = new ArrayList<Item>();
+                Cursor cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_VISITORS, ContentProviderForDb.PROJECTION_VISITORS, null, null, null);
+                if (cursor.moveToFirst()) {
+                    do {
+                        Cursor cursor2;
+                        Integer _id = cursor.getInt(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                        String visEFID = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_FACTID));
+                        String visUID = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_USERID));
+                        String visBeginTime = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_BEGINTIME));
+                        String visEndTime = cursor.getString(cursor.getColumnIndex(ContentProviderForDb.COLUMN_ENDTIME));
+                        cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_USERS, ContentProviderForDb.PROJECTION_USERS,
+                                ContentProviderForDb.COLUMN_ID + "=" + visUID, null, null);
+//                        cursor2 = getContentResolver().query(ContentProviderForDb.PROVIDER_EVENTS, ContentProviderForDb.PROJECTION_EVENTS,null , null, null);
+                        cursor2.moveToFirst();
+                        Log.i(cursor2.moveToFirst()+"",cursor2.getCount()+"");
+                        String _idUser2 = cursor2.getString(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_ID));
+                        String nameUser2 = cursor2.getString(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_NAME));
+                        String passwordUser2 = cursor2.getString(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_PASSWORD));
+                        String rightsUser2 = cursor2.getString(cursor2.getColumnIndex(ContentProviderForDb.COLUMN_RIGHTS));
+                        nameUser2.replace(" ","");
+                        if (Long.parseLong(visEFID) == mRowId) {
+                            itemsDinamic1.add(new Item(nameUser2,_id+" : " + visBeginTime + " - " + visEndTime));
+                        }
+                        cursor2.close();
+                    } while (cursor.moveToNext());
+                }
+                MyEDListViewAdapter adapter = new MyEDListViewAdapter(this, itemsDinamic1);
+                mEfLinkedUsersListView.setAdapter(adapter);
+
                 break;
             }
             case R.id.ef_edit_linked_users_delete: {
+                Item lItem = new Item("", "");
+                lItem = selectedFromLinkedUsersList;
+                Log.d("links_delete", "lItem.getTitle() = "
+                        + lItem.getTitle()
+                        + "lItem.getDescription() = "
+                        + lItem.getDescription());
+                String[] parsingItemDescription = lItem.getDescription().split(" ");
+
+                getContentResolver().delete(ContentProviderForDb.PROVIDER_VISITORS, ContentProviderForDb.COLUMN_ID.toString() + "=" + parsingItemDescription[0], null);
+                View viewLinksMontre = findViewById(R.id.ef_edit_linked_users_montre);
+                buttonClicked(viewLinksMontre);
                 break;
             }
             case R.id.ef_edit_linked_users_add: {
                 Intent intent = new Intent(EditEF.this, LinkedUser.class);
                 intent.putExtra(ContentProviderForDb.COLUMN_ID, mRowId);
                 startActivityForResult(intent, 1);
+                break;
+            }
+
+            case R.id.ef_edit_music_add_update: {
+                Intent intent = new Intent(this, FileChooser.class);
+                ArrayList<String> extensions = new ArrayList<String>();
+                extensions.add(".mp3");
+                intent.putStringArrayListExtra("filterFileExtension", extensions);
+                startActivityForResult(intent, FILE_CHOOSER);
+                break;
+            }
+            case R.id.ef_edit_music_play: {
+                mediaPlayer = new  MediaPlayer();
+                initMediaPlayer(mMusicLink.getText().toString());
+                mediaPlayer.start();
+//                mediaPlayer = mediaPlayer.create(getApplicationContext(), Uri.parse(mMusicLink.toString()));//Environment.getExternalStorageDirectory().getPath() + "/Music/intro.mp3"
+//                try {
+//                    mediaPlayer.setDataSource(mMusicLink.getText().toString());
+//                    Log.i("Music",mMusicLink.getText().toString());
+//                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                        public void onPrepared(MediaPlayer player) {
+//                            player.start();
+//                        }
+//                    });
+////                    mediaPlayer.setOnPreparedListener(this);
+////                    mediaPlayer.prepareAsync();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                mediaPlayer.start();
+//                if(mediaPlayer.isPlaying()){
+//                    mediaPlayer.stop();
+//                }
+//                mediaPlayer.start();
+//                mMusicLink
+                break;
+            }
+            case R.id.ef_edit_music_stop: {
+//                mMusicLink
+                if(mediaPlayer.isPlaying()){
+                    mediaPlayer.stop();
+                }
+                break;
+            }
+
+            case R.id.ef_edit_image_add_update: {
+                Intent intent = new Intent(this, FileChooser.class);
+                ArrayList<String> extensions = new ArrayList<String>();
+                extensions.add(".png");
+//                extensions.add(".jpg");
+                intent.putStringArrayListExtra("filterFileExtension", extensions);
+                startActivityForResult(intent, FILE_CHOOSER_IMAGE);
                 break;
             }
         }
@@ -309,6 +418,22 @@ public class EditEF extends Activity implements View.OnTouchListener {
                     .getColumnIndexOrThrow(ContentProviderForDb.COLUMN_NAME)));
             mDescription.setText(todo.getString(todo
                     .getColumnIndexOrThrow(ContentProviderForDb.COLUMN_DESCRIPTION)));
+
+            if(update) {
+                mMusicLink.setText(todo.getString(todo
+                        .getColumnIndexOrThrow(ContentProviderForDb.COLUMN_MUSICID)));
+                mImageLink.setText(todo.getString(todo
+                        .getColumnIndexOrThrow(ContentProviderForDb.COLUMN_IMAGEID)));
+                try {
+                    mImage.clearAnimation();
+                    mImage.setImageBitmap(BitmapFactory.decodeFile(new File(mImageLink.getText().toString()).getAbsolutePath()));
+                } catch(OutOfMemoryError ex){
+                    ex.getStackTrace();
+                }
+            }
+
+//            mImageLink.setText();//TODO images
+
         }
 //        mDbHelper.close();
     }
@@ -358,31 +483,48 @@ public class EditEF extends Activity implements View.OnTouchListener {
     private void saveState() {
         //TODO rights
 //        mDbHelper.open();
-        String category = (String) mCategory.getSelectedItem();
-        String type = (String) mType.getSelectedItem();
-        String name = mName.getText().toString();
-        String description = mDescription.getText().toString();
-        ContentValues lvalues = new ContentValues();
-        lvalues.put(ContentProviderForDb.COLUMN_NAME,name);
-        lvalues.put(ContentProviderForDb.COLUMN_TYPE,type);
-        lvalues.put(ContentProviderForDb.COLUMN_DESCRIPTION,description);
-        if (name.length() > 0) {
-            if (mRowId == null) {
-                Uri uriId = getContentResolver().insert(ContentProviderForDb.PROVIDER_EVENTS,lvalues);//mDbHelper.createTodo(name, type, description, category);
+        MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+        if (!app.getRights().equals("Read-Write")) {
+
+        } else {
+            String imagelink;
+            String musiclink;
+            if (update) {
+                musiclink = mMusicLink.getText().toString();
+                imagelink = mImageLink.getText().toString();//TODO images
+            } else {
+                musiclink = "";
+                imagelink = "";
+            }
+
+            String category = (String) mCategory.getSelectedItem();
+            String type = (String) mType.getSelectedItem();
+            String name = mName.getText().toString();
+            String description = mDescription.getText().toString();
+            ContentValues lvalues = new ContentValues();
+            lvalues.put(ContentProviderForDb.COLUMN_NAME, name);
+            lvalues.put(ContentProviderForDb.COLUMN_TYPE, type);
+            lvalues.put(ContentProviderForDb.COLUMN_DESCRIPTION, description);
+            lvalues.put(ContentProviderForDb.COLUMN_MUSICID, musiclink);
+            lvalues.put(ContentProviderForDb.COLUMN_IMAGEID, imagelink);
+            if (name.length() > 0) {
+                if (mRowId == null) {
+                    Uri uriId = getContentResolver().insert(ContentProviderForDb.PROVIDER_EVENTS, lvalues);//mDbHelper.createTodo(name, type, description, category);
 //                Long lId = getContentResolver().acquireContentProviderClient(uriId).;
 //                if (lId > 0) {
 //                    mRowId = lId;
 //                }
-            } else {
-                lvalues.put(ContentProviderForDb.COLUMN_ID,mRowId);
-                getContentResolver().update(ContentProviderForDb.PROVIDER_EVENTS,lvalues,
-                        mRowId.toString() + "=" + ContentProviderForDb.COLUMN_ID,null);
+                } else {
+                    lvalues.put(ContentProviderForDb.COLUMN_ID, mRowId);
+                    getContentResolver().update(ContentProviderForDb.PROVIDER_EVENTS, lvalues,
+                            mRowId.toString() + "=" + ContentProviderForDb.COLUMN_ID, null);
 //                mDbHelper.updateTodo(mRowId, name, type, description, category);
+                }
             }
-        }
 //        mDbHelper.close();
+        }
     }
-
+    
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
@@ -504,5 +646,55 @@ public class EditEF extends Activity implements View.OnTouchListener {
 
     ;
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if ((requestCode == FILE_CHOOSER) && (resultCode == -1)) {
+            String fileSelected = data.getStringExtra("fileSelected");
+            Toast.makeText(this, fileSelected, Toast.LENGTH_SHORT).show();
+            mMusicLink.setText(fileSelected);
+//            populateFields();
 
+        }
+        if ((requestCode == FILE_CHOOSER_IMAGE) && (resultCode == -1)) {
+            String fileSelected = data.getStringExtra("fileSelected");
+            Toast.makeText(this, fileSelected, Toast.LENGTH_SHORT).show();
+            mImageLink.setText(fileSelected);
+//            populateFields();
+
+        }
+        saveState();
+    }
+
+    private void initMediaPlayer(String PATH_TO_FILE)
+    {
+        TextView textState = (TextView) findViewById(R.id.ef_edit_music_comment);
+//        String PATH_TO_FILE = "/sdcard/music.mp3";
+        mediaPlayer = new  MediaPlayer();
+
+        try {
+            mediaPlayer.setDataSource(PATH_TO_FILE);
+            mediaPlayer.prepare();
+            Toast.makeText(this, PATH_TO_FILE, Toast.LENGTH_LONG).show();
+            stateMediaPlayer = stateMP_NotStarter;
+            textState.setText("- IDLE -");
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            stateMediaPlayer = stateMP_Error;
+            textState.setText("- ERROR!!! -");
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            stateMediaPlayer = stateMP_Error;
+            textState.setText("- ERROR!!! -");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+            stateMediaPlayer = stateMP_Error;
+            textState.setText("- ERROR!!! -");
+        }
+    }
 }

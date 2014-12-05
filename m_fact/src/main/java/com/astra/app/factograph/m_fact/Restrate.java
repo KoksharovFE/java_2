@@ -48,6 +48,11 @@ public class Restrate extends Activity {
     public void buttonClicked(View view) {
         switch (view.getId()) {
             case R.id.tags_update: {
+                MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                if(!app.getRights().equals("Read-Write")){
+                    break;
+                }
+
 //                cursor = dbHelper.fetchAllTodos();
                 cursor = getContentResolver().query(ContentProviderForDb.PROVIDER_USERS, ContentProviderForDb.PROJECTION_USERS, null, null, null);
                 if (cursor.getCount() == 0) {
@@ -113,8 +118,6 @@ public class Restrate extends Activity {
 
             }
             case R.id.ef_edit_linked_users_add: {
-                cursor.close();
-                super.onStop();
                 setResult(RESULT_OK);
                 this.finish();
                 break;
@@ -179,7 +182,7 @@ public class Restrate extends Activity {
                     Log.e("NullPointerException","insert user in users");
                 }
                 */
-        }
+
         //Log.i("fields",rights+" "+password+" "+login);
 //        } catch (NullPointerException e) {
 //            Log.e(e.toString(),"null fields try to write in database");
@@ -187,6 +190,6 @@ public class Restrate extends Activity {
 //            super.onStop();
 //            setResult(RESULT_CANCELED);
 //        }
-
+        }
     }
 }

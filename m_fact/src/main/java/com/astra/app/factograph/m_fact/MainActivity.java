@@ -53,6 +53,8 @@ public class MainActivity extends Activity {
 //                startActivityForResult(intent, 1);
                 Log.d("tags_update","in MainActivity");
                 //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, Export.class);
+                startActivityForResult(intent, 1);
                 break;
             }
 

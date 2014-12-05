@@ -168,6 +168,7 @@ public class ContentProviderForDb extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Log.i("reading from database: ", getTable(uri)+"");
         return mDatabase.query(getTable(uri), projection, selection, selectionArgs, null, null, sortOrder);
     }
 
@@ -178,6 +179,7 @@ public class ContentProviderForDb extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        Log.i("insert in database: ", getTable(uri)+"");
         Long id = mDatabase.insert(getTable(uri), null, values);
         return null;
     }
@@ -192,11 +194,13 @@ public class ContentProviderForDb extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        Log.i("delete in database: ", getTable(uri)+"");
         return mDatabase.delete(getTable(uri), selection, selectionArgs);
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String whereClause, String[] whereArgs) {
+        Log.i("update in database: ", getTable(uri)+"");
         return mDatabase.update(getTable(uri), values, whereClause, whereArgs);
     }
 

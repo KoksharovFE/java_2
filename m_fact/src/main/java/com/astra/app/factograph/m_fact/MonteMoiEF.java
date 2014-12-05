@@ -31,12 +31,6 @@ import java.util.regex.Pattern;
  */
 
 public class MonteMoiEF extends ListActivity {
-//    private EFDbAdapted efHelper;
-//    private UserDbAdapter userHelper;
-//    private LinksDbAdapter linksHelper;
-    //    private static final int ACTIVITY_CREATE = 0;
-//    private static final int ACTIVITY_EDIT = 1;
-//    private static final int DELETE_ID = Menu.FIRST + 1;
     private Cursor cursor;
     private Spinner mType;
     private EditText mSearch;
@@ -65,21 +59,9 @@ public class MonteMoiEF extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_monte_moi_e);
         //setContentView(R.layout.activity_monte_moi_ef);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
-        // Set up the ViewPager with the sections adapter.
-//        mViewPager = (ViewPager) findViewById(R.id.pager);
-//        mViewPager.setAdapter(mSectionsPagerAdapter);
         mType = (Spinner) findViewById(R.id.monte_moi_spinner);
         mSearch = (EditText) findViewById(R.id.monte_moi_search);
-        //mListView = (ListView) findViewById(R.id.monte_moi_list_view);
-//        efHelper = new EFDbAdapted(this);
-//        userHelper = new UserDbAdapter(this);
-//        linksHelper = new LinksDbAdapter(this);
         mListView = (ListView) this.getListView();
-//        userHelper.open();
-//        efHelper.open();
     }
 
     @SuppressLint ("ResourceAsColor")
@@ -94,7 +76,6 @@ public class MonteMoiEF extends ListActivity {
 
             }
             case R.id.ef_edit_linked_users_add: {
-                //TODO rights && Global
 //                MyGlobalSigns appState = ((MyGlobalSigns)getApplicationContext());
 //                String state = appState.getRights();
                 Intent intent = new Intent(MonteMoiEF.this, EditEF.class);
@@ -225,7 +206,6 @@ public class MonteMoiEF extends ListActivity {
     }
 
     public void ItemClickListener(AdapterView<?> a, View v, int position, long id) {
-        //TODO not work, try to catch error
         Item chosenItem = (Item) a.getSelectedItem();
         String name = chosenItem.getTitle();
         String _id = chosenItem.getDescription();
@@ -272,13 +252,6 @@ public class MonteMoiEF extends ListActivity {
         super.onPause();
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        userHelper.open();
-//        efHelper.open();
-//    }
-
     protected void onStop() {
         super.onStop();
         setResult(RESULT_OK);
@@ -293,9 +266,6 @@ public class MonteMoiEF extends ListActivity {
 //        startActivityForResult(i,1);
         try {
             super.onListItemClick(l, v, position, id);
-            //TODO not work, try to catch error
-//            userHelper.open();
-//            efHelper.open();
             MyEDListViewAdapter adapter = (MyEDListViewAdapter) l.getAdapter();
             Item chosenItem = adapter.getItem(position);
             String name = chosenItem.getTitle();

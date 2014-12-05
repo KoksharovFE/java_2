@@ -53,5 +53,12 @@
     <string name="title_activity_tags">Tags</string>
     <string name="linqued_users_title">Linked Users</string>
     <string name="add">Add</string>
-
+    <string name="title_activity_linked_user">LinkedUser</string>
+    <string name="voides"></string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+    <string name="music_path"></string>
+    <string name="title_activity_export">Export</string>
+    <string name="export_xml">Export in xml</string>
+    <string name="export_txt">Export in txt</string>
 </resources>

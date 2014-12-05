@@ -125,9 +125,9 @@ public class Links extends Activity {
 //        mDbHelper.open();
 //        efDbHelper.open();
 //        if (mRowId != null) {
-//            Cursor todo = mDbHelper.fetchTodo(mRowId);
-//            startManagingCursor(todo);
-//            String category = todo.getString(todo
+//            Cursor to do = mDbHelper.fetchTodo(mRowId);
+//            startManagingCursor(to do);
+//            String category = to do.getString(to do
 //                    .getColumnIndexOrThrow(LinksDbAdapter.KEY_TYPE1));
 //            for (int i = 0; i < type1.getCount(); i++) {
 //                String s = (String) type1.getItemAtPosition(i);

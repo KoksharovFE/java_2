@@ -26,6 +26,9 @@
             android:name=".Details"
             android:label="@string/title_activity_details" />
         <activity
+            android:name=".FileChooser"
+            android:label="@string/file_chooser_details" />
+        <activity
             android:name=".Auth"
             android:label="@string/app_name" >
             <intent-filter>
@@ -61,6 +64,15 @@
             android:enabled="true"
             android:exported="true" >
         </provider>
+
+        <activity
+            android:name=".LinkedUser"
+            android:label="@string/title_activity_linked_user" >
+        </activity>
+        <activity
+            android:name=".Export"
+            android:label="@string/title_activity_export" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />

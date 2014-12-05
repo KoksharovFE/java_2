@@ -145,6 +145,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 break;
             }
             case R.id.ef_links_create: {
+                MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                if(!app.getRights().equals("Read-Write")){
+                    break;
+                }
                 Intent intent = new Intent(EditEF.this, Links.class);
                 intent.putExtra(ContentProviderForDb.COLUMN_ID, mRowId);
                 startActivityForResult(intent, 1);
@@ -198,6 +202,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 break;
             }
             case R.id.ef_links_delete_selected: {
+                MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                if(!app.getRights().equals("Read-Write")){
+                    break;
+                }
                 Item lItem = new Item("", "");
 //                    Adapter adapter = mEfLinksListView.getAdapter();
 //                    ;
@@ -266,6 +274,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
 //                intent.putExtra(EFDbAdapted.KEY_ROWID, mRowId);
 //                startActivityForResult(intent, 1);
 //                tagsDbHelper.open();
+                MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                if(!app.getRights().equals("Read-Write")){
+                    break;
+                }
                 EditText ef_edit_tag_name = (EditText) findViewById(R.id.ef_edit_tag_name);
                 String tag_name = ef_edit_tag_name.getText().toString();
                 ContentValues lvalues;
@@ -314,6 +326,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 break;
             }
             case R.id.ef_edit_linked_users_delete: {
+                MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                if(!app.getRights().equals("Read-Write")){
+                    break;
+                }
                 Item lItem = new Item("", "");
                 lItem = selectedFromLinkedUsersList;
                 Log.d("links_delete", "lItem.getTitle() = "
@@ -328,6 +344,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
                 break;
             }
             case R.id.ef_edit_linked_users_add: {
+                MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                if(!app.getRights().equals("Read-Write")){
+                    break;
+                }
                 Intent intent = new Intent(EditEF.this, LinkedUser.class);
                 intent.putExtra(ContentProviderForDb.COLUMN_ID, mRowId);
                 startActivityForResult(intent, 1);
@@ -335,6 +355,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
             }
 
             case R.id.ef_edit_music_add_update: {
+                MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                if(!app.getRights().equals("Read-Write")){
+                    break;
+                }
                 Intent intent = new Intent(this, FileChooser.class);
                 ArrayList<String> extensions = new ArrayList<String>();
                 extensions.add(".mp3");
@@ -377,6 +401,10 @@ public class EditEF extends Activity implements View.OnTouchListener {
             }
 
             case R.id.ef_edit_image_add_update: {
+                MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
+                if(!app.getRights().equals("Read-Write")){
+                    break;
+                }
                 Intent intent = new Intent(this, FileChooser.class);
                 ArrayList<String> extensions = new ArrayList<String>();
                 extensions.add(".png");
@@ -481,7 +509,6 @@ public class EditEF extends Activity implements View.OnTouchListener {
 //        finish();
 //    }
     private void saveState() {
-        //TODO rights
 //        mDbHelper.open();
         MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
         if (!app.getRights().equals("Read-Write")) {
@@ -524,7 +551,7 @@ public class EditEF extends Activity implements View.OnTouchListener {
 //        mDbHelper.close();
         }
     }
-    
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {

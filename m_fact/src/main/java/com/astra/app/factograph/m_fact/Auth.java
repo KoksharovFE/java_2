@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,7 +89,7 @@ public class Auth extends Activity {
                     auth_below.setTextColor(getResources().getColor(R.color.cyan));
                     auth_below.setText("correct credentials");
                     Intent intent = new Intent(Auth.this, MainActivity.class);
-
+                    Log.i("rights level",mRights);
                     MyGlobalSigns app = ((MyGlobalSigns) getApplicationContext());
                     app.setRights(mRights);
                     startActivity(intent);
